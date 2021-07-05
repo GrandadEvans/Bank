@@ -1,0 +1,74 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production",
+        "test": "jest --watchAll --colors --reporters /opt/phpstorm/plugins/JavaScriptLanguage/helpers/jest-intellij/lib/jest-intellij-reporter.js --coverage",
+        "cypress:open": "cypress open"
+    },
+    "devDependencies": {
+        "@vue/test-utils": "^1.2.0",
+        "axios": "^0.21",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-jest": "^26.6.3",
+        "browser-sync": "^2.26.14",
+        "browser-sync-webpack-plugin": "^2.3.0",
+        "cypress": "^7.5.0",
+        "expect": "^26.6.2",
+        "jest": "^26.6.3",
+        "jsdom": "^16.5.3",
+        "jsdom-global": "^3.0.2",
+        "laravel-mix": "^6.0.6",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14",
+        "resolve-url-loader": "^3.1.2",
+        "sass": "^1.32.11",
+        "sass-loader": "^11.0.1",
+        "vue": "^2.6.12",
+        "vue-jest": "^3.0.7",
+        "vue-loader": "^15.9.6",
+        "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "bootstrap": "^5.0",
+        "bootstrap-vue": "^2.21.2",
+        "chart.js": "^3.1.1",
+        "currency.js": "^2.0.3",
+        "datatables.net": "^2.1.1",
+        "datatables.net-bs4": "^3.2.2",
+        "daterangepicker": "^3.1.0",
+        "moment": "^2.29.1",
+        "vue-chartjs": "^3.5.1",
+        "vue-sweetalert2": "^4.3.1",
+        "vue-tables-2": "^2.2.1",
+        "vuex": "^3.6.2"
+    },
+    "jest": {
+        "modulePaths": [
+            "/shared/vendor/modules"
+        ],
+        "moduleFileExtensions": [
+            "js",
+            "jsx"
+        ],
+        "moduleDirectories": [
+            "node_modules",
+            "bower_components",
+            "shared"
+        ],
+        "moduleNameMapper": {
+            "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+            "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js",
+            "^react(.*)$": "<rootDir>/vendor/react-master$1",
+            "^config$": "<rootDir>/configs/app-config.js"
+        },
+        "transform": {
+            ".*\\.(js)$": "babel-jest"
+        }
+    }
+}

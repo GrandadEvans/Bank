@@ -1,0 +1,75 @@
+// Variables
+@import 'variables';
+@import 'functions';
+
+.card {
+    margin-bottom: 1rem;
+
+    dt {
+        float: left;
+        padding-right: 1rem;
+    }
+}
+
+
+thead th {
+    text-align: center;
+}
+
+.strong {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.btn-transparent {
+    background: none;
+    border: none;
+}
+
+.transactions-table td.transaction-description,
+.transactions-table td.transaction-provider {
+    cursor: pointer;
+    color: blue;
+}
+
+.transactions-table td.transaction-description:hover,
+.transactions-table td.transaction-provider:hover {
+    text-decoration: underline;
+}
+
+.transaction-remarks label {
+    display: none;
+}
+
+.hidden_remark_submit {
+    display: none;
+}
+
+.transaction-edit .fa-plus-circle {
+    margin-left: 0.25rem;
+}
+.dynamic_background_colour {
+    &:after {
+        content: " ";
+    }
+
+    text-align: center;
+}
+
+.nav-item {
+    list-style: none;
+}
+
+.tags_list {
+    & .tag {
+        text-align: center;
+        border-radius: 10px;
+        margin: -0.5rem 0.5rem;
+        position: absolute;
+        min-width: 5rem;
+    }
+}
+
+.transaction-tags {
+    min-width: 7rem;
+}

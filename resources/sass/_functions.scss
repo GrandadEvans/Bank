@@ -1,0 +1,13 @@
+/**
+ * This is taken from here
+ * https://allurewebsolutions.com/using-variable-text-color-scss-function-to-pass-accessibility-contrast-standards
+ * It will see what gradiant of lightness a background-colour is and change the font colour automatically
+ */
+@function dynamic-text-color($color) {
+    @if (lightness($color) > 33) {
+        @return #000;
+    } @else {
+        @return #fff;
+    }
+}
+
