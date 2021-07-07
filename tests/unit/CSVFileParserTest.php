@@ -184,8 +184,8 @@ class CSVFileParserTest extends TestCase
         $expectedArray = [
             'Transaction Date' => '01/06/2017',
             'Transaction Type' => 'DEB',
-            'Sort Code' => "'11-06-73",
-            'Account Number' => '00694058',
+            'Sort Code' => "'12-34-56",
+            'Account Number' => '98765432',
             'Transaction Description' => 'CAPITAL ONE EUROPE',
             'Debit Amount' => 23.79,
             'Credit Amount' => null,
