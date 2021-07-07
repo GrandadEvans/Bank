@@ -1,0 +1,575 @@
+{
+  "ignition.healthCheck": {
+    "name": "ignition.healthCheck",
+    "domain": null,
+    "action": "Facade\\Ignition\\Http\\Controllers\\HealthCheckController",
+    "uri": "_ignition/health-check",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ignition.executeSolution": {
+    "name": "ignition.executeSolution",
+    "domain": null,
+    "action": "Facade\\Ignition\\Http\\Controllers\\ExecuteSolutionController",
+    "uri": "_ignition/execute-solution",
+    "method": [
+      "POST"
+    ]
+  },
+  "ignition.shareReport": {
+    "name": "ignition.shareReport",
+    "domain": null,
+    "action": "Facade\\Ignition\\Http\\Controllers\\ShareReportController",
+    "uri": "_ignition/share-report",
+    "method": [
+      "POST"
+    ]
+  },
+  "ignition.scripts": {
+    "name": "ignition.scripts",
+    "domain": null,
+    "action": "Facade\\Ignition\\Http\\Controllers\\ScriptController",
+    "uri": "_ignition/scripts/{script}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ignition.styles": {
+    "name": "ignition.styles",
+    "domain": null,
+    "action": "Facade\\Ignition\\Http\\Controllers\\StyleController",
+    "uri": "_ignition/styles/{style}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cypress.factory": {
+    "name": "cypress.factory",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@factory",
+    "uri": "__cypress__/factory",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.login": {
+    "name": "cypress.login",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@login",
+    "uri": "__cypress__/login",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.logout": {
+    "name": "cypress.logout",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@logout",
+    "uri": "__cypress__/logout",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.artisan": {
+    "name": "cypress.artisan",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@artisan",
+    "uri": "__cypress__/artisan",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.run-php": {
+    "name": "cypress.run-php",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@runPhp",
+    "uri": "__cypress__/run-php",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.csrf-token": {
+    "name": "cypress.csrf-token",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@csrfToken",
+    "uri": "__cypress__/csrf_token",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cypress.routes": {
+    "name": "cypress.routes",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@routes",
+    "uri": "__cypress__/routes",
+    "method": [
+      "POST"
+    ]
+  },
+  "": {
+    "name": null,
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ImporterController@statement_transferer",
+    "uri": "transfer_statement",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "get_logout": {
+    "name": "get_logout",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\LoginController@logout",
+    "uri": "logout",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "login": {
+    "name": "login",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\LoginController@showLoginForm",
+    "uri": "login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "logout": {
+    "name": "logout",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\LoginController@logout",
+    "uri": "logout",
+    "method": [
+      "POST"
+    ]
+  },
+  "register": {
+    "name": "register",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\RegisterController@showRegistrationForm",
+    "uri": "register",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "password.request": {
+    "name": "password.request",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\ForgotPasswordController@showLinkRequestForm",
+    "uri": "password/reset",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "password.email": {
+    "name": "password.email",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\ForgotPasswordController@sendResetLinkEmail",
+    "uri": "password/email",
+    "method": [
+      "POST"
+    ]
+  },
+  "password.reset": {
+    "name": "password.reset",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\ResetPasswordController@showResetForm",
+    "uri": "password/reset/{token}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "password.update": {
+    "name": "password.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\Auth\\ResetPasswordController@reset",
+    "uri": "password/reset",
+    "method": [
+      "POST"
+    ]
+  },
+  "home": {
+    "name": "home",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "home",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.create": {
+    "name": "transactions.create",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@create",
+    "uri": "transactions/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.store": {
+    "name": "transactions.store",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@store",
+    "uri": "transactions/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "transactions.edit": {
+    "name": "transactions.edit",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@edit",
+    "uri": "transactions/edit/{transaction}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.getJsonTags": {
+    "name": "transactions.getJsonTags",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@getJsonTags",
+    "uri": "transactions/getJsonTags/{transaction}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.update": {
+    "name": "transactions.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@update",
+    "uri": "transactions/edit/{transaction}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "transactions.ajaxUpdate": {
+    "name": "transactions.ajaxUpdate",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@ajaxUpdate",
+    "uri": "transactions/ajaxUpdate/{transaction}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "transactions.delete": {
+    "name": "transactions.delete",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@destroy",
+    "uri": "transactions/{transaction}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "transactions.import": {
+    "name": "transactions.import",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@import",
+    "uri": "transactions/import",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.providerChoice": {
+    "name": "transactions.providerChoice",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@providerChoice",
+    "uri": "transactions/providerChoice",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.manual_import": {
+    "name": "transactions.manual_import",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@manual_import",
+    "uri": "transactions/manual_import",
+    "method": [
+      "POST"
+    ]
+  },
+  "transactions.all": {
+    "name": "transactions.all",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@all",
+    "uri": "transactions/all/{page?}/{limit?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.": {
+    "name": "transactions.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@addRemarkFromJs",
+    "uri": "transactions/add-remark-from-js",
+    "method": [
+      "POST"
+    ]
+  },
+  "transactions.index": {
+    "name": "transactions.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@index",
+    "uri": "transactions",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "transactions.filter": {
+    "name": "transactions.filter",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@filter",
+    "uri": "transactions/filter/{search?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "regulars.index": {
+    "name": "regulars.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@index",
+    "uri": "regulars",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "regulars.create": {
+    "name": "regulars.create",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@create",
+    "uri": "regulars/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "regulars.store": {
+    "name": "regulars.store",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@store",
+    "uri": "regulars/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "regulars.edit": {
+    "name": "regulars.edit",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@edit",
+    "uri": "regulars/edit/{regular}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "regulars.update": {
+    "name": "regulars.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@update",
+    "uri": "regulars/edit/{regular}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "regulars.delete": {
+    "name": "regulars.delete",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\RegularController@destroy",
+    "uri": "regulars/{regular}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "providers.index": {
+    "name": "providers.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@index",
+    "uri": "providers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.create": {
+    "name": "providers.create",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@create",
+    "uri": "providers/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.": {
+    "name": "providers.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@simple_list",
+    "uri": "providers/simple_list",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.find-transactions": {
+    "name": "providers.find-transactions",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@findTransactions",
+    "uri": "providers/find-transactions/{provider}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.provider-transactions": {
+    "name": "providers.provider-transactions",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@transactions",
+    "uri": "providers/transactions/{provider}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.store": {
+    "name": "providers.store",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@store",
+    "uri": "providers/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "providers.edit": {
+    "name": "providers.edit",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@edit",
+    "uri": "providers/edit/{provider}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "providers.update": {
+    "name": "providers.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@update",
+    "uri": "providers/edit/{provider}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "providers.delete": {
+    "name": "providers.delete",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\ProviderController@destroy",
+    "uri": "providers/{provider}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "tags.index": {
+    "name": "tags.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@index",
+    "uri": "tags",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tags.create": {
+    "name": "tags.create",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@create",
+    "uri": "tags/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tags.": {
+    "name": "tags.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@simpleList",
+    "uri": "tags/simple_list",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tags.store": {
+    "name": "tags.store",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@store",
+    "uri": "tags/create",
+    "method": [
+      "POST"
+    ]
+  },
+  "tags.edit": {
+    "name": "tags.edit",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@edit",
+    "uri": "tags/edit/{tag}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tags.update": {
+    "name": "tags.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@update",
+    "uri": "tags/edit/{tag}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "tags.delete": {
+    "name": "tags.delete",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TagController@destroy",
+    "uri": "tags/{tag}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "predictions": {
+    "name": "predictions",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PredictionsController@index",
+    "uri": "predictions",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "search": {
+    "name": "search",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\SearchController@search",
+    "uri": "search",
+    "method": [
+      "POST"
+    ]
+  }
+}
