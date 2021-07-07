@@ -20,4 +20,6 @@ module.exports = (on, config) => {
     // `config` is the resolved Cypress config
 
     on('task', require('./swap-env'));
+
+    return config
 };
