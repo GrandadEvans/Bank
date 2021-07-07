@@ -1,5 +1,5 @@
 require('./bootstrap');
-require('./tagsPieChart');
+// require('./tagsPieChart');
 import {store} from './vueComponents';
 import Swal from "sweetalert2";
 
@@ -32,8 +32,8 @@ $(document).ready(function () {
         }
     })
 
-    let chartArea = document.getElementById('curve_chart');
-    if (chartArea) {
-        require('./yearsIncomeExpenditureChart');
-    }
+    // let chartArea = document.getElementById('curve_chart');
+    // if (chartArea) {
+    //     require('./yearsIncomeExpenditureChart');
+    // }
 });
