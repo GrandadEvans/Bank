@@ -8,10 +8,6 @@
     </button>
 
     <a class="nav-link" href="{{ route('home') }}">Home <span class="sr-only">(current)</span></a>
-    @guest
-        <a class="nav-link" href="{{ route('quick_login') }}">Quick Login</a>
-    @endguest
-
 
     <ul class="navbar-nav px-3">
 
@@ -26,7 +22,7 @@
             </li>
     </ul>
     @endauth
-    
+
     @guest
         <ul class="navbar-nav px-3">
 
