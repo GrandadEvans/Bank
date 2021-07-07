@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PaymentMethodController extends Controller
 {
+
+    public function all()
+    {
+        return PaymentMethod::all();
+    }
+
     /**
      * Display a listing of the resource.
      *

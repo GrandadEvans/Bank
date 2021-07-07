@@ -4,18 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
-// Auto login while in test mode (or at home)
-Route::get('/quick_login', function() {
-    try {
-        Auth::loginUsingId(1);
-    }
-    catch (Exception $e) {
-        Artisan::call('migrate:fresh --seed');
-        Auth::loginUsingId(1);
-    }
-    return view('home');
-})->name('quick_login');
-
 Route::view('/', 'welcome');
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('get_logout');
@@ -94,9 +82,7 @@ Route::middleware(['auth'])->group(function() {
     // Predictions
     Route::get('predictions', 'PredictionsController@index')->name('predictions');
 
-    Route::get('/payment_methods/all', function() {
-        return \Bank\Models\PaymentMethod::all();
-    });
+    Route::get('/payment_methods/all', 'PaymentMethodController@all');
 
     Route::post('/search', 'SearchController@search')->name('search');
 });
