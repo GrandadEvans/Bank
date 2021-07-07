@@ -1,50 +1,44 @@
-// register.spec.js created with Cypress
-//
-// Start writing your Cypress tests below!
-// If you're unfamiliar with how Cypress works,
-// check out the link below and learn how to write your first test:
-// https://on.cypress.io/writing-first-test
-
 const correctPassword = 'password123';
 const incorrectPassword = `${correctPassword}1`;
+const email = 'john@grandadevans.com';
+const distinctEmail = 'john1@grandadevans.com';
 
-describe('Make sure the web page exists', () => {
-    it('Check the page exists', () => {
-        cy.exec('php artisan migrate:fresh --seed')
-
-        cy.visit('http://192.168.0.3:8000')
+before(() => {
+    cy.artisan('migrate:fresh').then(() => {
+        cy.seed('BaseSeeder')
+        cy.create('Bank\\Models\\User', 1, {
+            'email': email
+        })
     });
 });
 
-describe('Check the form behaves properly', () => {
-    it('It catches if passwords don\'t match', () => {
-        cy.get('.registration-link').click()
+describe('Check the Registration page', () => {
+    it('checks the home page registration link works', () => {
+        cy.visit('/');
+        cy.get('.registration-link').click();
+        cy.url().should('include', '/register');
+    });
 
-            .get('#name').type('John Evans')
-            .get('#email').type('john@grandadevans.com')
-            .get('#password').type(correctPassword)
-            .get('#password-confirm').type(incorrectPassword)
-            .get('#submit').click()
-
-            .get('form#registration-form')
-            .contains('The password confirmation does not match.')
-            .get('#password').type(correctPassword)
-            .get('#password-confirm').type(correctPassword)
-            .get('#submit').click()
+    it('check the registration form works', () => {
+        cy.visit('/register');
+        cy.get('#name').type('John Evans');
+        cy.get('#email').type(email);
+        cy.get('#password').type(correctPassword);
+        cy.get('#password-confirm').type(incorrectPassword);
+        cy.get('#submit').click()
+        cy.get('form#registration-form').contains('The password confirmation does not match.');
+        cy.get('form#registration-form').contains('The email has already been taken.');
+        cy.get('#password').clear().type(correctPassword);
+        cy.get('#password-confirm').clear().type(correctPassword);
+        cy.get('#email').clear().type(distinctEmail);
+        cy.get('#submit').click();
+        cy.wait(1000)
     })
-    it('It catches if email address already exists', () => {
-        cy.get('.registration-link').click()
 
-            .get('#name').type('John Evans')
-            .get('#email').type('john@grandadevans.com')
-            .get('#password').type(correctPassword)
-            .get('#password-confirm').type(incorrectPassword)
-            .get('#submit').click()
-
-            .get('form#registration-form')
-            .contains('The password confirmation does not match.')
-            .get('#password').type(correctPassword)
-            .get('#password-confirm').type(correctPassword)
-            .get('#submit').click()
+    it('diverts to dashboard if logged in', () => {
+        cy.login();
+        cy.visit('/register');
+        cy.url().should('include', '/home');
+        cy.wait(1000)
     })
 })
