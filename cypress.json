@@ -1,4 +1,7 @@
 {
-    "baseUrl": "http://localhost:8000",
-    "projectId": "62a2aj"
+    "baseUrl": "http://192.168.0.3:8000",
+    "projectId": "62a2aj",
+    "env": {
+        "APP_ENV": "testing"
+    }
 }
