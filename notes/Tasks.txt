@@ -1,0 +1,4 @@
+## Immediate tasks
+
+  * Review past commits tp look for security issued before I begin coding on the project again
+  * Sync the YouTrack system with the jobs I need to do, I think it's basically in sync, but I need to check
