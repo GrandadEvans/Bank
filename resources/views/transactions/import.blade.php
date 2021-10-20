@@ -16,6 +16,7 @@
                     <form
                         class="form"
                         enctype="multipart/form-data"
+                        id="import-form"
                         name="statement_upload_form"
                         action="{{ route('transactions.manual_import') }}"
                         method="post"
@@ -30,14 +31,14 @@
                                 name="import_file_button"
                             >Go to it!</button>
                         </div>
-    
+
                         {{ csrf_field() }}
                     </form>
                </div>
             </div>
-    
+
         </article>
-        
+
         <footer>
         </footer>
     </section>
