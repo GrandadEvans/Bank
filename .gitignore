@@ -29,3 +29,4 @@
 /yarn-error.log
 
 !/.env.example
+/.vagrant/machines/bank/virtualbox/private_key
