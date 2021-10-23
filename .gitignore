@@ -30,3 +30,4 @@
 
 !/.env.example
 /.vagrant/machines/bank/virtualbox/private_key
+/public/resources/tmp/app.css
