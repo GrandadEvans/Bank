@@ -364,7 +364,7 @@ class TransactionController extends Controller
 //            $providerResults = CsvFileParser::getTransactionsProviders($row["Transaction Description"], $providers);
 
 //            $possibleProviders = count($providerResults);
-            if (empty($row['Transaction Type'])) $row['Transaction Type'] = "Unknown";
+            if (empty($row['Transaction Type'])) $row['Transaction Type'] = "---";
 
             try {
                 $t->payment_method_id = PaymentMethod::where('abbreviation', $row["Transaction Type"])->get()->first()->id;
