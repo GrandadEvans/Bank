@@ -28,7 +28,6 @@
         "facade/ignition": "^2.5",
         "hoa/console": "*",
         "laracasts/cypress": "^1.4",
-        "laravel/homestead": "^12.7",
         "laravel/tinker": "^v2.6.1",
         "mockery/mockery": "^1.4.3",
         "nunomaduro/collision": "^5.0",
