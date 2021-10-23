@@ -24,9 +24,9 @@ mix
         'daterangepicker',
         'toastify-js'
     ])
-    .sass('resources/sass/sass.scss', 'resources/to_delete/app.css')
+    .sass('resources/sass/sass.scss', 'public/css/app.css')
+    // .postCss('resources/tmp/app.css', 'public/css/')
     .sass('resources/sass/vendor.scss', 'public/css/vendor.css')
-    .postCss('resources/to_delete/app.css', 'public/css/')
     .copy('resources/images', 'public/images')
     .sourceMaps()
 ;
