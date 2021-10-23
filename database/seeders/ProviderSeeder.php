@@ -19,17 +19,6 @@ class ProviderSeeder extends Seeder
             'name' => 'N/A',
             'payment_method_id' => 7
         ]);
-        Provider::factory()->create([
-            'name' => 'Halifax Bank',
-            'regular_expressions' => '' .
-"/halifax/i
-/tmpp/i
-/mortgage/i"
-        ]);
-        Provider::factory()->create([
-            'name' => 'Some Protection Company',
-            'regular_expressions' => '/protection/i'
-        ]);
         Provider::factory()->count(19)->create();
     }
 }
