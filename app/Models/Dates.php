@@ -4,33 +4,37 @@ namespace Bank\Models;
 
 use Carbon\Carbon;
 use DateTime;
-use \Exception;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * Date Utilities
+ *
+ * These are methods, mainly static that are not covered by Laravel or other included libraries
+ */
 class Dates extends BaseModel
 {
-    use HasFactory;
-
     /**
      * Format a date to a standard format we can use in our tables
      *
-     * @param $dateIn
+     * @param string|Carbon $dateIn Can either be a string or an instance of Carbon
+     *
+     * @todo Sort out a decent handler for the exception instead of just returning false
      *
      * @return bool|string
+     *
      */
-    public static function formatDateForTable($dateIn)
+    public static function formatDateForTable(Carbon|string $dateIn): bool|string
     {
         if ($dateIn instanceof Carbon) {
             $carbon = $dateIn;
-
         } else {
-
             try {
                 $carbon = new Carbon($dateIn);
             }
-            catch(Exception $exception) {
+            catch(Exception) {
                 return false;
             }
         }
@@ -40,24 +44,28 @@ class Dates extends BaseModel
         return $carbon->format($format);
     }
 
+    use HasFactory;
+
     /**
      * Format a date to a unix timestamp
      *
-     * @param $dateIn
+     * @param string|Carbon $dateIn Can either be a string or an instance of Carbon
+     *
+     * @todo This is almost complete duplicate code... See to it!
      *
      * @return bool|string
+     *
+     * @todo Sort out a decent handler for the exception instead of just returning false
      */
-    public static function formatDateToUnix($dateIn)
+    public static function formatDateToUnix(Carbon|string $dateIn): bool|string
     {
         if ($dateIn instanceof Carbon) {
             $carbon = $dateIn;
-
         } else {
-
             try {
                 $carbon = new Carbon($dateIn);
             }
-            catch(Exception $exception) {
+            catch(Exception) {
                 return false;
             }
         }
@@ -83,32 +91,23 @@ class Dates extends BaseModel
     }
 
     /**
-     * We can take a DB shorthand duration such as 2m and change it to 2 months
+     * We can take a DB shorthand duration such as 2 m and change it to 2 months
      *
      * @param  string  $short
      *
      * @return string
      */
-    public static function makeShortDurationReadable(string $short)
+    public static function makeShortDurationReadable(string $short): string
     {
         $multiplier = substr($short, 0, 1);
         $duration = substr($short, 1, 1);
-        switch ($duration) {
-            case 'd':
-                $longDuration = 'days';
-                break;
-            case 'w':
-                $longDuration = 'weeks';
-                break;
-            case 'm':
-                $longDuration = 'months';
-                break;
-            case 'q':
-                $longDuration = 'quarters';
-                break;
-            case 'y':
-                $longDuration = 'years';
-        }
+        $longDuration = match ($duration) {
+            'd' => 'days',
+            'w' => 'weeks',
+            'm' => 'months',
+            'q' => 'quarters',
+            default => 'years',
+        };
 
         if ($multiplier == 1) {
             $longDuration = Str::singular($longDuration);
@@ -120,21 +119,21 @@ class Dates extends BaseModel
     /**
      * Take a British date such as 13/06/2019 or 13-06-2019 and make it 2019-06-13
      *
-     * @param  mixed
+     * @param string|Carbon $britishDate The british formatted date string
      *
-     * @return mixed
+     * @return Carbon|string
      */
-    public static function convertBritishDateToMysql($britishDate)
+    public static function convertBritishDateToMysql(Carbon|string $britishDate): Carbon|string
     {
         if ($britishDate instanceof DateTime) {
             return $britishDate->format('Y-m-d');
         }
 
         $british = false;
+        $delimiter = '-';
 
         if (preg_match('/^\d{2}-\d{2}-\d{4}$/', $britishDate)) {
             $british = true;
-            $delimiter = '-';
         } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $britishDate)) {
             $british = true;
             $delimiter = '/';
@@ -151,7 +150,12 @@ class Dates extends BaseModel
         return $dateOut;
     }
 
-    public function setUser_idAttribute()
+    /**
+     * Automatically set the user_id property to the id of the logged in user
+     *
+     * @return int|null
+     */
+    public function setUser_idAttribute(): int|null
     {
         return Auth::id();
     }

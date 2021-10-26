@@ -2,15 +2,33 @@
 
 namespace Bank\Models;
 
+//use Bank\Observers\TransactionObserver;
+use DateInterval;
+use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Transaction
+ */
 class Transaction extends BaseModel
 {
+    /**
+     * Let the model know there is a factory available
+     */
     use HasFactory;
 
+//    protected $dispatchesEvents; // Disabled until InfluxDB reinstated
+
+    /**
+     * Let Eloquent know which fields can be mass assigned
+     *
+     * @var array
+     */
     protected $fillable = [
         'user_id',
         'date',
@@ -22,12 +40,20 @@ class Transaction extends BaseModel
         'remarks'
     ];
 
+    /**
+     * Let Eloquent know which fields are dates and should be made Carbon instances
+     *
+     * @var array
+     */
     protected $dates = [
         'date'
     ];
 
+
     /**
      * Make sure we have a proper date in case a British one was submitted
+     *
+     * @var
      */
     public function setDateAttribute($value)
     {
@@ -48,12 +74,18 @@ class Transaction extends BaseModel
         return ($start + $credit - $debit);
     }
 
-    public function user()
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo('Bank\User');
     }
 
-    public function provider()
+    /**
+     * @return HasOne
+     */
+    public function provider(): HasOne
     {
         return $this->hasOne(Provider::class, 'id', 'provider_id');
     }
@@ -61,18 +93,26 @@ class Transaction extends BaseModel
     /**
      * A provider can have one preferred method of payment
      */
-    public function paymentMethod()
+    public function paymentMethod(): HasOne
     {
         return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
     }
 
     // Has Many Tags
-    public function tags()
+
+    /**
+     * @return BelongsToMany
+     */
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'tag_transaction');
     }
 
-    public static function getTransactionScrapeDates()
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public static function getTransactionScrapeDates(): array
     {
         $lastDate = DB::table('transactions')
             ->select('date')
@@ -81,16 +121,16 @@ class Transaction extends BaseModel
             ->get();
 
         $dateParts = explode('-', $lastDate[0]->date);
-        $lastTransaction = new \DateTime();
+        $lastTransaction = new DateTime();
         $lastTransaction->setDate($dateParts[0], $dateParts[1], intval($dateParts[2]));
 
         $dayAfterLastTransaction = $lastTransaction
-            ->add(new \DateInterval('P1D'))
+            ->add(new DateInterval('P1D'))
             ->format('d/m/Y');
 
-        $date = new \DateTime('now', new DateTimeZone('Europe/London'));
+        $date = new DateTime('now', new DateTimeZone('Europe/London'));
         $yesterday = $date
-            ->sub(new \DateInterval('P1D'))
+            ->sub(new DateInterval('P1D'))
             ->format('d/m/Y');
 
         return [

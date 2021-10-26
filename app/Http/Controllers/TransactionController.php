@@ -400,7 +400,7 @@ class TransactionController extends Controller
 
         DB::commit();
 
-        return view('transactions.index');
+        return $this->index();
     }
 
     public function getTransactionScrapeDates()

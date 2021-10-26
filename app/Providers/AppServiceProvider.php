@@ -2,9 +2,11 @@
 
 namespace Bank\Providers;
 
+//use Bank\Models\Transaction;
 use Bank\Observers\ProviderObserver;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
+//use Bank\Observers\TransactionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +29,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->givePaymentMethodViewsSomePaymentMethods();
         Provider::observe(ProviderObserver::class);
-    }
+
+        // TransactionObserver has been disabled. Please see the file itself for explanation
+        // Transaction::observe(TransactionObserver::class);
+   }
 
     /**
      * Whenever we call the payment method view partial, give it the list of payment methods
