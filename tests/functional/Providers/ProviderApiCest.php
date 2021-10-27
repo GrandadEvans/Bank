@@ -39,11 +39,11 @@ class ProviderApiCest
         $this->user = User::factory()->create();
         $I->amLoggedAs($this->user);
         $I->amOnRoute('providers.index');
-        $I->seeNumRecords(22, 'providers'); // ProviderSeeder contains 20 rows = 2 rows with dedicated attributes
+        $I->seeNumRecords(20, 'providers'); // ProviderSeeder contains 20 rows = 2 rows with dedicated attributes
         $I->amOnRoute('providers.index');
         $I->seeAuthentication();
         $I->seeElement('table', ['id' => 'providersTable']);
-        $I->seeNumberOfElements('tr', 23);
+        $I->seeNumberOfElements('tr', 21);
     }
 
     public function we_see_the_provider_details_in_the_table(FunctionalTester $I)
