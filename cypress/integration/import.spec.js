@@ -28,7 +28,7 @@ describe('Test the import functionality', () => {
 
     it('has a form to enable us to upload', () => {
         cy.visit(importURL)
-        cy.get('form#import-form').contains('input')
-        cy.get('form#import-form').contains('button')
+        cy.get('form#import-form input')
+        cy.get('form#import-form button')
     })
 })

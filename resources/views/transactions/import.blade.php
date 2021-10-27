@@ -22,9 +22,8 @@
                         method="post"
                     >
                         <div class="file is-boxed is-info is-centered">
-                            <label class="file-label">
-                                <input class="file-input" type="file" name="file_input" id="file_input">
-                            </label>
+                            <label class="file-label" for="file_input">File to import</label>
+                            <input class="file-input" type="file" name="file_input" id="file_input">
                             <button
                                 class="button"
                                 id="import_file_button"
