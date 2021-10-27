@@ -2,6 +2,7 @@
 
 namespace Bank\Http\Controllers;
 
+use Bank\Jobs\ImportTransactions;
 use Bank\Models\Dates;
 use Bank\Http\Requests\TransactionAjaxRemarkRequest;
 use Illuminate\Contracts\Foundation\Application;
@@ -346,60 +347,7 @@ class TransactionController extends Controller
 
     protected function importFromFilename(string $path): Factory|View|Application
     {
-        $imported = new CsvFileParser($path);
-        $data = $imported->getData();
-
-        $transactionList = [];
-
-        DB::beginTransaction();
-
-        foreach($data as $row) {
-            $t = new Transaction();
-            $t->date = CsvFileParser::convertDate($row["Transaction Date"]);
-            $t->entry = $row["Transaction Description"];
-            $t->amount = Transaction::setAmount(floatval($row["Credit Amount"]), floatval($row["Debit Amount"]));
-            $t->balance = $row["Balance"];
-            $t->user_id = Auth::id();
-
-//            $providerResults = CsvFileParser::getTransactionsProviders($row["Transaction Description"], $providers);
-
-//            $possibleProviders = count($providerResults);
-            if (empty($row['Transaction Type'])) $row['Transaction Type'] = "---";
-
-            try {
-                $t->payment_method_id = PaymentMethod::where('abbreviation', $row["Transaction Type"])->get()->first()->id;
-            }
-            catch(ErrorException $e) {
-                throw new Exception("There was an error saving the transaction. The abbreviation of \"" . $row["Transaction Type"] .  "\" was not recognised.");
-            }
-
-            // If there is only 1 possible provider, then set that before we save the transaction
-//            if ($possibleProviders === 1) {
-//                $t->provider_id = $providerResults[0]['id'];
-//            }
-
-            if ( ! $t->save()) {
-                throw new Exception("Unable to save the transaction");
-            }
-
-//            foreach($providerResults as &$result) {
-//                $result['transaction_id'] = $t->id;
-//            }
-
-            // If there are multiple providers to choose from, add them to an array to be presented later
-//            if ($possibleProviders >= 1) {
-//                array_push($multipleProviderMatches, [
-//                    'id' => $t->id,
-//                    'date' => $t->date,
-//                    'entry' => $t->entry,
-//                    'amount' => $t->amount,
-//                    'providers' => $providerResults
-//                ]);
-//            }
-        }
-
-        DB::commit();
-
+        ImportTransactions::dispatch($path);
         return $this->index();
     }
 

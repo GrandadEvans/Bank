@@ -31,5 +31,8 @@ This, however, would probably require certification, and many loops to jump thro
 I will try, and create this app, so that the accounts, and the login procedures etc are decoupled.
 That should mean that a new instance of an account should be able to be just dropped in order to allow access to the accounts.
 
-
+## Additional documentation
+You can find more documentation on this repo, in the [docs](/docs) directory:
+  * [Example *Supervisor* configuration](/docs/supervisor.md)
+  * [Example *.env* file](/docs/.env.md)
 

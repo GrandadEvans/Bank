@@ -27,6 +27,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+    Event::listen(function (QueueBusy $event) {
+        Notification::route('mail', env('MAIL_ADMIN_ADDRESS', 'bank@localhost'))
+                ->notify(new QueueHasLongWaitTime(
+                    $event->connection,
+                    $event->queue,
+                    $event->size
+                ));
+    });
     }
 }
