@@ -119,11 +119,11 @@ class Dates extends BaseModel
     /**
      * Take a British date such as 13/06/2019 or 13-06-2019 and make it 2019-06-13
      *
-     * @param string|Carbon $britishDate The british formatted date string
+     * @param mixed $britishDate The british formatted date string
      *
      * @return Carbon|string
      */
-    public static function convertBritishDateToMysql(Carbon|string $britishDate): Carbon|string
+    public static function convertBritishDateToMysql(mixed $britishDate): Carbon|string
     {
         if ($britishDate instanceof DateTime) {
             return $britishDate->format('Y-m-d');
