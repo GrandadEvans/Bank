@@ -28,20 +28,22 @@ class ProviderRequest extends FormRequest
     {
         return [
             'name' => [
-                'between:2,100'
+                'between:2,100',
+                'required'
             ],
             'payment_method_id' => [
-                'integer'
+                'integer',
+                'required'
             ],
             'regular_expressions' => [
                 'max:1000'
             ],
             'remarks' => [
-                'between:2,255',
-                'sometimes'
+                'between:2,255'
             ],
             'transaction_id' => [
-                'integer'
+                'integer',
+                'required'
             ]
 //            'logo' => [
 //                'url',
