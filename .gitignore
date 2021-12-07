@@ -9,6 +9,7 @@
 /public/css
 /public/images
 /public/storage
+/public/vendor/telescope
 /resources/stubs
 /resources/csv
 /resources/har
