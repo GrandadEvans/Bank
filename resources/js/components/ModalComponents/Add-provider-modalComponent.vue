@@ -59,8 +59,31 @@
         </template>
 
         <template v-slot:modal-footer>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" form="add-provider-form" @click="addProvider" id="add-provider-submit-button">Add provider</button>
+            <button
+                aria-label="Cancel and dismiss the add provider modal"
+                class="btn btn-warning"
+                data-bs-dismiss="modal"
+                type="button"
+                @click="dismissModal"
+            >Cancel</button>
+
+            <button
+                aria-label="Cancel and dismiss the add provider modal"
+                class="btn btn-primary"
+                form="add-provider-form"
+                id="add-provider-submit-button"
+                type="button"
+                @click="submit"
+            >Add provider</button>
+
+            <button
+                aria-label="Submit the form and associate the chosen provider with the parent item eg transaction, then search for similar transactions"
+                class="btn btn-secondary"
+                form="add-provider-form"
+                id="add-provider-and-search-submit-button"
+                type="button"
+                @click="submitAndSearch"
+            >Add &amp; look for others</button>
         </template>
     </modal>
 </template>
@@ -72,10 +95,13 @@ export default {
     name: "add-provider-modal",
     data () {
         return {
+            ajaxProviderData: null,
+            ajaxUrl: `/providers/store-from-js`,
+            findSimilar: false,
             providerName: '',
             remarks: '',
             textEntries: '',
-            paymentMethod: 16,
+            paymentMethod: 16, // @todo I need to ensure that the correct method is default
         }
     },
     computed: {
@@ -84,24 +110,51 @@ export default {
         }
     },
     methods: {
-        async addProvider () {
+        async submit (event) {
+            if (0 === this.providerName.length) return;
+
             this.disableSubmitButton();
-            const url = `/providers/store-from-js`;
-            const returnedData = await axios.post(url, {
+            const ajaxData = {
+                find_similar: (this.findSimilar) ? 1 : 0,
                 name: this.providerName,
-                remarks: this.remarks,
-                regular_expressions: this.textEntries,
                 payment_method_id: this.paymentMethod,
+                regular_expressions: this.textEntries,
+                remarks: this.remarks,
                 transaction_id: this.$store.state.modalTransactionId,
                 type: 'json'
-            });
+            };
+
+            const returnedData = await axios.post(this.ajaxUrl, ajaxData);
+
+            this.resetForm();
+            window.addProviderModal.hide();
 
             if (returnedData.status === 201) {
-                this.$store.commit('newProviderDetected', this.providerName);
-                this.resetForm();
-                window.addProviderModal.hide();
-                Toast.fire({title: "Provider Added", icon: "success"})
+                const providerId = returnedData.data.provider_id;
+                this.providerSuccessfullyAdded({
+                    id: providerId,
+                    name: returnedData.data.provider_name,
+                    // similarTransactions: returnedData.data.similar_transactions
+                });
+
+                if (this.findSimilar === true) {
+                    this.showSimilar(returnedData.data.similar_transactions, providerId);
+                }
+            } else {
+                console.groupCollapsed('"Submit" action failed')
+                console.log('Status: ', returnedData.status);
+                console.info('Reply...');
+                console.log(returnedData.data);
+                console.info('Headers...');
+                console.log(returnedData.headers);
+                console.groupEnd();
+this.$store.commit('newProviderDetected', this.providerName);
+Toast.fire({title: "Provider Added", icon: "success"})
             }
+        },
+        dismissModal: function () {
+            this.resetForm();
+            window.addProviderModal.dispose();
         },
         enableSubmitButton () {
             document.getElementById("add-provider-submit-button").removeAttribute("disabled")
@@ -109,12 +162,37 @@ export default {
         disableSubmitButton () {
             document.getElementById("add-provider-submit-button").setAttribute("disabled", "disabled");
         },
+        submitAndSearch: function (event) {
+            this.findSimilar = true;
+            this.submit(event);
+        },
         resetForm () {
             this.providerName = '';
             this.remarks = '';
             this.textEntries = '';
-            this.paymentMethod = 'Unknown';
+            this.paymentMethod = '---';
             this.enableSubmitButton();
+        },
+        showSimilar: function (similar, providerId) {
+            if (similar.length === 0) {
+                Toast.fire({
+                    icon: 'info',
+                    title: "There are no similar transactions"
+                });
+            } else {
+                this.$store.commit('updateSimilarTransactions', similar);
+                this.$store.commit('updateSimilarTransactionsEntityId', providerId);
+                this.$store.commit('updateSimilarTransactionsType', 'provider');
+                this.$store.commit('updateSimilarTransactionsRowRef',
+                    this.$parent.$children[0].$children[2].$refs['transaction-table-entitys-list-row']);
+                window.addSimilarTransactionsModal.show()
+            }
+        },
+        providerSuccessfullyAdded: function (providerDetails) {
+            this.$store.commit('updateNewEntityDetails', {
+                id: providerDetails.provider_id,
+                name: providerDetails.name,
+            });
         },
         async updateMethods() {
             const url = '/payment_methods/all';

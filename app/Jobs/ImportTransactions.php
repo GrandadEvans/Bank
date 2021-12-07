@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 class ImportTransactions implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    use Illuminate\Queue\Middleware\WithoutOverlapping;
+//    use WithoutOverlapping;
 
     /**
      * The number of times the job may be attempted.

@@ -48,7 +48,7 @@ import { blackOrWhite } from '../helperFunctions'
                 return (this.mode === 'edit' && this.tags.length > 0);
             },
             taglist () {
-                if (null !== this.$store.state.newTagDetails) {
+                if (null !== this.$store.state.newEntityDetails && this.$store.state.similarTransactionsType === 'tag') {
                     this.tagAdded();
                 }
                 return this.tags;
@@ -69,14 +69,14 @@ import { blackOrWhite } from '../helperFunctions'
             },
             tagAdded: function () {
                 const newItem = {
-                    icon: this.$store.state.newTagDetails.icon,
-                    tag: this.$store.state.newTagDetails.name,
-                    id: this.$store.state.newTagDetails.id,
-                    default_color: this.$store.state.newTagDetails.bgColor,
-                    contrasted_color: blackOrWhite(this.$store.state.newTagDetails.bgColor)
+                    icon: this.$store.state.newEntityDetails.icon,
+                    tag: this.$store.state.newEntityDetails.name,
+                    id: this.$store.state.newEntityDetails.id,
+                    default_color: this.$store.state.newEntityDetails.bgColor,
+                    contrasted_color: blackOrWhite(this.$store.state.newEntityDetails.bgColor)
                 };
                 let activeIndex = this.$store.state.modalIndex;
-                let activeRow = this.$parent.$parent.$refs['transaction-table-tags-list-row'][activeIndex];
+                let activeRow = this.$parent.$parent.$refs['transaction-table-entitys-list-row'][activeIndex];
                 let activeTags = activeRow.$options.propsData.row.tags;
                 activeTags.push(newItem);
 

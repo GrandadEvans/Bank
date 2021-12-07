@@ -348,6 +348,17 @@ class TransactionController extends Controller
     protected function importFromFilename(string $path): Factory|View|Application
     {
         ImportTransactions::dispatch($path);
+        $flashData = [
+            'type' => 'info',
+            'title' => 'Transactions transacting!',
+            'text' => "Don't worry, your transactions are being added in the background, and will be available to view
+                soon, so keep checking back",
+            'showConfirmButton' => 'true',
+            'showCancelButton' => 'false'
+        ];
+
+            session()->flash('alert', $flashData);
+
         return $this->index();
     }
 

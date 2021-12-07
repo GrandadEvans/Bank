@@ -23,7 +23,7 @@
                         </option>
                     </select>
                     <div id="similar-transactions-help" class="form-text">
-                        You can also apply the new tag to these transaction<br />
+                        You can also apply the new {{ typeOfSimilarity }} to these transaction<br />
                         Click this link to select the similar transactions shown above.</div>
                 </div>
             </form>
@@ -50,6 +50,9 @@ export default {
     computed: {
         similarTransactions () {
             return this.$store.state.similarTransactions;
+        },
+        typeOfSimilarity () {
+            return this.$store.state.similarTransactionsType;
         }
     },
     methods: {
@@ -61,9 +64,9 @@ export default {
         },
         async addTransactions () {
             this.disableSubmitButton();
-            const url = `/tags/assignTransactions`;
+            const url = "/" + this.typeOfSimilarity + "s/assignTransactions";
             const returnedData = await axios.post(url, {
-                tag: this.$store.state.similarTransactionsTagId,
+                entity: this.$store.state.similarTransactionsEntityId,
                 transactions: this.otherTransactions,
                 type: 'json'
             });
@@ -71,14 +74,14 @@ export default {
             const assignedTransactions = returnedData.data.assignedTransactions;
             const errors               = returnedData.data.errors;
             const failedTransactions   = returnedData.data.failedTransactions;
-            const tagDetails           = returnedData.data.tagDetails;
+            const entityDetails        = returnedData.data.entityDetails;
 
-            if (returnedData.status === 202) {
-                this.assignSuccessfulTransactions(assignedTransactions, tagDetails);
+            if (returnedData.status === 201 || returnedData.status === 202) {
+                this.assignSuccessfulTransactions(assignedTransactions, entityDetails);
                 Toast.fire({ title: "Transactions Updated", icon: "success" });
             } else if (returnedData.status === 206) {
                 // mixed content. so some have files
-                this.assignSuccessfulTransactions(assignedTransactions, tagDetails);
+                this.assignSuccessfulTransactions(assignedTransactions, entityDetails);
                 this.assignFailedTransactions(failedTransactions, errors);
                 Toast.fire({ title: "Mixed result: see the log", icon: "warning" });
             } else {
@@ -96,21 +99,21 @@ export default {
             console.dir(errors);
             console.groupEnd();
         },
-        assignSuccessfulTransactions: function (assignedTransactions, tagDetails) {
-            const newItem = {
-                icon: tagDetails.icon,
-                tag: tagDetails.name,
-                id: tagDetails.id,
-                default_color: tagDetails.default_color,
-                contrasted_color: tagDetails.contrasted_color
-            };
-            let rows = this.$parent.$children[0].$children[2].$refs['transaction-table-tags-list-row'];
+        assignSuccessfulTransactions: function (assignedTransactions, newItem) {
+            let rows = this.$store.state.latestTransactionTableData
             for (let i=0; i<rows.length; i++) {
                 let row = rows[i];
-                let id = row.$options.propsData.row.id;
+                let id = row.id;
                 let exists = assignedTransactions.includes(id);
                 if (exists) {
-                    row.$options.propsData.row.tags.push(newItem);
+                    switch(this.typeOfSimilarity) {
+                        case tag:
+                            row.tags.push(newItem);
+                            break;
+                        case provider:
+                            row.provider = newItem;
+                            break;
+                    }
                 }
             }
         },

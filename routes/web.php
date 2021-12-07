@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/edit/{provider}', 'ProviderController@edit')->name('edit');
         Route::put('/edit/{provider}', 'ProviderController@update')->name('update');
         Route::delete('/{provider}', 'ProviderController@destroy')->name('delete');
+        Route::post('/assignTransactions', 'ProviderController@assignTransactions');
         Route::get('/simple_list', 'ProviderController@simple_list');
     });
 

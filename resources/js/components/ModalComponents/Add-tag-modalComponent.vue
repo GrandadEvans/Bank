@@ -121,13 +121,13 @@ export default {
     name: "add-tag-modal",
     data () {
         return {
-            tagName: '',
-            tagBgColor: randomColour(),
-            tagIcon: '',
             addFormVisible: false,
-            findSimilar: false,
             ajaxTagData: null,
             ajaxUrl: '/tags/store-from-js',
+            findSimilar: false,
+            tagBgColor: randomColour(),
+            tagIcon: '',
+            tagName: '',
         }
     },
     computed: {
@@ -162,38 +162,40 @@ export default {
             const value = event.target.value;
 
             const ajaxData = {
-                transaction_id: this.transactionId,
-                tag_id: this.ajaxTagData.tag_id,
-                tag_icon: this.ajaxTagData.icon,
                 default_color: this.ajaxTagData.default_color,
+                find_similar: (this.findSimilar) ? 1 : 0,
+                tag_icon: this.ajaxTagData.icon,
+                tag_id: this.ajaxTagData.tag_id,
                 tag_name: this.ajaxTagData.tag,
-                find_similar: (this.findSimilar) ? 1 : 0
+                transaction_id: this.transactionId
             };
 
             const returnedData = await axios.post(this.ajaxUrl, ajaxData);
+            const data = returnedData.data;
 
-            this.resetForm();
             window.addTagModal.hide();
-
             if (returnedData.status === 201) {
-                const tagId = returnedData.data.tag_id;
+                const tagId = data.tag_id;
+                const similar_transactions = data.similar_transactions;
+
                 this.tagSuccessfullyAdded({
+                    bgColor: data.default_color,
+                    icon: data.tag_icon,
                     id: tagId,
-                    name: returnedData.data.tag_name,
-                    icon: returnedData.data.tag_icon,
-                    bgColor: returnedData.data.default_color,
-                    similarTransactions: returnedData.data.similar_transactions
+                    name: data.tag_name,
+                    similarTransactions: similar_transactions
                 });
-                this.showSimilar(returnedData.data.similar_transactions, tagId)
+                this.showSimilar(similar_transactions, tagId)
             } else {
                 console.groupCollapsed('"Submit" action failed')
                 console.log('Status: ', returnedData.status);
                 console.info('Reply...');
-                console.log(returnedData.data);
+                console.log(data);
                 console.info('Headers...');
                 console.log(returnedData.headers);
                 console.groupEnd();
             }
+            this.resetForm();
         },
         async updateTags() {
             if (this.$store.state.tagList.length === 0) {
@@ -276,9 +278,9 @@ export default {
             if (this.findSimilar === true) {
                 if (similar.length > 0) {
                     this.$store.commit('updateSimilarTransactions', similar);
-                    this.$store.commit('updateSimilarTransactionsTagId', tagId);
+                    this.$store.commit('updateSimilarTransactionsEntityId', tagId);
+                    this.$store.commit('updateSimilarTransactionsType', 'tag');
                     window.addSimilarTransactionsModal.show()
-                    this.showSimilar(similar, tagId);
                 } else {
                     Toast.fire({
                         icon: 'info',
@@ -286,19 +288,14 @@ export default {
                     });
                 }
             }
-            this.$store.commit('updateSimilarTransactions', similar);
-            if (similar.length > 0) {
-                this.$store.commit('updateSimilarTransactionsTagId', tagId);
-                window.addSimilarTransactionsModal.show()
-            }
         },
         submitAndSearch: function (event) {
             this.findSimilar = true;
             this.submit(event);
         },
         tagSuccessfullyAdded: function (tagDetails) {
-            this.$store.commit('newTagDetected', {
-                id: tagDetails.tag_id,
+            this.$store.commit('updateNewEntityDetails', {
+                id: tagDetails.id,
                 name: tagDetails.name,
                 icon: tagDetails.icon,
                 bgColor: tagDetails.bgColor,

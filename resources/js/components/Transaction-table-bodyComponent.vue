@@ -5,7 +5,6 @@
             :row="rowData"
             :index="index"
             :key="rowData.id"
-            :ref="'transaction-table-tags-list-row'"
         />
 
     </tbody>

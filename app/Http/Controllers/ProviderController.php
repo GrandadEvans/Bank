@@ -5,10 +5,12 @@ namespace Bank\Http\Controllers;
 use Bank\Http\Requests\ProviderRequest;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
+use Bank\Models\Tag;
 use Bank\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class ProviderController extends Controller
@@ -112,23 +114,40 @@ class ProviderController extends Controller
      */
     public function storeFromJs(ProviderRequest $request)
     {
-        $validated = $request->validated();
-        $responseText = 'OK';
-        $responseCode = Response::HTTP_CREATED;
+        $statusCode = Response::HTTP_CREATED;
 
         try {
-            $provider = new Provider($validated);
-            $provider->saveOrFail();
+            $validated = $request->validated();
+
+            if (isset($validated['provider_id']) && $validated['provider_id'] > 0) {
+                $provider = Provider::findOrFail($validated['provider_id']);
+            } else {
+                $provider = $this->createNewProvider($validated);
+            }
 
             $transaction = Transaction::findOrFail($validated['transaction_id']);
             $transaction->provider_id = $provider->id;
             $transaction->save();
+
+            $similarTransactions = [];
+            if ($validated['find_similar'] == 1) {
+                $entryText = $transaction->entry;
+                $similarTransactions = Transaction::where('entry', $entryText)->
+                    where('id', '!=', $validated['transaction_id'])->
+                    get();
+            }
+
+             $reply = [
+                'provider_id' => $provider->id,
+                'provider_name' => $provider->name,
+                'similar_transactions' => $similarTransactions
+            ];
+      }
+        catch(\Exception $e) {
+            $statusCode = Response::HTTP_BAD_REQUEST;
+            $reply = $e->getMessage();
         }
-        catch (\Exception $e) {
-            $responseText = $e->getMessage();
-            $responseCode = Response::HTTP_BAD_REQUEST;
-        }
-        return new Response($responseText, $responseCode);
+        return new Response($reply, $statusCode);
     }
 
     /**
@@ -208,5 +227,66 @@ class ProviderController extends Controller
     public function simple_list()
     {
         return Provider::all()->get();
+    }
+
+    private function createNewProvider(array $validated)
+    {
+        $provider = new Provider();
+        $provider->name = $validated['name'];
+        $provider->remarks = $validated['remarks'];
+        $provider->regular_expressions = $validated['regular_expressions'];
+        $provider->payment_method_id = $validated['payment_method_id'];
+        $provider->saveOrFail();
+
+        return $provider;
+    }
+
+    public function assignTransactions(Request $request)
+    {
+        $assignedTransactions = [];
+        $errors = [];
+        $failedTransactions = [];
+        $providerDetails = [];
+        $providerId = intval($request->get('entity'));
+        $responseCode = Response::HTTP_ACCEPTED;
+        $transactions = $request->get('transactions');
+
+        try {
+            $provider = Provider::findOrFail($providerId);
+            $providerDetails = [
+                'name' => $provider->provider,
+                'id' => $provider->id
+            ];
+        }
+        catch(\Exception $e) {
+            $errors[] = [
+                'action' => 'find provider',
+                'error' => $e->getMessage(),
+                'providerId' => $providerId
+            ];
+            $responseCode = Response::HTTP_BAD_REQUEST;
+        }
+
+        $entityDetails = [];
+        if ($responseCode !== Response::HTTP_BAD_REQUEST) {
+            $sanitized = [];
+            foreach ($transactions as $transaction) {
+                if (intval($transaction) !== 0) {
+                    $sanitized[] = intval($transaction); // @todo do I really need this twice
+                }
+            }
+            $sanitized = array_unique($sanitized);
+
+            $entityDetails = Transaction::whereIn('id', $sanitized)
+                ->update(['provider_id' => $providerId]);
+        }
+
+        $responseText = [
+            'errors' => $errors,
+            'failedTransactions' => $failedTransactions,
+            'assignedTransactions' => $assignedTransactions,
+            'entityDetails' => $entityDetails
+        ];
+        return new Response($responseText, $responseCode);
     }
 }

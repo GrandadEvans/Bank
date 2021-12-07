@@ -54,12 +54,12 @@ export default {
             window.addProviderModal.show();
             const providerModalEl = document.getElementById('add-provider-modal');
             providerModalEl.addEventListener('hidden.bs.modal', (event) => {
-                if (null !== this.$store.state.newProviderDetails) {
-                    const newProvider = this.$store.state.newProviderDetails;
+                if (null !== this.$store.state.newEntityDetails) {
+                    const newProvider = this.$store.state.newEntityDetails;
                     this.$emit('provider-updated', newProvider);
 
                     Toast.fire({icon: 'success', title: 'New provider added to transaction'});
-                    this.$store.commit('newProviderDetected', null);
+                    this.$store.commit('updateNewEntityDetails', null);
                 }
             });
         },

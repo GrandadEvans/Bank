@@ -110,7 +110,7 @@ export default {
             this.enableSubmitButton();
         },
         remarkSuccessfullyAdded: function (remarkDetails) {
-            let rows = this.$parent.$children[0].$children[2].$refs['transaction-table-tags-list-row'];
+            let rows = this.$parent.$children[0].$children[2].$refs['transaction-table-entitys-list-row'];
             for (let i=0; i<rows.length; i++) {
                 let row = rows[i];
                 let id = row.$options.propsData.row.id;

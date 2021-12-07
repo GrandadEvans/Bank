@@ -5,13 +5,14 @@ export const storeConfig = {
         modalIndex: null,
         modalToShow: null,
         modalTransactionId: null,
-        newTagDetails: null,
-        newProviderDetails: null,
+        newEntityDetails: null,
         paymentMethods: [],
         providersData: [],
         providersLoaded: false,
         similarTransactions: [],
-        similarTransactionsTagId: [],
+        similarTransactionsEntityId: [],
+        similarTransactionsType: null,
+        similarTransactionsRowRef: null,
         tagList: [],
         transactionsLoaded: false,
         transactionTable: [
@@ -82,15 +83,9 @@ export const storeConfig = {
                 columnPath: ''
             }
 
-        ],
+        ]
     },
     mutations: {
-        newTagDetected(state, details) {
-            state.newTagDetails = details;
-        },
-        newProviderDetected(state, details) {
-            state.newProviderDetails = details;
-        },
         updateLatestTransactionTableData (state, data) {
             state.latestTransactionTableData = data;
         },
@@ -104,7 +99,10 @@ export const storeConfig = {
             state.modalToShow = modal;
         },
         updateModalTransactionId(state, id) {
-            state.modalTransactionId = id
+            state.modalTransactionId = id;
+        },
+        updateNewEntityDetails(state, details) {
+            state.newEntityDetails = details;
         },
         updatePaymentMethods(state, methods) {
             state.paymentMethods = methods;
@@ -118,8 +116,14 @@ export const storeConfig = {
         updateSimilarTransactions(state, transactions) {
             state.similarTransactions = transactions;
         },
-        updateSimilarTransactionsTagId(state, id) {
-            state.similarTransactionsTagId = id;
+        updateSimilarTransactionsType(state, type) {
+            state.similarTransactionsType = type;
+        },
+        updateSimilarTransactionsRowRef(state, ref) {
+            state.similarTransactionsRowRef = ref;
+        },
+        updateSimilarTransactionsEntityId(state, id) {
+            state.similarTransactionsEntityId = id;
         },
         updateTagList(state, tags) {
             state.tagList = tags;
