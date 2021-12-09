@@ -2,6 +2,7 @@
 
 namespace Bank\Models;
 
+use Bank\UtilityClasses\Dates;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ class Regular extends BaseModel
         'nextDue',
         'description',
         'amount',
+        'period',
         'remarks',
         'days',
         'type',

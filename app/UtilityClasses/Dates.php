@@ -1,11 +1,10 @@
 <?php
 
-namespace Bank\Models;
+namespace Bank\UtilityClasses;
 
 use Carbon\Carbon;
 use DateTime;
 use Exception;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -14,7 +13,7 @@ use Illuminate\Support\Str;
  *
  * These are methods, mainly static that are not covered by Laravel or other included libraries
  */
-class Dates extends BaseModel
+class Dates
 {
     /**
      * Format a date to a standard format we can use in our tables
@@ -43,8 +42,6 @@ class Dates extends BaseModel
 
         return $carbon->format($format);
     }
-
-    use HasFactory;
 
     /**
      * Format a date to a unix timestamp
