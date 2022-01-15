@@ -34,3 +34,4 @@
 /public/resources/tmp/app.css
 
 /bootstrap/cache/**
+bank_dev--local.session.sql

@@ -60,6 +60,31 @@
             </li>
         </ul>
 
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('regulars.index') }}">
+                    <i class="fa fa-tag"></i> Regulars
+                </a>
+                <ul>
+                    <!-- TODO: Change icon -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('regulars.scan') }}">
+                            <i class="fa fa-tag"></i> Scan for new Regulars
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                   <!--
+                        <li class="nav-item">
+                        <a class="nav-link" href="{{ route('regulars.create') }}">
+                            <i class="fa fa-tag"></i> Create Regular
+                        </a>
+                    </li>
+-->
+                </ul>
+            </li>
+        </ul>
+
         <div id="sidebar_piechart">
             <div id="chart_div"></div>
         </div>

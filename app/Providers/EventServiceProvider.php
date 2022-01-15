@@ -3,6 +3,8 @@
 namespace Bank\Providers;
 
 use Illuminate\Auth\Events\Registered;
+use Bank\Events\ScanForRegulars;
+use Bank\Listeners\StartNewRegularsScan;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -18,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ScanForRegulars::class => [
+            StartNewRegularsScan::class,
+        ]
     ];
 
     /**

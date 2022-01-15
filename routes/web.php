@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/edit/{regular}', 'RegularController@edit')->name('edit');
             Route::put('/edit/{regular}', 'RegularController@update')->name('update');
             Route::delete('/{regular}', 'RegularController@destroy')->name('delete');
+            Route::get('/scan', 'RegularController@scan')->name('scan');
         });
 
     // Providers

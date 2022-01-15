@@ -6,6 +6,7 @@ use Bank\Http\Requests\RegularRequest;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Regular;
 use Bank\Models\Provider;
+use Bank\Events\ScanForRegulars;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -113,5 +114,12 @@ class RegularController extends Controller
                 'text' => 'Item successfully deleted'
             ]);
 
+    }
+
+    /**
+     * Manually request a new scan of new regulars
+     */
+    public function scan() {
+        ScanForRegulars::dispatch();
     }
 }
