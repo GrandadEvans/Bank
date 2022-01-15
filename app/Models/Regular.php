@@ -4,6 +4,7 @@ namespace Bank\Models;
 
 use Bank\UtilityClasses\Dates;
 use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
@@ -150,6 +151,18 @@ class Regular extends BaseModel
     public function provider()
     {
         return $this->hasOne(Provider::class, 'id', 'provider_id');
+    }
+
+    /**
+     * I want to find distinct entries for this user
+     * 
+     * They should obviously be for this user, and distinct on the entry text and the amount
+     */
+    public static function findDistinctEntries() {
+        $entries = DB::table('transactions')
+            ->where('user_id', Auth::id())
+            ->groupBy('entry')
+            ->get();
     }
 
 }
