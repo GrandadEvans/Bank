@@ -119,7 +119,10 @@ class RegularController extends Controller
     /**
      * Manually request a new scan of new regulars
      */
-    public function scan() {
+    public function scan()
+    {
         ScanForRegulars::dispatch();
+        session()->flash('alert', "A new scan is underway, and you'll be informed of the results in a few minutes");
+        return view('home');
     }
 }

@@ -155,12 +155,12 @@ class Regular extends BaseModel
 
     /**
      * I want to find distinct entries for this user
-     * 
+     *
      * They should obviously be for this user, and distinct on the entry text and the amount
      */
-    public static function findDistinctEntries() {
-        $entries = DB::table('transactions')
-            ->where('user_id', Auth::id())
+    public static function findDistinctEntries($allowRegularEntries = true) {
+        return Transaction::where('user_id', Auth::id())
+            ->where('isPartOfRegular', $allowRegularEntries)
             ->groupBy('entry')
             ->get();
     }

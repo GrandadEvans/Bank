@@ -2,10 +2,8 @@
 
 namespace Bank\Listeners;
 
-use Bank\Models\Regular;
 use Bank\Events\ScanForRegulars;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Bank\UtilityClasses\NewRegularFinder;
 
 class StartNewRegularsScan
 {
@@ -22,11 +20,12 @@ class StartNewRegularsScan
     /**
      * Handle the event.
      *
-     * @param  \Bank\Events\ScanForRegulars  $event
+     * @param ScanForRegulars $event
+     *
      * @return void
      */
-    public function handle(ScanForRegulars $event)
+    public function handle(ScanForRegulars $event): void
     {
-        Regular::findDistinctEntries();
+        new NewRegularFinder(returnFindings: false);
     }
 }
