@@ -122,7 +122,14 @@ class RegularController extends Controller
     public function scan()
     {
         ScanForRegulars::dispatch();
-        session()->flash('alert', "A new scan is underway, and you'll be informed of the results in a few minutes");
+        $flashData = [
+            'type' => 'success',
+            'title' => 'Success!',
+            'text' => "A new scan is underway, and you'll be informed of the results in a few minutes"
+        ];
+
+        session()->flash('alert', $flashData);
+
         return view('home');
     }
 }
