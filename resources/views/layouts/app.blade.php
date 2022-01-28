@@ -50,7 +50,7 @@
     <script>
         swal.fire({
             @foreach($flashMessage as $key => $value)
-                '{{ $key }}': '{!! $value !!}',
+                '{{ $key }}': '{!! e($value) !!}',
             @endforeach
         });
 
