@@ -3,7 +3,7 @@ require('./tagsPieChart');
 import {store} from './vueComponents';
 import Swal from "sweetalert2";
 
-$(document).ready(function () {
+$(function() {
     let token = document.head.querySelector('meta[name="csrf-token"]');
     if (token) {
         $.ajaxSetup({
