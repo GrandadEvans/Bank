@@ -42,14 +42,16 @@ Route::middleware(['auth'])->group(function() {
 
     // Regulars
     Route::prefix('regulars')->name('regulars.')->group(function () {
-            Route::get('/', 'RegularController@index')->name('index');
-            Route::get('/create', 'RegularController@create')->name('create');
-            Route::post('/create', 'RegularController@store')->name('store');
-            Route::get('/edit/{regular}', 'RegularController@edit')->name('edit');
-            Route::put('/edit/{regular}', 'RegularController@update')->name('update');
-            Route::delete('/{regular}', 'RegularController@destroy')->name('delete');
-            Route::get('/scan', 'RegularController@scan')->name('scan');
-        });
+        Route::get('/', 'RegularController@index')->name('index');
+        Route::get('/create', 'RegularController@create')->name('create');
+        Route::post('/create', 'RegularController@store')->name('store');
+        Route::get('/edit/{regular}', 'RegularController@edit')->name('edit');
+        Route::put('/edit/{regular}', 'RegularController@update')->name('update');
+        Route::delete('/{regular}', 'RegularController@destroy')->name('delete');
+        Route::get('/scan', 'RegularController@scan')->name('scan');
+        Route::get('/scan_results', 'RegularController@scanResults');
+        Route::get('/possible-new', 'RegularController@possibleNew')->name('possibleNew');
+    });
 
     // Providers
     Route::prefix('providers')->name('providers.')->group(function () {
