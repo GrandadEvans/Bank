@@ -171,7 +171,7 @@ return [
          */
         Bank\Providers\AppServiceProvider::class,
         Bank\Providers\AuthServiceProvider::class,
-        // Bank\Providers\BroadcastServiceProvider::class,
+        Bank\Providers\BroadcastServiceProvider::class,
         Bank\Providers\EventServiceProvider::class,
         Bank\Providers\RouteServiceProvider::class,
 //        Bank\Providers\TelescopeServiceProvider::class, // Manually registered in AppServiceProvider

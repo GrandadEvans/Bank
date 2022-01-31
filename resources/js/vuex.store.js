@@ -2,11 +2,14 @@ export const storeConfig = {
     state: {
         latestTransactionTableData: {},
         latestTransactionTableStats: {},
+        latestRegularTableData: {},
+        latestRegularTableStats: {},
         modalIndex: null,
         modalToShow: null,
         modalTransactionId: null,
         newEntityDetails: null,
         paymentMethods: [],
+        possibleNewRegularsLoaded: false,
         providersData: [],
         providersLoaded: false,
         similarTransactions: [],
@@ -15,6 +18,7 @@ export const storeConfig = {
         similarTransactionsRowRef: null,
         tagList: [],
         transactionsLoaded: false,
+        regularsLoaded: false,
         transactionTable: [
             {
                 id: 'transaction_id',
@@ -83,14 +87,70 @@ export const storeConfig = {
                 columnPath: ''
             }
 
+        ],
+        regularTable: [
+            // {
+            //     id: 'transaction_id',
+            //     name: 'transaction_id',
+            //     label: 'ID',
+            //     columnPath: 'transaction_id'
+            // },
+            {
+                id: 'transaction_date',
+                name: 'transaction_date',
+                label: 'Date',
+                columnPath: 'transaction.date'
+            },
+            {
+                id: 'transaction_provider',
+                name: 'transaction_provider',
+                label: 'Provider',
+                columnPath: 'provider.name'
+            },
+            // {
+            //     id: 'transaction_description',
+            //     name: 'transaction_description',
+            //     label: 'Description',
+            //     columnPath: 'transaction.description'
+            // },
+            {
+                id: 'transaction_amount',
+                name: 'transaction_amount',
+                label: 'Amount',
+                columnPath: 'transaction.amount'
+            },
+            {
+                id: 'transaction_type',
+                name: 'transaction_type',
+                label: 'Type',
+                columnPath: 'payment_method.name'
+            },
+            {
+                id: 'transaction_remarks',
+                name: 'transaction_remarks',
+                label: 'Remarks',
+                columnPath: 'transaction.remarks'
+            },
+            {
+                id: 'transactions_actions',
+                name: 'transactions_actions',
+                label: 'Edit',
+                columnPath: ''
+            }
         ]
     },
     mutations: {
-        updateLatestTransactionTableData (state, data) {
+        updateLatestTransactionTableData(state, data) {
             state.latestTransactionTableData = data;
         },
-        updateLatestTransactionTableStats (state, data) {
+        updateLatestTransactionTableStats(state, data) {
             state.latestTransactionTableStats = data;
+        },
+        updateLatestRegularTableData(state, data) {
+            state.latestRegularTableData = data;
+        },
+        updateLatestRegularTableStats(state, data) {
+            state.latestRegularTableStats = data;
         },
         updateModalIndex(state, index) {
             state.modalIndex = index;
@@ -134,8 +194,14 @@ export const storeConfig = {
 
             state.latestTransactionTableData[index].remarks = remark;
         },
-        transactionsLoaded (state, loadedState) {
+        regularsLoaded(state, loadedState) {
+            state.regularsLoaded = loadedState;
+        },
+        transactionsLoaded(state, loadedState) {
             state.transactionsLoaded = loadedState;
         },
+        possibleNewRegularsLoaded(state, loadedState) {
+            state.possibleNewRegularsLoaded = loadedState;
+        }
     }
 }

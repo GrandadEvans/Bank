@@ -17,6 +17,7 @@ Vue.component('add-similar-transactions-modal', require('./components/ModalCompo
 Vue.component('add-tag-modal', require('./components/ModalComponents/Add-tag-modalComponent').default);
 Vue.component('button-component', require('./components/ButtonComponent').default);
 Vue.component('modal', require('./components/ModalComponents/ModalComponent').default);
+Vue.component('new-regular-scan-results-table', require('./components/NewRegularScanResultsComponent').default);
 Vue.component('pagination-links', require('./components/Pagination-linksComponent').default);
 Vue.component('provider-select', require('./components/provider-selectComponent').default);
 Vue.component('search', require('./components/SearchComponent').default);
@@ -31,4 +32,9 @@ Vue.component('transaction-table-body', require('./components/Transaction-table-
 Vue.component('transaction-table-footer', require('./components/Transaction-table-footerComponent').default);
 Vue.component('transaction-table-header', require('./components/Transaction-table-headerComponent').default);
 Vue.component('transaction-table-row', require('./components/Transaction-table-rowComponent').default);
+Vue.component('regular-table', require('./components/Regular-tableComponent').default);
+Vue.component('regular-table-body', require('./components/Regular-table-bodyComponent').default);
+Vue.component('regular-table-footer', require('./components/Regular-table-footerComponent').default);
+Vue.component('regular-table-header', require('./components/Regular-table-headerComponent').default);
+Vue.component('regular-table-row', require('./components/Regular-table-rowComponent').default);
 

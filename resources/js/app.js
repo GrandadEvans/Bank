@@ -1,7 +1,6 @@
 require('./bootstrap');
 require('./tagsPieChart');
 import {store} from './vueComponents';
-import Swal from "sweetalert2";
 
 $(function() {
     let token = document.head.querySelector('meta[name="csrf-token"]');

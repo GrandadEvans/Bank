@@ -16,6 +16,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 import Echo from 'laravel-echo';
+import Swal from "sweetalert2";
+
 window.Pusher = require('pusher-js');
 window.Echo = new Echo({
     broadcaster: 'pusher',
@@ -26,8 +28,9 @@ window.Echo = new Echo({
 require('./vueComponents');
 require('bootstrap');
 // window.currency   = require('currency.js');
-window.moment     = require('moment');
+window.moment = require('moment');
 
+window.Swal = window.swal = Swal;
 /**
  * Set the currency field format
  *
