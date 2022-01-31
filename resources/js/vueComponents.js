@@ -15,12 +15,14 @@ Vue.component('add-provider-modal', require('./components/ModalComponents/Add-pr
 Vue.component('add-remarks-modal', require('./components/ModalComponents/Add-remarks-modalComponent').default);
 Vue.component('add-similar-transactions-modal', require('./components/ModalComponents/Add-similar-transactions-modalComponent').default);
 Vue.component('add-tag-modal', require('./components/ModalComponents/Add-tag-modalComponent').default);
+Vue.component('badge-component', require('./components/BadgeComponent').default);
 Vue.component('button-component', require('./components/ButtonComponent').default);
 Vue.component('modal', require('./components/ModalComponents/ModalComponent').default);
 Vue.component('new-regular-scan-results-table', require('./components/NewRegularScanResultsComponent').default);
 Vue.component('pagination-links', require('./components/Pagination-linksComponent').default);
 Vue.component('provider-select', require('./components/provider-selectComponent').default);
 Vue.component('search', require('./components/SearchComponent').default);
+// Vue.component('sidebar', require('./components/SidebarComponent').default);
 Vue.component('tag', require('./components/TagComponent').default);
 Vue.component('tags-list', require('./components/TaglistComponent').default);
 Vue.component('td-amount', require('./components/Td-amountComponent').default);

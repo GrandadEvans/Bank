@@ -2,7 +2,6 @@
 
 namespace Bank\UtilityClasses;
 
-use Bank\Events\ScanForRegulars;
 use Bank\Models\Regular;
 use Bank\Models\Transaction;
 use Carbon\Carbon;
@@ -45,9 +44,7 @@ class NewRegularFinder
     {
         $findings = $this->scan();
 
-        $fp = fopen(resource_path()."/newRegularScans/".Carbon::now()->format('Y-m-d_H-i-s').".json", "w+");
-        fwrite($fp, json_encode($findings));
-        fclose($fp);
+        $this->persistFindings($findings);
 
         if ($returnFindings) {
             return $findings;
@@ -227,13 +224,45 @@ class NewRegularFinder
     public function addTransactionToPossibleRegulars(
         Transaction $transaction,
         Transaction $nextTransaction,
-        string      $period,
-    ): void
-    {
+        string $period,
+    ): void {
         if (!array_key_exists($transaction->entry, $this->possibleRegulars)) {
-            $this->possibleRegulars[$transaction->entry]['transactions'][] = $transaction;
-            $this->possibleRegulars[$transaction->entry]['period'] = $period;
+//            $this->possibleRegulars[$transaction->entry]['transactions'][] = $transaction;
+//            $this->possibleRegulars[$transaction->entry]['period'] = $period;
+            $this->possibleRegulars[$transaction->entry] = $period;
         }
-        $this->possibleRegulars[$transaction->entry]['transactions'][] = $nextTransaction;
+//        $this->possibleRegulars[$transaction->entry]['transactions'][] = $nextTransaction;
+    }
+
+    /**
+     * Write the findings to both a timestamped file and a "latest" file, both in a user specific directory
+     *
+     * @param  array  $findings
+     *
+     * @return void
+     */
+    private function persistFindings(array $findings): void
+    {
+        $dir = RegularTransactionUtilities::getRegularScanDirectory();
+
+        if (!file_exists($dir)) {
+            if (!mkdir($dir, 0777)) {
+                // @todo: Fix permissions
+                // @todo: Catch and action error
+            }
+        }
+        $path = Carbon::now()->format('Y-m-d_H-i-s');
+        $latest_filename = 'latest';
+        $ext = '.json';
+        $filename = $dir.$path.$ext;
+        $latest_path = $dir.$latest_filename.$ext;
+
+        $fp = fopen($filename, "w+");
+        fwrite($fp, json_encode($findings));
+        fclose($fp);
+
+        if (!copy($filename, $latest_path)) {
+            // @todo: action error if false
+        }
     }
 }
