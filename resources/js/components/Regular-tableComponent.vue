@@ -8,7 +8,8 @@
             </header>
 
             <section style="margin:1rem">
-                <h1 style="flex-grow: 1; text-align: center">&ldquo;ALDI&rdquo; appears every <strong>WEEK</strong></h1>
+                <h1 style="flex-grow: 1; text-align: center">&ldquo;{{ this.name }}&rdquo; appears every
+                    <strong>{{ this.period }}</strong></h1>
                 <div class="btn-group" style="display: flex">
                     <button class="btn btn-warning" style="margin-right: 0.5rem">Decline</button>
                     <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;">Not Sure
@@ -18,8 +19,14 @@
             </section>
 
             <section style="margin-top: 0.5rem;">
-                <h3>Latest transactions</h3>
-                <table class="table table-striped table-hover table-bordered regulars-table">
+                <table
+                    v-if="regularsLoaded === true"
+                    :source=this.source
+                    id="regulars-table"
+                    class="table table-striped table-hover table-bordered regulars-table">
+
+                    <caption>Latest transactions</caption>
+
                     <thead>
                     <tr>
                         <th scope="col">Date</th>
@@ -77,8 +84,14 @@
             </section>
 
             <section style="margin-top: 0.5rem;">
-                <h3>Statistics</h3>
-                <table class="table table-striped table-hover table-bordered regulars-table">
+                <table
+                    v-if="regularsLoaded === true"
+                    :source=this.source
+                    id="regulars-table"
+                    class="table table-striped table-hover table-bordered regulars-table">
+
+                    <caption>Statistics</caption>
+
                     <thead>
                     <tr>
                         <th scope="col">Period</th>
@@ -128,18 +141,7 @@
                 </table>
             </section>
         </section>
-        <!--    <div v-if="regularsLoaded === true">-->
-        <!--        <keep-alive>-->
-        <!--            <search></search>-->
-        <!--        </keep-alive>-->
-        <!--        <keep-alive>-->
-        <!--            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"></pagination-links>-->
-        <!--        </keep-alive>-->
-        <!--        <keep-alive>-->
         <!--            <table-->
-        <!--                v-if="regularsLoaded === true"-->
-        <!--                :source=this.source-->
-        <!--                id="regulars-table"-->
         <!--                class="table table-striped table-hover table-bordered regulars-table">-->
 
 
@@ -158,7 +160,11 @@
 <script>
 export default {
     name: "regular-table",
-    props: ['source'],
+    props: [
+        'source',
+        'name',
+        'period'
+    ],
     computed: {
         regularsLoaded: function () {
             return this.$store.state.regularsLoaded;

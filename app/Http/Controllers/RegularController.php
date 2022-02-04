@@ -7,9 +7,12 @@ use Bank\Http\Requests\RegularRequest;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
 use Bank\Models\Regular;
+use Bank\Models\Transaction;
 use Bank\UtilityClasses\RegularTransactionUtilities;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class RegularController extends Controller
@@ -144,66 +147,79 @@ class RegularController extends Controller
         return view('regulars.scanResults');
     }
 
-    public function possibleNew()
+    public function possibleNew(int $iteration)
     {
+        $iteration--; // convert page number to array index
         $dir = RegularTransactionUtilities::getRegularScanDirectory();
         $latestFilename = "${dir}/latest.json";
         $latestContents = file_get_contents($latestFilename);
+        $decoded = json_decode(json: $latestContents, associative: true);
+        $keys = array_keys($decoded['transactions']);
+        $values = array_values($decoded['transactions']);
 
-//        $userId = (int) Auth::id();
-//        $search = '';// !empty($value = request()->get('search', ['value' => ''])) ? $value['value'] : '';
-//        $orderByColumn = !empty($sort = request()->get('orderBy')) ? '0' : 'transactions.id';
-//        $orderByDirection = request()->get('ascending') == 1 ? 'asc' : 'desc';
-//        $startingRecord = ($limit * ($page - 1)) + 1;
-//        $endRecord = $limit * $page;
-//
-//        $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
-//            ->where('transactions.user_id', Auth::id());
-//
-//        $totalRecords = $query->count();
-//
-//        if (!empty($search)) {
-//            $query
-//                ->where('transactions.entry', 'like', '%%'.$search.'%')
-//                ->orWhere('transactions.remarks', 'like', '%%'.$search.'%')
-//                ->orWhere('transactions.amount', 'like', '%%'.$search.'%');
-//                ->orWhere('providers.name',       'like', '%%'.$search.'%');
-//        }
-//
-//        $filteredRecords = $query->count();
-//
-//        $query->orderBy($orderByColumn, $orderByDirection);
-//        $query->limit($limit);
-//        $query->forPage($page, $limit);
-//
-//        $data = $query->get();
-//
-//        $query2 = DB::table('transactions')
-//            ->where('user_id', Auth::id())
-//            ->where('amount', '>', 0)
-//            ->average('amount');
-//        $query3 = DB::table('transactions')
-//            ->where('user_id', Auth::id())
-//            ->where('amount', '<', 0)
-//            ->average('amount');
-//
-//
-//        $stats = [
-//            'totalRecords' => (int) $totalRecords,
-//            'filteredRecords' => (int) $filteredRecords,
-//            'startingRecord' => (int) $startingRecord,
-//            'endRecord' => (int) $endRecord,
-//            'page' => (int) $page,
-//            'limit' => (int) $limit,
-//            'average_in' => $query2,
-//            'average_out' => $query3
-//        ];
+        $userId = (int) Auth::id();
 
-        $decoded = json_decode($latestContents);
+        $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
+            ->where('transactions.user_id', Auth::id())
+            ->where('transactions.entry', $keys[$iteration])
+            ->distinct();
+
+
+        $query->orderBy('date', 'DESC');
+        $data = $query->get();
+
+//        $grouped = $data->groupBy(['entry']);
+//        dd($grouped->all());
+        $period = $values[$iteration];
+
+        $lastSixMonths = $data->takeWhile(function ($item) {
+            $now = Carbon::create('now');
+            $sixMonthsAgo = Carbon::create('6 months ago');
+            $test = Carbon::create($item->date);
+
+            return $test->isBetween($now, $sixMonthsAgo);
+        });
+
+        $lastOneYear = $data->takeWhile(function ($item) {
+            $now = Carbon::create('now');
+            $oneYearAgo = Carbon::create('now')->subYear();
+            $test = Carbon::create($item->date);
+
+            return $test->isBetween($now, $oneYearAgo);
+        });
+
+        $allTime = $this->getStatsPerPeriod($data);
+        $lastFiveEntries = $this->getStatsPerPeriod($data->take(5));
+        $lastTenEntries = $this->getStatsPerPeriod($data->take(10));
+        $lastSixMonths = $this->getStatsPerPeriod($lastSixMonths);
+        $lastYear = $this->getStatsPerPeriod($lastOneYear);
+
         return [
-            'data' => $decoded,
+            'data' => [
+                'transactions' => $data,
+            ],
             'stats' => [
+                'lastFiveEntries' => $lastFiveEntries,
+                'lastTenEntries' => $lastTenEntries,
+                'lastSixMonths' => $lastSixMonths,
+                'lastOneYear' => $lastYear,
+                'allTime' => $allTime,
+                'name' => $data->first()->entry,
+                'period' => $period,
+                'totalDistinct' => count($decoded['transactions'])
             ]
         ];
+    }
+
+    private function getStatsPerPeriod(Collection $collection)
+    {
+        $sum = $collection->sum('amount');
+        $count = $collection->count();
+        if ($count) {
+            $average = ($sum / $count);
+            return [$sum, $count, $average];
+        }
+
+        return [0, 0, 0];
     }
 }

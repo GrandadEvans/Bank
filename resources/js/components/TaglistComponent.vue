@@ -5,6 +5,7 @@
                 class="fas fa-plus-circle add-new-tag"
                 @click="addNewTag"
                 v-on:tag-added="tagAdded"
+                v-if="!read_only"
             ></i>
             <i v-if="validTags" class="fas fa-times-circle exit-edit-mode"
                v-on:click="changeTagMode"></i>
@@ -29,18 +30,19 @@
 
 <script>
 const bootstrap = require('bootstrap');
-import { blackOrWhite } from '../helperFunctions'
+import {blackOrWhite} from '../helperFunctions'
 
-    export default {
-        name: "tags-list",
-        props: [
-            'index',
-            'tags',
-            'mode',
-            'transaction_id',
-            'tag_count'
-        ],
-        computed: {
+export default {
+    name: "tags-list",
+    props: [
+        'index',
+        'tags',
+        'mode',
+        'transaction_id',
+        'tag_count',
+        'read_only'
+    ],
+    computed: {
             direction: function () {
                 return (this.mode === 'edit') ? 'column' : 'row';
             },

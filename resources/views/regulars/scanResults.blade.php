@@ -8,7 +8,7 @@
 
     <section id="report-summary">
         <article class="section-body">
-            <new-regular-scan-results-table source="/regulars/possible-new"/>
+            <new-regular-scan-results-table source="/regulars/possible-new" iteration="0"/>
         </article>
 
         <footer>

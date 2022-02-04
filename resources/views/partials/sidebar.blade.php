@@ -76,6 +76,11 @@
                             <i class="fa fa-tag"></i> Scan for new Regulars
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('regulars.scanResults') }}">
+                            <i class="fa fa-tag"></i> View latest scan results
+                        </a>
+                    </li>
                 </ul>
                 <ul>
                 <!--

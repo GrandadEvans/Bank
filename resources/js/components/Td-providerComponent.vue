@@ -4,6 +4,7 @@
             <provider-select
                 :transaction_id="transaction_id"
                 v-on:provider-updated="providerUpdated"
+                v-if="!read_only"
             ></provider-select>
         </slot>
     </div>
@@ -13,7 +14,8 @@
 export default {
     name: "td-provider",
     props: [
-        'transaction_id'
+        'transaction_id',
+        'read_only'
     ],
     methods: {
         providerUpdated: function (provider) {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license https://opensource.org/licenses/LGPL-3.0 GNU Lesser General Public License version 3
+ * @package Bank
+ * @subpackage UtilityClasses
+ */
 
 namespace Bank\UtilityClasses;
 
@@ -10,70 +15,78 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- *
+ * Class to find possible regular entries for a user in the database
  */
 class NewRegularFinder
 {
     /**
      * This will be a new list of regulars that are found during the scan
      *
-     * @var array
+     * @var array $possibleRegulars
      */
     public array $possibleRegulars = [];
 
     /**
      * The number of tests to perform per transaction
      *
-     * @var int
+     * @var int $numberOfDatesToTest
      */
     public int $numberOfDatesToTest = 4;
 
     /**
      * The format of the date we want from Carbon
      *
-     * @var string
+     * @var string $dateFormat
      */
     protected string $dateFormat = 'Y-m-d';
 
     /**
+     * The maximum amount of entries to retrieve and test per potential regular
+     *
+     * @var int $numberOfDistinctEntries
+     */
+    protected int $numberOfDistinctEntries = 0;
+
+    /**
      * Constructor
      *
-     * @param bool  $returnFindings
+     * @param  bool  $returnFindings  Should the results be returned (not allowed for event listeners)
+     * @test    Broadcast the results to the user on the frontend !important!
      */
     public function __construct(bool $returnFindings = true)
     {
-        $findings = $this->scan();
+        $this->scan();
 
-        $this->persistFindings($findings);
+        $this->persistFindings();
 
         if ($returnFindings) {
-            return $findings;
+            return $this->possibleRegulars;
         }
-
-        // @todo broadcast the findings to the user !important!
     }
 
     /**
      * This is the main method that will take care of scanning for new regular transactions
      *
-     * @return array
+     * @uses \Bank\UtilityClasses\TimePeriods::$availablePeriods to get all applicable time periods
      */
-    public function scan(): array
+    public function scan(): void
     {
         $distinctEntries = $this->getDistinctEntries();
+        $this->numberOfDistinctEntries = $distinctEntries->count();
 
         $timePeriods = TimePeriods::$availablePeriods;
 
-        foreach($distinctEntries as $distinctEntry) {
+        foreach ($distinctEntries as $distinctEntry) {
             $this->testEachDistinctEntry(transaction: $distinctEntry, timePeriods: $timePeriods);
         }
-        return $this->possibleRegulars;
     }
 
     /**
      * This will get a Collection of distinct transactions that are not already part of a regular
      *
-     * @return Collection
+     * @return  Collection
+     * @uses    \Bank\Models\Regular::findDistinctEntries() to get a list of repeated transactions for this user
+     *
      */
     public function getDistinctEntries(): Collection
     {
@@ -83,8 +96,8 @@ class NewRegularFinder
     /**
      * This is past each of the distinct transactions in turn
      *
-     * @param Transaction $transaction
-     * @param array $timePeriods
+     * @param  array  $timePeriods
+     * @param  Transaction  $transaction
      *
      * @return void
      */
@@ -110,9 +123,8 @@ class NewRegularFinder
                 }
 
                 $transaction = $similarTransactions[$i];
-                $nextTransaction = $similarTransactions[$i+1];
+                $nextTransaction = $similarTransactions[$i + 1];
                 $nextDate = $transaction->date->copy()->sub($period, $multiplier);
-
                 $range = $this->getRangeOfDates(nextDate: $nextDate);
 
                 foreach ($range as $date) {
@@ -125,11 +137,12 @@ class NewRegularFinder
     /**
      * This will find all transactions that are similar to this one
      *
-     * @param Transaction $transaction
+     * @param  Transaction  $transaction
+     * @return  Collection
+     * @uses    \Illuminate\Support\Facades\Auth::id to get the current users ID
+     * @uses    \Bank\Models\Transaction::where to find similar items
      *
-     * @return Collection
-     *
-     * @todo I'm pretty sure this is an n+1 problem
+     * @todo    I'm pretty sure this is an n+1 problem
      */
     public function getSimilarTransactions(Transaction $transaction): Collection
     {
@@ -144,9 +157,9 @@ class NewRegularFinder
     /**
      * Get either the global numberOfDatesToTest or the number of transactions passed; whichever is smaller
      *
-     * @param mixed $transactions Can be an int or a Collection
+     * @param  mixed  $transactions  Can be an int or a Collection
      *
-     * @return int
+     * @return  int
      */
     public function numberTransactionsToTest(mixed $transactions): int
     {
@@ -165,9 +178,12 @@ class NewRegularFinder
      * after a weekend, as well as days when the transaction is taken out during weekends.
      * If the transaction is on a weekday, it will simply wrap that date in an array
      *
-     * @param Carbon $nextDate
+     * @param  Carbon  $nextDate
+     * @return  array
+     * @uses    \Carbon\Carbon::MONDAY to get Carbon's version of Monday
+     * @uses    \Carbon\CarbonPeriod::create to get a range of dates from the previous Friday to the next Monday
      *
-     * @return array
+     * @uses    \Carbon\Carbon::FRIDAY to get Carbon's version of Friday
      */
     public function getRangeOfDates(Carbon $nextDate): array
     {
@@ -191,20 +207,19 @@ class NewRegularFinder
     /**
      * Check to see if 2 dates match, if they do, then add to the list of final successes
      *
-     * @param Transaction $transaction,
-     * @param Transaction $nextTransaction,
-     * @param string $dateToCheck
-     * @param string $period
+     * @param  Transaction  $transaction
+     * @param  Transaction  $nextTransaction
+     * @param  string  $dateToCheck
+     * @param  string  $period
      *
-     * @return void
+     * @return  void
      */
     public function checkForMatchingDates(
         Transaction $transaction,
         Transaction $nextTransaction,
-        string      $dateToCheck,
-        string      $period
-    ): void
-    {
+        string $dateToCheck,
+        string $period
+    ): void {
 
         $transactionDate = $nextTransaction->date->format($this->dateFormat);
         if ($transactionDate === $dateToCheck) {
@@ -227,28 +242,31 @@ class NewRegularFinder
         string $period,
     ): void {
         if (!array_key_exists($transaction->entry, $this->possibleRegulars)) {
-//            $this->possibleRegulars[$transaction->entry]['transactions'][] = $transaction;
-//            $this->possibleRegulars[$transaction->entry]['period'] = $period;
             $this->possibleRegulars[$transaction->entry] = $period;
         }
-//        $this->possibleRegulars[$transaction->entry]['transactions'][] = $nextTransaction;
     }
 
     /**
      * Write the findings to both a timestamped file and a "latest" file, both in a user specific directory
      *
-     * @param  array  $findings
+     * @todo REFACTOR: Split this method up an maybe move to a different class
+     * @todo: action on failures such as fail to save or copy
+     * @todo: Fix file permissions !important!
+     * @uses \Bank\UtilityClasses\RegularTransactionUtilities::getRegularScanDirectory to get the correct directory
+     * @uses \Carbon\Carbon::now to format the name of the file
      *
      * @return void
      */
-    private function persistFindings(array $findings): void
+    private function persistFindings(): void
     {
+        $findings['totalDistinct'] = $this->numberOfDistinctEntries;
+        $findings['transactions'] = $this->possibleRegulars;
+
         $dir = RegularTransactionUtilities::getRegularScanDirectory();
 
         if (!file_exists($dir)) {
             if (!mkdir($dir, 0777)) {
-                // @todo: Fix permissions
-                // @todo: Catch and action error
+                //
             }
         }
         $path = Carbon::now()->format('Y-m-d_H-i-s');
@@ -262,7 +280,7 @@ class NewRegularFinder
         fclose($fp);
 
         if (!copy($filename, $latest_path)) {
-            // @todo: action error if false
+            //
         }
     }
 }
