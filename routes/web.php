@@ -57,9 +57,11 @@ Route::middleware(['auth'])->group(function() {
         Route::put('/edit/{possibleRegular}', 'PossibleRegularController@update')->name('update');
         Route::get('/scan', 'PossibleRegularController@scan')->name('scan');
         Route::get('/scan_results', 'PossibleRegularController@scanResults')->name('scanResults');
-        Route::delete('/{possibleRegular}', 'PossibleRegularController@destroy')->name('delete');
-        Route::get('/accept', [PossibleRegularController::class, 'accept'])->name('accept');
+        Route::post('/accept', [PossibleRegularController::class, 'accept']);
+        Route::post('/decline', [PossibleRegularController::class, 'decline']);
+        Route::post('/postpone', [PossibleRegularController::class, 'postpone']);
         Route::get('/first', 'PossibleRegularController@view')->name('view'); // keep at bottom
+        Route::delete('/{possibleRegular}', 'PossibleRegularController@destroy')->name('delete');
     });
 
     // Providers

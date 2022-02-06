@@ -85,13 +85,46 @@ class PossibleRegularController extends Controller
     /**
      * Mark an entry as accepted.
      *
-     * @param  AcceptPossibleRegularRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function accept()
     {
         $possibleRegular = $this->getFirstOutstanding();
         $possibleRegular->last_action = 'accepted';
+        $possibleRegular->last_action_happened = now();
+        if ($possibleRegular->save()) {
+            return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
+        } else {
+            return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Mark an entry as declined.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function decline()
+    {
+        $possibleRegular = $this->getFirstOutstanding();
+        $possibleRegular->last_action = 'declined';
+        $possibleRegular->last_action_happened = now();
+        if ($possibleRegular->save()) {
+            return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
+        } else {
+            return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Mark an entry as postponed.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postpone()
+    {
+        $possibleRegular = $this->getFirstOutstanding();
+        $possibleRegular->last_action = 'postponed';
         $possibleRegular->last_action_happened = now();
         if ($possibleRegular->save()) {
             return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);

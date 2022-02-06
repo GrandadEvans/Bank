@@ -33,8 +33,8 @@ class PossibleRegular extends Model
     public function scopeOutstanding(Builder $query):Builder
     {
         return $query->
-            where('user_id', Auth::id())->
-            whereIn('last_action', [self::POSTPONED, self::CREATED]);
+        where('user_id', Auth::id())->
+        whereIn('last_action', [self::CREATED]);
     }
 
     public function markAccepted(int $id): bool

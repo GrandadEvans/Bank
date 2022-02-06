@@ -7,9 +7,10 @@
                         &ldquo;{{ this.name }}&rdquo; appears every <strong>{{ this.period }}</strong>
                     </h1>
                     <div class="btn-group" style="display: flex">
-                        <button class="btn btn-warning" style="margin-right: 0.5rem">Decline
+                        <button class="btn btn-warning" style="margin-right: 0.5rem" @click="this.decline">Decline
                         </button>
                         <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;"
+                                @click="this.postpone"
                         >Not Sure
                         </button>
                         <button class="btn btn-primary" style="margin-left: 0.5rem" @click="this.accept">Accept</button>
@@ -224,10 +225,32 @@ export default {
             }
         },
         async accept() {
-            let returnedData = await axios.get(`/possible-regulars/accept`);
+            let returnedData = await axios.post(`/possible-regulars/accept`);
             console.log(returnedData)
             if (returnedData.status === 202) {
-                Toast.fire('Accepted :-)');
+                Toast.fire('Marked as ACCEPTED :-)');
+                this.loadPage(returnedData)
+            } else {
+                Toast.fire('ERROR!');
+                // @todo Handle error
+            }
+        },
+        async decline() {
+            let returnedData = await axios.post(`/possible-regulars/decline`);
+            console.log(returnedData)
+            if (returnedData.status === 202) {
+                Toast.fire('Marked at DECLINED :-)');
+                this.loadPage(returnedData)
+            } else {
+                Toast.fire('ERROR!');
+                // @todo Handle error
+            }
+        },
+        async postpone() {
+            let returnedData = await axios.post(`/possible-regulars/postpone`);
+            console.log(returnedData)
+            if (returnedData.status === 202) {
+                Toast.fire('Marked at POSTPONED :-)');
                 this.loadPage(returnedData)
             } else {
                 Toast.fire('ERROR!');
