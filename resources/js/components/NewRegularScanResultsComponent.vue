@@ -142,6 +142,48 @@
                         </tbody>
                     </table>
                 </section>
+
+                <section>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Provider</label>
+                            <provider-select></provider-select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Next Due</label>
+                            <b-datepicker></b-datepicker>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea
+                                name="description"
+                                id="description"
+                                class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Payment Method</label>
+                            <payment-method-select :id="this.paymentMethodId"></payment-method-select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <td-amount></td-amount>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estimated</label>
+                            <input type="checkbox" name="estimated" id="estimated" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Remarks</label>
+                            <textarea
+                                name="remarks"
+                                id="remarks"
+                                class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button>Add Details</button>
+                        </div>
+                    </form>
+                </section>
             </div>
             <div v-else>
                 <h1>No Results</h1>
@@ -159,6 +201,8 @@ export default {
             name: '',
             transactions: [],
             totalDistinct: 0,
+            providerSelected: null,
+            paymentMethodId: null
         }
     },
     props: [
@@ -188,6 +232,7 @@ export default {
                 this.period = returnedData.data.stats.period;
                 this.totalPages = stats.totalDistinct;
                 this.id = stats.id;
+                this.paymentMethodId = stats.paymentMethodId;
 
                 this.$store.commit('updateLatestRegularTableData', this.transactions);
                 this.$store.commit('possibleNewRegularsLoaded', false);

@@ -6,7 +6,7 @@
                 id="providers-select"
                 class="providers-select"
                 v-on:change="chooseProvider"
-                v-model="selected"
+                v-model="providerSelected"
                 :disabled="false"
                 role="listbox"
             >
@@ -33,7 +33,7 @@ export default {
     ],
     data: function () {
         return {
-            selected: ''
+            providerSelected: ''
         }
     },
     computed: {

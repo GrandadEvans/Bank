@@ -20,6 +20,7 @@ Vue.component('button-component', require('./components/ButtonComponent').defaul
 Vue.component('modal', require('./components/ModalComponents/ModalComponent').default);
 Vue.component('new-regular-scan-results-table', require('./components/NewRegularScanResultsComponent').default);
 Vue.component('pagination-links', require('./components/Pagination-linksComponent').default);
+Vue.component('payment-method-select', require('./components/Payment-method-selectComponent').default);
 Vue.component('provider-select', require('./components/provider-selectComponent').default);
 Vue.component('search', require('./components/SearchComponent').default);
 // Vue.component('sidebar', require('./components/SidebarComponent').default);

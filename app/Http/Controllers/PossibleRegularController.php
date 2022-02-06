@@ -77,7 +77,8 @@ class PossibleRegularController extends Controller
                 'allTime' => $allTime,
                 'name' => $transactionsCollection->first()->entry,
                 'period' => $period,
-                'totalDistinct' => $possibilities->count()
+                'totalDistinct' => $possibilities->count(),
+                'paymentMethodId' => $transactionsCollection->first()->payment_method_id
             ]
         ];
     }
@@ -93,6 +94,12 @@ class PossibleRegularController extends Controller
         $possibleRegular->last_action = 'accepted';
         $possibleRegular->last_action_happened = now();
         if ($possibleRegular->save()) {
+//            $r = new Regular();
+//            $r->user_id = Auth::id();
+//            $r->provider_id = 1;
+//            $r->nextDue = '';
+//            $r->lastRotated = '';
+//            $r->description = '';
             return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
         } else {
             return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
