@@ -1,5 +1,6 @@
 <?php
 
+use Bank\Http\Controllers\PossibleRegularController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,9 +49,17 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/edit/{regular}', 'RegularController@edit')->name('edit');
         Route::put('/edit/{regular}', 'RegularController@update')->name('update');
         Route::delete('/{regular}', 'RegularController@destroy')->name('delete');
-        Route::get('/scan', 'RegularController@scan')->name('scan');
-        Route::get('/scan_results', 'RegularController@scanResults')->name('scanResults');
-        Route::get('/possible-new/{iteration}', 'RegularController@possibleNew')->name('possibleNew');
+    });
+
+    // PossibleRegulars
+    Route::prefix('possible-regulars')->name('possibleRegulars.')->group(function () {
+        Route::get('/', 'PossibleRegularController@index')->name('index');
+        Route::put('/edit/{possibleRegular}', 'PossibleRegularController@update')->name('update');
+        Route::get('/scan', 'PossibleRegularController@scan')->name('scan');
+        Route::get('/scan_results', 'PossibleRegularController@scanResults')->name('scanResults');
+        Route::delete('/{possibleRegular}', 'PossibleRegularController@destroy')->name('delete');
+        Route::get('/accept', [PossibleRegularController::class, 'accept'])->name('accept');
+        Route::get('/first', 'PossibleRegularController@view')->name('view'); // keep at bottom
     });
 
     // Providers

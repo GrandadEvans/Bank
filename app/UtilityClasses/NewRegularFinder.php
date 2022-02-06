@@ -7,6 +7,7 @@
 
 namespace Bank\UtilityClasses;
 
+use Bank\Models\PossibleRegular;
 use Bank\Models\Regular;
 use Bank\Models\Transaction;
 use Carbon\Carbon;
@@ -56,8 +57,6 @@ class NewRegularFinder
     public function __construct(bool $returnFindings = true)
     {
         $this->scan();
-
-        $this->persistFindings();
 
         if ($returnFindings) {
             return $this->possibleRegulars;
@@ -241,7 +240,12 @@ class NewRegularFinder
         Transaction $nextTransaction,
         string $period,
     ): void {
-        if (!array_key_exists($transaction->entry, $this->possibleRegulars)) {
+        $collection = PossibleRegular::where('user_id', Auth::id())
+            ->where('entry', $transaction->entry)
+            ->where('period', $period)
+            ->get();
+        if ($collection->count() === 0) {
+            $this->persistFindings($transaction->entry, $period);
             $this->possibleRegulars[$transaction->entry] = $period;
         }
     }
@@ -257,30 +261,13 @@ class NewRegularFinder
      *
      * @return void
      */
-    private function persistFindings(): void
+    private function persistFindings($entry, $period): void
     {
-        $findings['totalDistinct'] = $this->numberOfDistinctEntries;
-        $findings['transactions'] = $this->possibleRegulars;
-
-        $dir = RegularTransactionUtilities::getRegularScanDirectory();
-
-        if (!file_exists($dir)) {
-            if (!mkdir($dir, 0777)) {
-                //
-            }
-        }
-        $path = Carbon::now()->format('Y-m-d_H-i-s');
-        $latest_filename = 'latest';
-        $ext = '.json';
-        $filename = $dir.$path.$ext;
-        $latest_path = $dir.$latest_filename.$ext;
-
-        $fp = fopen($filename, "w+");
-        fwrite($fp, json_encode($findings));
-        fclose($fp);
-
-        if (!copy($filename, $latest_path)) {
-            //
-        }
+        $pr = new PossibleRegular();
+        $pr->entry = $entry;
+        $pr->period = $period;
+        $pr->last_Action = 'created';
+        $pr->user_id = Auth::id();
+        $pr->save();
     }
 }

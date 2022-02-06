@@ -164,7 +164,7 @@ class RegularTestsCest
     public function test_the_entire_setup(FunctionalTester $I)
     {
         $RT = new NewRegularFinder();
-        $result = $RT->scan();
+        $result = $RT->possibleRegulars;
 
         assertCount(6, $result);
     }
