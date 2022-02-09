@@ -8,6 +8,8 @@ export const storeConfig = {
         modalToShow: null,
         modalTransactionId: null,
         newEntityDetails: null,
+        newRegularDetails: null,
+        newRegularDetailsLoaded: false,
         paymentMethods: [],
         possibleNewRegularsLoaded: false,
         providersData: [],
@@ -164,13 +166,19 @@ export const storeConfig = {
         updateNewEntityDetails(state, details) {
             state.newEntityDetails = details;
         },
+        updateNewRegularDetails(state, details) {
+            state.newRegularDetails = details;
+        },
+        updateNewRegularDetailsLoaded(state, details) {
+            state.newRegularDetailsLoaded = details;
+        },
         updatePaymentMethods(state, methods) {
             state.paymentMethods = methods;
         },
         updateProvidersData(state, providers) {
             state.providersData = providers;
         },
-        updateProvidersLoaded (state, boolState) {
+        updateProvidersLoaded(state, boolState) {
             state.providersLoaded = boolState;
         },
         updateSimilarTransactions(state, transactions) {

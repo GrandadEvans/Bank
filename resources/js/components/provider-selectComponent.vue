@@ -11,14 +11,16 @@
                 role="listbox"
             >
                 <option disabled="disabled" aria-disabled="true">Choose a provider</option>
-                <option disabled="disabled" aria-disabled="true">-- choose an existing provider --</option>
+                <option disabled="disabled" aria-disabled="true" v-if="!simple_list">-- choose an existing provider --
+                </option>
                 <option
                     v-for="provider in providers"
                     :value="provider.id"
                     role="option"
-                    >{{ provider.name }}</option>
-                <option disabled="disabled" aria-disabled="true">-- or provide a new one --</option>
-                <option value="add-new">I'll create a new one</option>
+                >{{ provider.name }}
+                </option>
+                <option disabled="disabled" aria-disabled="true" v-if="!simple_list">-- or provide a new one --</option>
+                <option value="add-new" v-if="!simple_list">I'll create a new one</option>
             </select>
     </slot>
     </div>
@@ -29,7 +31,8 @@
 export default {
     name: "provider-select",
     props: [
-        'transaction_id'
+        'transaction_id',
+        'simple_list'
     ],
     data: function () {
         return {
@@ -76,7 +79,7 @@ export default {
             const returnedData = await axios.get(url);
             this.$emit('provider-updated', returnedData.data);
 
-            Toast.fire({ icon: 'success', title: 'Transaction updated' });
+            Toast.fire({icon: 'success', title: 'Transaction updated'});
         },
         async updateProviders() {
             this.providerContent = '';
@@ -85,5 +88,11 @@ export default {
             this.$store.commit('updateProvidersData', returnedData.data);
         },
     },
+    mounted: function () {
+        // if (this.$store.state.providersLoaded.length === 0) {
+        console.log('should be updating providers')
+        this.updateProviders();
+        // }
+    }
 }
 </script>

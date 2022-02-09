@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Bank\Models\Provider;
 use Bank\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -16,13 +17,19 @@ class TransactionsSeeder extends Seeder
     public function run()
     {
         Transaction::factory()->count(250)->create();
-
+        $p1 = Provider::factory()->create();
+        $p2 = Provider::factory()->create();
+        $p3 = Provider::factory()->create();
+        $p4 = Provider::factory()->create();
+        $p5 = Provider::factory()->create();
+        $p6 = Provider::factory()->create();
+        $p7 = Provider::factory()->create();
         // Create Daily Transactions
 //        $dailyTransactions = [];
         for ($i = 1; $i < 5; $i++) {
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p1->id,
                 'entry' => 'Daily match',
                 'date' => "2021-01-0{$i}",
                 'amount' => 24.75
@@ -44,7 +51,7 @@ class TransactionsSeeder extends Seeder
 
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p2->id,
                 'entry' => 'Weekly match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 45.00
@@ -65,7 +72,7 @@ class TransactionsSeeder extends Seeder
 
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p3->id,
                 'entry' => 'Four Weekly match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 82.00
@@ -85,7 +92,7 @@ class TransactionsSeeder extends Seeder
             $newDate = $newDate->copy()->addMonth();
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p4->id,
                 'entry' => 'Monthly match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 156.42
@@ -104,7 +111,7 @@ class TransactionsSeeder extends Seeder
             $newDate = $newDate->copy()->addQuarter();
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p5->id,
                 'entry' => 'Quarterly match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 72.86
@@ -123,7 +130,7 @@ class TransactionsSeeder extends Seeder
             $newDate = $newDate->copy()->addYear();
             $transaction = Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p6->id,
                 'entry' => 'Annual match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 52.00
@@ -143,7 +150,7 @@ class TransactionsSeeder extends Seeder
         for ($i = 1; $i < 5; $i++) {
             Transaction::factory([
                 'user_id' => 1,
-                'provider_id' => 1,
+                'provider_id' => $p7->id,
                 'entry' => 'NO match',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 9.99

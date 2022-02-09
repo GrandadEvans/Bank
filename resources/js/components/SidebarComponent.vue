@@ -15,7 +15,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('transactions.index') }}">
+                    <a class="nav-link" :href="transactions__index">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              class="feather feather-file">
@@ -26,7 +26,7 @@
                     </a>
                     <ul>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transactions.create')}}">
+                            <a class="nav-link" :href="transactions__create">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="feather feather-file-text">
@@ -42,7 +42,7 @@
                     </ul>
                     <ul>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transactions.import')}}">
+                            <a class="nav-link" :href="transactions__import">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="feather feather-file-text">
@@ -59,7 +59,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('providers.index') }}">
+                    <a class="nav-link" :href="providers__index">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              class="feather feather-bar-chart-2">
@@ -71,7 +71,7 @@
                     </a>
                     <ul>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('providers.create')}}">
+                            <a class="nav-link" :href="providers__create">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="feather feather-file-text">
@@ -88,12 +88,12 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tags.index') }}">
+                    <a class="nav-link" :href="tags__index">
                         <i class="fa fa-tag"></i> Tags
                     </a>
                     <ul>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('tags.create') }}">
+                            <a class="nav-link" :href="tags__create">
                                 <i class="fa fa-tag"></i> Create Tag
                             </a>
                         </li>
@@ -102,29 +102,30 @@
             </ul>
 
             <ul class="nav flex-column">
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('regulars.index') }}">
+                    <a class="nav-link" :href="regulars__index">
                         <i class="fa fa-tag"></i> Regulars
-                        <badge-component count="1"></badge-component>
-                        <!-- @todo: Make regular count dynamic -->
                     </a>
                     <ul>
                         <!-- TODO: Change icon -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('regulars.scan') }}">
+                            <a class="nav-link" :href="possible_regulars__scan"
+                               @click.stop.prevent="scanForNewRegulars">
                                 <i class="fa fa-tag"></i> Scan for new Regulars
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" :href="possible_regulars__scan_results">
+                                <i class="fa fa-tag"></i>
+                                <span style="position: relative">
+                                    View latest scan results
+                                    <badge-component :count="regularsBadgeCount" v-if="regularsBadgeCount > 0">
+                                    </badge-component>
+                                </span>
                             </a>
                         </li>
                     </ul>
                     <ul>
-                        <!--
-                                <li class="nav-item">
-                                <a class="nav-link" href="{{ route('regulars.create') }}">
-                                    <i class="fa fa-tag"></i> Create Regular
-                                </a>
-                            </li>
-        -->
                     </ul>
                 </li>
             </ul>
@@ -134,19 +135,50 @@
             </div>
         </div>
     </nav>
-
 </template>
 
 <script>
 export default {
     name: "sidebar",
+    props: [
+        'transactions__import',
+        'transactions__index',
+        'transactions__create',
+        'providers__index',
+        'providers__create',
+        'tags__index',
+        'tags__create',
+        'regulars__index',
+        'possible_regulars__scan',
+        'possible_regulars__scan_results'
+    ],
+    data() {
+        return {
+            regularsBadgeCount: 0
+        }
+    },
     methods: {
-        loggedIn: () => {
-            if (document.getElementById("log-in-id")) {
-                return true;
+        async scanForNewRegulars() {
+            let returnedData = await axios.get('/possible-regulars/scan'),
+                type = '',
+                title = '',
+                text = '';
+
+            if (returnedData.status === 202) {
+                type = 'success';
+                title = 'Success';
+                text = 'A new scan is underway, and you\'ll be informed of the results in a few minutes';
             } else {
-                return false;
+                type = 'error';
+                title = 'Error!';
+                text = 'There was an unknown error whilst requesting your latest regular transaction scan.<br />Please contact me if this has ruined your life';
             }
+
+            Swal.fire({
+                'type': type,
+                'title': title,
+                'text': text,
+            });
         }
     }
 }

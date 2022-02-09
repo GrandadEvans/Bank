@@ -14,7 +14,7 @@ class FileHandler
     /**
      * @var String $file
      */
-    protected $file;
+    public $file;
 
     /**
      * File handle returned by the fopen method
@@ -38,6 +38,7 @@ class FileHandler
     protected function confirmFileExists(): bool
     {
         $fs = new Filesystem();
+
         if ($fs->exists($this->file) && $fs->isReadable($this->file)) {
             return true;
         } else {

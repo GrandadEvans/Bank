@@ -19,6 +19,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Throwable;
 
 class TransactionController extends Controller
@@ -204,7 +205,7 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Bank\Transaction  $transaction
+     * @param  Transaction  $transaction
      * @return Response
      */
     public function edit(Transaction $transaction)
@@ -220,7 +221,7 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bank\Transaction  $transaction
+     * @param  Transaction  $transaction
      * @return Response
      */
     public function update(TransactionRequest $request, Transaction $transaction)
@@ -310,9 +311,19 @@ class TransactionController extends Controller
         // Get a list of all providers
         $providers = Provider::all()->get();
 
+        $userId = Auth::id();
         $path = $request->file_input->path();
+        $directory = base_path()."/resources/statements/user_{$userId}";
 
-        return $this->importFromFilename($path);
+        if (!file_exists($directory)) {
+            mkdir($directory);
+        }
+        try {
+            copy($path, $directory.'/latest.csv');
+        } catch (Exception $e) {
+            throw new FileException($e->getMessage());
+        }
+        return $this->importFromFilename();
     }
 
     public function autoImport()
@@ -340,9 +351,11 @@ class TransactionController extends Controller
         unlink($filename);
     }
 
-    protected function importFromFilename(string $path): Factory|View|Application
+    protected function importFromFilename(): Factory|View|Application
     {
-        ImportTransactions::dispatch($path);
+        $id = Auth::id();
+
+        ImportTransactions::dispatch(Auth::user());
         $flashData = [
             'type' => 'info',
             'title' => 'Transactions transacting!',
@@ -352,7 +365,7 @@ class TransactionController extends Controller
             'showCancelButton' => 'false'
         ];
 
-            session()->flash('alert', $flashData);
+        session()->flash('alert', $flashData);
 
         return $this->index();
     }

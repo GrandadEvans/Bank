@@ -9,7 +9,7 @@
         <ul>
             <!-- TODO: Change icon -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('possibleRegulars.scan') }}">
+                <a class="nav-link" href="{{ route('possibleRegulars.scan') }}" @@click="scanForNewRegulars">
                     <i class="fa fa-tag"></i> Scan for new Regulars
                 </a>
             </li>

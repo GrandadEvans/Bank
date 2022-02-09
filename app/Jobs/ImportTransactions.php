@@ -4,6 +4,7 @@ namespace Bank\Jobs;
 
 use Bank\Models\PaymentMethod;
 use Bank\Models\Transaction;
+use Bank\Models\User;
 use Bank\UtilityClasses\CsvFileParser;
 use ErrorException;
 use Exception;
@@ -13,8 +14,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 /**
  * Only run a single import until moved to a decent environment
@@ -27,22 +28,30 @@ use Illuminate\Support\Facades\DB;
 class ImportTransactions implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-//    use WithoutOverlapping;
 
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
-    public $tries = 2;
+    public int $tries = 2;
+//
+//    /**
+//     * Get the middleware the job should pass through.
+//     *
+//     * @return array
+//     */
+//    public function middleware()
+//    {
+//        $userId = $this->user->id;
+//        return [new WithoutOverlapping($userId)];
+//    }
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected User $user;
+
+    public function __construct(User $user)
     {
+        $this->user = $user;
         $this->onQueue('importing');
     }
 
@@ -51,22 +60,25 @@ class ImportTransactions implements ShouldQueue, ShouldBeUnique
      *
      * @return void
      */
-    public function handle($path)
+    public function handle()
     {
-        $imported = new CsvFileParser($path);
+        $userId = $this->user->id;
+        $filename = base_path()."/resources/statements/user_{$userId}/latest.csv";
+
+        $imported = new CsvFileParser($filename);
         $data = $imported->getData();
 
         $transactionList = [];
 
         DB::beginTransaction();
 
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $t = new Transaction();
             $t->date = CsvFileParser::convertDate($row["Transaction Date"]);
             $t->entry = $row["Transaction Description"];
             $t->amount = Transaction::setAmount(floatval($row["Credit Amount"]), floatval($row["Debit Amount"]));
             $t->balance = $row["Balance"];
-            $t->user_id = Auth::id();
+            $t->user_id = $userId;
 
 //            $providerResults = CsvFileParser::getTransactionsProviders($row["Transaction Description"], $providers);
 
@@ -74,10 +86,10 @@ class ImportTransactions implements ShouldQueue, ShouldBeUnique
             if (empty($row['Transaction Type'])) $row['Transaction Type'] = "---";
 
             try {
-                $t->payment_method_id = PaymentMethod::where('abbreviation', $row["Transaction Type"])->get()->first()->id;
-            }
-            catch(ErrorException $e) {
-                throw new Exception("There was an error saving the transaction. The abbreviation of \"" . $row["Transaction Type"] .  "\" was not recognised.");
+                $t->payment_method_id = PaymentMethod::where('abbreviation',
+                    $row["Transaction Type"])->get()->first()->id;
+            } catch (ErrorException $e) {
+                throw new Exception("There was an error saving the transaction. The abbreviation of \"".$row["Transaction Type"]."\" was not recognised.");
             }
 
             // If there is only 1 possible provider, then set that before we save the transaction
@@ -106,6 +118,7 @@ class ImportTransactions implements ShouldQueue, ShouldBeUnique
         }
 
         DB::commit();
+        unlink($filename);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Bank\UtilityClasses;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Collection as SupportCollection;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
@@ -81,6 +80,8 @@ class CsvFileParser extends FileHandler
     {
         $this->file = $file;
         $this->confirmFileExists($file);
+        
+        parent::__construct();
     }
 
     /**
@@ -180,7 +181,6 @@ class CsvFileParser extends FileHandler
 
         // The array is now in a reversed state so we need to put it back in the correct order (#BA-51)
         $arrayToReturn = array_reverse($arrayToReturn);
-
         return (array) $arrayToReturn;
     }
 

@@ -2,9 +2,6 @@
 
 namespace Bank\Http\Controllers;
 
-use App\Http\Requests\AcceptPossibleRegularRequest;
-use App\Http\Requests\StorePossibleRegularRequest;
-use App\Http\Requests\UpdatePossibleRegularRequest;
 use Bank\Events\ScanForRegulars;
 use Bank\Models\PossibleRegular;
 use Bank\Models\Transaction;
@@ -65,6 +62,15 @@ class PossibleRegularController extends Controller
         $lastSixMonths = $this->getStatsPerPeriod($lastSixMonths);
         $lastYear = $this->getStatsPerPeriod($lastOneYear);
 
+        $multiplier = 1;
+        if (str_starts_with($period, 'every ')) {
+            $parts = explode(' ', $period);
+            $multiplier = intval($parts[1]);
+            $period = $parts[2];
+        }
+
+        $nextDate = $transactionsCollection->first()->date->copy()->add($period, $multiplier);
+
         return [
             'data' => [
                 'transactions' => $transactionsCollection,
@@ -78,7 +84,9 @@ class PossibleRegularController extends Controller
                 'name' => $transactionsCollection->first()->entry,
                 'period' => $period,
                 'totalDistinct' => $possibilities->count(),
-                'paymentMethodId' => $transactionsCollection->first()->payment_method_id
+                'paymentMethodId' => $transactionsCollection->first()->payment_method_id,
+                'providerId' => $transactionsCollection->first()->provider_id,
+                'nextDate' => $nextDate->format('Y-m-d')
             ]
         ];
     }
@@ -145,7 +153,7 @@ class PossibleRegularController extends Controller
      */
     public function scan()
     {
-        ScanForRegulars::dispatch();
+        ScanForRegulars::dispatch(Auth::user());
         $flashData = [
             'type' => 'success',
             'title' => 'Success!',
@@ -154,7 +162,13 @@ class PossibleRegularController extends Controller
 
         session()->flash('alert', $flashData);
 
-        return view('home');
+        /*
+         * This is not the correct way to move the user back to the previous url.
+         * I know the previous url is at url()->previous, but how do I get the system to send the user to the previous
+         * url? I think I may have to send the request in the background with js and do it that way
+         * @todo: Send the user to the correct URL the correct way
+         */
+        return \response(null, 202);
     }
 
     /**

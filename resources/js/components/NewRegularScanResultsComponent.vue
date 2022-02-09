@@ -7,25 +7,84 @@
                         &ldquo;{{ this.name }}&rdquo; appears every <strong>{{ this.period }}</strong>
                     </h1>
                     <div class="btn-group" style="display: flex">
-                        <button class="btn btn-warning" style="margin-right: 0.5rem" @click="this.decline">Decline
-                        </button>
-                        <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;"
-                                @click="this.postpone"
-                        >Not Sure
-                        </button>
-                        <button class="btn btn-primary" style="margin-left: 0.5rem" @click="this.accept">Accept</button>
+                      <button class="btn btn-warning" style="margin-right: 0.5rem" @click="this.decline">Decline
+                      </button>
+                      <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;"
+                              @click="this.postpone"
+                      >Not Sure
+                      </button>
+                      <button class="btn btn-primary" style="margin-left: 0.5rem" @click="this.addNewRegular">Accept
+                      </button>
                     </div>
                 </section>
 
-                <section style="margin-top: 0.5rem;">
-                    <table
-                        id="regulars-table"
-                        class="table table-striped table-hover table-bordered regulars-table">
-                        <caption>Latest transactions</caption>
+              <section class="col-md-6">
+                <form>
+                  <!-- Provider -->
+                  <div class="mb-3">
+                    <label class="form-label">Provider</label>
+                    <provider-select-for-pr :id="this.providerId"></provider-select-for-pr>
+                  </div>
 
-                        <thead>
-                            <tr>
-                                <th scope="col">Date</th>
+                  <!-- Payment Method -->
+                  <div class="mb-3">
+                    <label class="form-label">Payment Method</label>
+                    <payment-method-select :id="this.paymentMethodId"></payment-method-select>
+                  </div>
+
+                  <!-- Next Due -->
+                  <div class="mb-3">
+                    <label class="form-label">Next Due</label>
+                    <input type="date" id="input-date" name="input-date" v-model="inputDate"/>
+                  </div>
+
+                  <!-- Amount -->
+                  <div class="mb-3">
+                    <label class="form-label">Amount</label>
+                    <input type="text" id="input-amount" name="input-amount" v-model="inputAmount"/>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea
+                        name="description"
+                        id="description"
+                        class="form-control"
+                        v-model="inputDescription"></textarea>
+                  </div>
+
+                  <!-- Estimated -->
+                  <div class="mb-3">
+                    <label class="form-label">Estimated</label>
+                    <input type="checkbox" name="estimated" id="estimated" class="form-control"
+                           v-model="inputEstimated"/>
+                  </div>
+
+                  <!-- Remarks -->
+                  <div class="mb-3">
+                    <label class="form-label">Remarks</label>
+                    <textarea
+                        name="remarks"
+                        id="remarks"
+                        class="form-control"
+                        v-model="inputRemarks"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <button>Add Details</button>
+                  </div>
+                </form>
+              </section>
+
+              <section style="margin-top: 0.5rem;">
+                <table
+                    id="regulars-table"
+                    class="table table-striped table-hover table-bordered regulars-table">
+                  <caption>Latest transactions</caption>
+
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Current Provider</th>
                                 <th scope="col">Payment Method</th>
@@ -143,47 +202,6 @@
                     </table>
                 </section>
 
-                <section>
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Provider</label>
-                            <provider-select></provider-select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Next Due</label>
-                            <b-datepicker></b-datepicker>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea
-                                name="description"
-                                id="description"
-                                class="form-control"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Payment Method</label>
-                            <payment-method-select :id="this.paymentMethodId"></payment-method-select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Amount</label>
-                            <td-amount></td-amount>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Estimated</label>
-                            <input type="checkbox" name="estimated" id="estimated" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Remarks</label>
-                            <textarea
-                                name="remarks"
-                                id="remarks"
-                                class="form-control"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <button>Add Details</button>
-                        </div>
-                    </form>
-                </section>
             </div>
             <div v-else>
                 <h1>No Results</h1>
@@ -197,12 +215,22 @@ export default {
     name: "new-regular-scan-results-table",
     data: function () {
         return {
-            period: '',
-            name: '',
-            transactions: [],
-            totalDistinct: 0,
-            providerSelected: null,
-            paymentMethodId: null
+          period: '',
+          name: '',
+          transactions: [],
+          totalDistinct: 0,
+          providerSelected: null,
+          paymentMethodId: null,
+          providerId: null,
+          lastFiveEntries: null,
+          lastTenEntries: null,
+          lastSixMonths: null,
+          lastOneYear: null,
+          inputDate: '',
+          inputAmount: 0,
+          inputDescription: '',
+          inputRemarks: '',
+          inputEstimated: false
         }
     },
     props: [
@@ -222,28 +250,33 @@ export default {
     methods: {
         async loadPage(returnedData) {
             if (returnedData.data === 'no results') {
-                this.$store.commit('possibleNewRegularsLoaded', true);
-                this.$store.commit('regularsLoaded', true);
+              this.$store.commit('possibleNewRegularsLoaded', false);
+              this.$store.commit('regularsLoaded', false);
             } else {
-                this.transactions = returnedData.data.data.transactions;
+              this.transactions = returnedData.data.data.transactions;
 
-                let stats = returnedData.data.stats;
-                this.name = stats.name;
-                this.period = returnedData.data.stats.period;
-                this.totalPages = stats.totalDistinct;
-                this.id = stats.id;
-                this.paymentMethodId = stats.paymentMethodId;
+              let stats = returnedData.data.stats;
+              this.name = stats.name;
+              this.period = returnedData.data.stats.period;
+              this.totalPages = stats.totalDistinct;
+              this.id = stats.id;
+              this.$store.commit('updateNewRegularDetails', {
+                payment_method_id: stats.paymentMethodId,
+                provider_id: stats.providerId,
+                date: stats.nextDate,
+                amount: this.transactions[0].amount,
+              }),
+                  this.$store.commit('updateNewRegularDetailsLoaded', true);
+              this.$store.commit('updateLatestRegularTableData', this.transactions);
+              this.$store.commit('possibleNewRegularsLoaded', false);
+              this.$store.commit('regularsLoaded', false);
+              this.$store.commit('updateLatestRegularTableStats', returnedData.data.stats);
+              this.$store.commit('possibleNewRegularsLoaded', true);
+              this.$store.commit('regularsLoaded', true);
 
-                this.$store.commit('updateLatestRegularTableData', this.transactions);
-                this.$store.commit('possibleNewRegularsLoaded', false);
-                this.$store.commit('regularsLoaded', false);
-                this.$store.commit('updateLatestRegularTableStats', returnedData.data.stats);
-                this.$store.commit('possibleNewRegularsLoaded', true);
-                this.$store.commit('regularsLoaded', true);
 
-
-                this.lastFiveEntries = {
-                    'total': stats.lastFiveEntries[0],
+              this.lastFiveEntries = {
+                'total': stats.lastFiveEntries[0],
                     'count': stats.lastFiveEntries[1],
                     'avg': stats.lastFiveEntries[2]
                 }
@@ -295,20 +328,37 @@ export default {
             let returnedData = await axios.post(`/possible-regulars/postpone`);
             console.log(returnedData)
             if (returnedData.status === 202) {
-                Toast.fire('Marked at POSTPONED :-)');
-                this.loadPage(returnedData)
+              Toast.fire('Marked at POSTPONED :-)');
+              this.loadPage(returnedData)
             } else {
-                Toast.fire('ERROR!');
-                // @todo Handle error
+              Toast.fire('ERROR!');
+              // @todo Handle error
             }
         },
-        async getData(url = '/possible-regulars/first') {
-            let data = await axios.get(url);
-            this.loadPage(data);
-        }
+      async getData(url = '/possible-regulars/first') {
+        let data = await axios.get(url);
+        this.loadPage(data);
+      },
+      addNewRegular: function () {
+        this.$store.commit('updateModalToShow', 'add-regular-modal')
+        // this.$store.commit('updateModalTransactionId', this.transaction_id)
+        // this.$store.commit('updateModalIndex', this.$props.index)
+        window.addRegularModal.show();
+      },
+      async updateProviders() {
+        console.log('updating providers')
+        this.providerContent = '';
+        let url = `/providers/simple_list`;
+        const returnedData = await axios.get(url);
+        this.$store.commit('updateProvidersData', returnedData.data);
+      },
+
     },
     mounted: function () {
-        let data = this.getData();
+      let data = this.getData();
+      if (this.$store.state.providersData.length === 0) {
+        this.updateProviders();
+      }
     },
 }
 </script>

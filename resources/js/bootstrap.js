@@ -19,14 +19,14 @@ import Echo from 'laravel-echo';
 import Swal from "sweetalert2";
 
 window.Pusher = require('pusher-js');
+require('./vueComponents');
+require('bootstrap');
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: false // @todo: Switch this to true when switching SSL
+    forceTLS: true // @todo: Switch this to true when switching SSL
 });
-require('./vueComponents');
-require('bootstrap');
 // window.currency   = require('currency.js');
 window.moment = require('moment');
 
@@ -49,5 +49,18 @@ window.GBP = value => {
         negativePattern: `! - #`
     }).format();
 }
+
+// Echo.private(`users.${userId}`)
+window.Echo.private(`users.1`)
+    .listen('ScanForRegulars', (e) => {
+        alert('here')
+        // console.dir(e);
+    });
+// Echo.private(`users.${userId}`)
+window.Echo.channel(`users.1`)
+    .listen('ScanForRegulars', (e) => {
+        alert('here')
+        // console.dir(e);
+    });
 
 
