@@ -134,7 +134,7 @@ export default {
                 this.providerSuccessfullyAdded({
                     id: providerId,
                     name: returnedData.data.provider_name,
-                    // similarTransactions: returnedData.data.similar_transactions
+                    similarTransactions: returnedData.data.similar_transactions
                 });
 
                 if (this.findSimilar === true) {
@@ -148,8 +148,9 @@ export default {
                 console.info('Headers...');
                 console.log(returnedData.headers);
                 console.groupEnd();
-this.$store.commit('newProviderDetected', this.providerName);
-Toast.fire({title: "Provider Added", icon: "success"})
+
+                this.$store.commit('newProviderDetected', this.providerName);
+                Toast.fire({title: "Provider Added", icon: "success"})
             }
         },
         dismissModal: function () {
@@ -180,17 +181,16 @@ Toast.fire({title: "Provider Added", icon: "success"})
                     title: "There are no similar transactions"
                 });
             } else {
+                console.dir(this);
                 this.$store.commit('updateSimilarTransactions', similar);
                 this.$store.commit('updateSimilarTransactionsEntityId', providerId);
                 this.$store.commit('updateSimilarTransactionsType', 'provider');
-                this.$store.commit('updateSimilarTransactionsRowRef',
-                    this.$parent.$children[0].$children[2].$refs['transaction-table-entitys-list-row']);
                 window.addSimilarTransactionsModal.show()
             }
         },
         providerSuccessfullyAdded: function (providerDetails) {
             this.$store.commit('updateNewEntityDetails', {
-                id: providerDetails.provider_id,
+                id: providerDetails.id,
                 name: providerDetails.name,
             });
         },
@@ -200,7 +200,6 @@ Toast.fire({title: "Provider Added", icon: "success"})
 
             if (returnedData.status === 200) {
                 this.$store.commit('updatePaymentMethods', returnedData.data);
-                console.log(this.$store.state.paymentMethods);
             } else {
                 Swal.fire({
                     icon: 'error',

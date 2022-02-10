@@ -106,12 +106,14 @@ export default {
                 let id = row.id;
                 let exists = assignedTransactions.includes(id);
                 if (exists) {
-                    switch(this.typeOfSimilarity) {
-                        case tag:
+                    switch (this.typeOfSimilarity) {
+                        case 'tag':
                             row.tags.push(newItem);
                             break;
-                        case provider:
-                            row.provider = newItem;
+                        case 'provider':
+                            row.provider.id = newItem.id;
+                            row.provider.name = newItem.name;
+                            this.$store.commit('updateLatestTransactionTableData', rows);
                             break;
                     }
                 }

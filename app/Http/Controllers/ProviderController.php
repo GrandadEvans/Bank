@@ -5,12 +5,9 @@ namespace Bank\Http\Controllers;
 use Bank\Http\Requests\ProviderRequest;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
-use Bank\Models\Tag;
 use Bank\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class ProviderController extends Controller
@@ -245,6 +242,7 @@ class ProviderController extends Controller
     {
         $assignedTransactions = [];
         $errors = [];
+        $entityDetails = [];
         $failedTransactions = [];
         $providerDetails = [];
         $providerId = intval($request->get('entity'));
@@ -253,8 +251,8 @@ class ProviderController extends Controller
 
         try {
             $provider = Provider::findOrFail($providerId);
-            $providerDetails = [
-                'name' => $provider->provider,
+            $entityDetails = [
+                'name' => $provider->name,
                 'id' => $provider->id
             ];
         }
@@ -267,7 +265,6 @@ class ProviderController extends Controller
             $responseCode = Response::HTTP_BAD_REQUEST;
         }
 
-        $entityDetails = [];
         if ($responseCode !== Response::HTTP_BAD_REQUEST) {
             $sanitized = [];
             foreach ($transactions as $transaction) {
@@ -277,8 +274,17 @@ class ProviderController extends Controller
             }
             $sanitized = array_unique($sanitized);
 
-            $entityDetails = Transaction::whereIn('id', $sanitized)
-                ->update(['provider_id' => $providerId]);
+            Transaction::whereIn('id', $sanitized)->update(['provider_id' => $providerId]);
+
+            $transactions = Transaction::whereIn('id', $sanitized)->get();
+
+            foreach ($transactions as $transaction) {
+                if ($transaction->provider_id === $providerId) {
+                    $assignedTransactions[] = $transaction->id;
+                } else {
+                    $failedTransactions[] = $transaction->id;
+                }
+            }
         }
 
         $responseText = [

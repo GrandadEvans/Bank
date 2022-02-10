@@ -1,8 +1,10 @@
 <template>
-    <tr :class="significantEntry(row.amount)">
+    <tr :class="significantEntry(row.amount)" :data-transaction-id="row.id">
         <th>{{ row.id }}</th>
-        <td><input type="checkbox" /></td>
-        <td><td-date :date="row.date"/></td>
+        <td><input type="checkbox"/></td>
+        <td>
+            <td-date :date="row.date"/>
+        </td>
         <td>
             <td-provider
                 v-if="row.provider.name === 'N/A'"

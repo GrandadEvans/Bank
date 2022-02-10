@@ -89,10 +89,9 @@ export default {
         },
     },
     mounted: function () {
-        // if (this.$store.state.providersLoaded.length === 0) {
-        console.log('should be updating providers')
-        this.updateProviders();
-        // }
+        if (this.$store.state.providersLoaded.length === 0) {
+            this.updateProviders();
+        }
     }
 }
 </script>

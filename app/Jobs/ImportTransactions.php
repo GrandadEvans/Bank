@@ -16,6 +16,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 /**
@@ -64,8 +65,9 @@ class ImportTransactions implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
         $userId = $this->user->id;
-        $filename = base_path()."/resources/statements/user_{$userId}/latest.csv";
 
+        $filename = base_path()."/resources/statements/user_{$userId}/latest.csv";
+        Log::debug('file should be stored at '.$filename);
         $imported = new CsvFileParser($filename);
         $data = $imported->getData();
 

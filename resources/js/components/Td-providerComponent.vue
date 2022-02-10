@@ -19,7 +19,7 @@ export default {
     ],
     methods: {
         providerUpdated: function (provider) {
-            return this.$el.innerHTML = `<div>${provider}</div>`;
+            return this.$el.innerHTML = `<div>${provider.name}</div>`;
         },
         async showProviderSelectBox () {
             if (this.$store.state.providersLoaded) {
