@@ -36,7 +36,7 @@
                     <a class="nav-link" :href="providers__create">
                         <font-awesome-icon icon="fa-solid fa-shop"
                         />
-                        Providers;</a>
+                        Providers</a>
                     <ul>
                         <li class="nav-item">
                             <!-- 2 different links due to Codeception not recognising link with icon and space in -->
