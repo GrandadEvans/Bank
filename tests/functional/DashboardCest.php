@@ -23,31 +23,6 @@ class DashboardCest
      */
 
     /**
-     * Make sure we can see the Providers link before we begin
-     *
-     * @param FunctionalTester $I
-     * @return void
-     */
-    public function we_see_the_providers_link(FunctionalTester $I)
-    {
-        $I->amOnRoute('home');
-        $I->seeLink('Providers');
-    }
-
-    /**
-     * Make sure clicking the Providers link takes us to the Providers page
-     *
-     * @param FunctionalTester $I
-     * @return void
-     */
-    public function when_we_click_the_providers_link_we_see_the_providers_page(FunctionalTester $I)
-    {
-        $I->amOnRoute('home');
-        $I->click('Providers');
-        $I->canSeeCurrentRouteIs('providers.index');
-    }
-
-    /**
      * Make sure we can see the Providers.create link before we begin
      *
      * @param FunctionalTester $I
@@ -56,7 +31,7 @@ class DashboardCest
     public function we_see_the_link_to_add_a_new_provider(FunctionalTester $I)
     {
         $I->amOnRoute('home');
-        $I->seeLink('Create Provider');
+        $I->seeLink('Add Provider');
     }
 
     /**
@@ -68,7 +43,7 @@ class DashboardCest
     public function make_sure_the_link_to_add_a_new_provider_works(FunctionalTester $I)
     {
         $I->amOnRoute('home');
-        $I->click('Create Provider');
+        $I->click('Add Provider');
         $I->canSeeCurrentRouteIs('providers.create');
     }
 
@@ -80,31 +55,6 @@ class DashboardCest
      */
 
     /**
-     * Make sure we can see the Transactions link before we begin
-     *
-     * @param FunctionalTester $I
-     * @return void
-     */
-    public function we_see_the_transactions_link(FunctionalTester $I)
-    {
-        $I->amOnRoute('home');
-        $I->seeLink('Transactions');
-    }
-
-    /**
-     * Make sure clicking the Transactions link takes us to the Transactions page
-     *
-     * @param FunctionalTester $I
-     * @return void
-     */
-    public function when_we_click_the_transactions_link_we_see_the_transactions_page(FunctionalTester $I)
-    {
-        $I->amOnRoute('home');
-        $I->click('Transactions');
-        $I->canSeeCurrentRouteIs('transactions.index');
-    }
-
-    /**
      * Make sure we can see the Transactions.create link before we begin
      *
      * @param FunctionalTester $I
@@ -113,20 +63,52 @@ class DashboardCest
     public function we_see_the_link_to_add_a_new_transaction(FunctionalTester $I)
     {
         $I->amOnRoute('home');
-        $I->seeLink('Create Transaction');
+        $I->seeLink('Add Transaction');
     }
 
     /**
      * Make sure clicking the Transactions.create link takes us to the correct page
      *
-     * @param FunctionalTester $I
+     * @param  FunctionalTester  $I
      * @return void
      */
     public function make_sure_the_link_to_add_a_new_transaction_works(FunctionalTester $I)
     {
         $I->amOnRoute('home');
-        $I->click('Create Transaction');
+        $I->click('Add Transaction');
         $I->canSeeCurrentRouteIs('transactions.create');
+    }
+
+
+    /**
+     ***************************************************
+     *                  TAGS
+     ***************************************************
+     */
+
+    /**
+     * Make sure we can see the Tags.create link before we begin
+     *
+     * @param  FunctionalTester  $I
+     * @return void
+     */
+    public function we_see_the_link_to_add_a_new_tag(FunctionalTester $I)
+    {
+        $I->amOnRoute('home');
+        $I->seeLink('Add Tag');
+    }
+
+    /**
+     * Make sure clicking the Tags.create link takes us to the correct page
+     *
+     * @param  FunctionalTester  $I
+     * @return void
+     */
+    public function make_sure_the_link_to_add_a_new_tag_works(FunctionalTester $I)
+    {
+        $I->amOnRoute('home');
+        $I->click('Add Tag');
+        $I->canSeeCurrentRouteIs('tags.create');
     }
 
 

@@ -10,7 +10,7 @@
     //             //                 let out = '',
     //             //                     provider_id = parseInt(row.provider_id);
     //             //
-    //             //                 out += `<a href="${data}"><i class="fas fa-edit"></i></a>`;
+    //             //                 out += `<a href="${data}"><font-awesome-icon icon="fa-solid fa-pen-to-square" /></a>`;
     //             //                 if (provider_id === 1) {
     //             //                     out += `
     //             //                             <a

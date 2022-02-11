@@ -24,13 +24,13 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/home', 'home')->name('home');
 
     // Graphs
-    Route::prefix('graph')->name('graphs.')->group(function () {
+    Route::prefix('/graph')->name('graphs.')->group(function () {
         Route::get('/by-tags/months/{months}', [GraphController::class, 'byTags']);
         Route::get('/totalsByMonth', [GraphController::class, 'totalsByMonth']);
     });
 
     // Transactions
-    Route::prefix('transactions')->name('transactions.')->group(function () {
+    Route::prefix('/transactions')->name('transactions.')->group(function () {
         Route::get('/create', [TransactionController::class, 'create'])->name('create');
         Route::post('/create', [TransactionController::class, 'store'])->name('store');
         Route::get('/edit/{transaction}', [TransactionController::class, 'edit'])->name('edit');
@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Regulars
-    Route::prefix('regulars')->name('regulars.')->group(function () {
+    Route::prefix('/regulars')->name('regulars.')->group(function () {
         Route::get('/', [RegularController::class, 'index'])->name('index');
         Route::get('/create', [RegularController::class, 'create'])->name('create');
         Route::post('/create', [RegularController::class, 'store'])->name('store');
@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // PossibleRegulars
-    Route::prefix('possible-regulars')->name('possibleRegulars.')->group(function () {
+    Route::prefix('/possible-regulars')->name('possibleRegulars.')->group(function () {
         Route::get('/', [PossibleRegularController::class, 'index'])->name('index');
         Route::put('/edit/{possibleRegular}', [PossibleRegularController::class, 'update'])->name('update');
         Route::get('/scan', [PossibleRegularController::class, 'scan'])->name('scan');
@@ -77,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Providers
-    Route::prefix('providers')->name('providers.')->group(function () {
+    Route::prefix('/providers')->name('providers.')->group(function () {
         Route::get('/', [ProviderController::class, 'index'])->name('index');
         Route::get('/create', [ProviderController::class, 'create'])->name('create');
         Route::post('/store-from-js', [ProviderController::class, 'storeFromJs']);
@@ -94,7 +94,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Tags
-    Route::prefix('tags')->name('tags.')->group(function () {
+    Route::prefix('/tags')->name('tags.')->group(function () {
         Route::get('/', [TagController::class, 'index'])->name('index');
         Route::get('/create', [TagController::class, 'create'])->name('create');
         Route::post('/store-from-js', [TagController::class, 'storeFromJs']);
@@ -108,7 +108,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Predictions
-    Route::get('predictions', [PredictionsController::class, 'index'])->name('predictions');
+    Route::get('/predictions', [PredictionsController::class, 'index'])->name('predictions');
 
     Route::get('/payment_methods/all', [PaymentMethodController::class, 'all']);
 

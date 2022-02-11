@@ -48,12 +48,14 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('tags.index') }}">
-                    <i class="fa fa-tag"></i> Tags
+                    <font-awesome-icon icon="fa-solid fa-tags"/>
+                    Tags
                 </a>
                 <ul>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('tags.create') }}">
-                            <i class="fa fa-tag"></i> Create Tag
+                            <font-awesome-icon icon="fa-solid fa-tags"/>
+                            Create Tag
                         </a>
                     </li>
                 </ul>
@@ -61,7 +63,7 @@
         </ul>
 
         @include('partials.sidebar.regulars')
-        
+
         <div id="sidebar_piechart">
             <div id="chart_div"></div>
         </div>
