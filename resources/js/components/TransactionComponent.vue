@@ -7,8 +7,10 @@
 
 <!--        TODO: Filter by entry (link needed)-->
         <td>
-            <span class="entry-details">{{transaction.entry}}</span>
-            <span class="entry-icon"><i :class="getEntryIcon(transaction.entry)"></i></span></td>
+            <span class="entry-details">{{ transaction.entry }}</span>
+            <span class="entry-icon">
+                <font-awesome-icon :icon="getEntryIcon(transaction.entry)"/>
+            </span></td>
 
         <td class="amount">{{ formattedAmount(transaction.amount) }}</td>
         <td :class="getOverdraftStatus(transaction.balance, this.overdraftLimit)">{{ formattedAmount(transaction.balance) }}</td>
@@ -20,7 +22,7 @@
 </template>
 
 <script>
-import { currency, formatDate } from "../helperFunctions";
+import {currency, formatDate} from "../helperFunctions";
 
 export default {
     methods: {

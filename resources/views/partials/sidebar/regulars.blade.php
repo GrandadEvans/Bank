@@ -1,7 +1,8 @@
 <ul class="nav flex-column">
     <li class="nav-item">
         <a class="nav-link" href="{{ route('regulars.index') }}">
-            <i class="fa fa-tag"></i> Regulars
+            <font-awesome-icon icon="fa-solid fa-tags"/>
+            Regulars
             @if (session()->has('regulars-badge-count') && session()->get('regulars-badge-count') != 0)
                 <badge-component>{{ session()->get('regulars-badge-count') }}</badge-component>
             @endif
@@ -10,12 +11,14 @@
             <!-- TODO: Change icon -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('possibleRegulars.scan') }}" @@click="scanForNewRegulars">
-                    <i class="fa fa-tag"></i> Scan for new Regulars
+                    <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
+                    Scan for new Regulars
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('possibleRegulars.scanResults') }}">
-                    <i class="fa fa-tag"></i> View latest scan results
+                    <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
+                    View latest scan results
                 </a>
             </li>
         </ul>
@@ -23,7 +26,7 @@
         <!--
                         <li class="nav-item">
                         <a class="nav-link" href="{{ route('regulars.create') }}">
-                            <i class="fa fa-tag"></i> Create Regular
+                            <font-awesome-icon icon="fa-solid fa-tags" />&nbsp;Create Regular
                         </a>
                     </li>
 -->

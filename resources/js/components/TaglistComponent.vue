@@ -1,14 +1,12 @@
 <template>
     <ul class="tags_list" :style="{'flex-direction': direction}">
         <li class="tag-edit-li">
-            <i
-                class="fas fa-plus-circle add-new-tag"
-                @click="addNewTag"
-                v-on:tag-added="tagAdded"
-                v-if="!read_only"
-            ></i>
-            <i v-if="validTags" class="fas fa-times-circle exit-edit-mode"
-               v-on:click="changeTagMode"></i>
+            <span class="add-new-tag" @click="addNewTag" v-on:tag-added="tagAdded" v-if="!read_only">
+            <font-awesome-icon icon="fa-solid fa-circle-plus"/>
+            </span>
+            <span v-if="validTags" class="exit-edit-mode" v-on:click="changeTagMode">
+                <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
+            </span>
         </li>
         <tag
             v-for="(tag, index) in taglist"

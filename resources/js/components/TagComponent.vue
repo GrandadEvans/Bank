@@ -2,14 +2,18 @@
     <li class="tag-list-li" :style="{'justify-content': justifyTags}">
         <div class="justify-start">
             <div class="icon-round" :style="{ 'background-color': background_color, 'color': contrasted_color, }">
-                <i v-if="null != icon" :title="tagTitle" v-bind:class="icon"></i>
-                <i v-else :title="tagTitle" class="far fa-circle"></i>
+                <font-awesome-icon v-if="null != icon" :title="tagTitle" v-bind:icon="icon"/>
+                <font-awesome-icon icon="fa-solid fa-circle"/>
             </div>
             <div class="tag-title" v-if="mode === 'edit'">{{ tagTitle }}</div>
         </div>
         <div class="justify-end" v-if="mode === 'edit'">
-            <div class="tag-edit"><i class="fa fa-edit"></i></div>
-            <div class="tag-delete" v-on:click="deleteTag"><i class="fa fa-trash"></i></div>
+            <div class="tag-edit">
+                <font-awesome-icon icon="fa-solid fa-pen-to-square"/>
+            </div>
+            <div class="tag-delete" v-on:click="deleteTag">
+                <font-awesome-icon icon="fa-solid fa-trash-can"/>
+            </div>
         </div>
     </li>
 </template>

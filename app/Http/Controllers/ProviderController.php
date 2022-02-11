@@ -44,10 +44,10 @@ class ProviderController extends Controller
                 'text' => 'Do you want to run the new regular expression against the transactions now?',
                 'showConfirmButton' => 'true',
                 'showCancelButton' => 'true',
-                'cancelButtonText' => '<i class="fa fa-thumbs-down" />No',
+                'cancelButtonText' => '<font-awesome-icon icon="fa-solid fa-thumbs-down" />No',
                 'confirmButtonText' =>
-                    '<a href="/transactions/filter/' . session()->get('updatedProviderRegex') .'"'.
-                    'style="text-decoration: none; color: white;"><i class="fa fa-thumbs-up" />Yes</a>'
+                    '<a href="/transactions/filter/'.session()->get('updatedProviderRegex').'"'.
+                    'style="text-decoration: none; color: white;"><font-awesome-icon icon="fa-solid fa-thumbs-up" />Yes</a>'
             ];
 
             session()->flash('alert', $flashData);

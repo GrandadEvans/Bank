@@ -76,10 +76,12 @@
                 class="mb-3 tag-example"
                 v-if="allFieldsSet"
             >
-                <i :class="fontAwesomeIcon" :style="{
+                <span :style="{
                     'background-color': tagBgColor,
                     'color': contrastedColor
-                }"/>
+                }">
+                <font-awesome-icon :icon="fontAwesomeIcon.icon" :size="fontAwesomeIcon.size"/>
+                    </span>
             </div>
         </template>
 
@@ -114,19 +116,20 @@
 </template>
 
 <script>
-import { blackOrWhite, randomColour } from '../../helperFunctions';
+import {blackOrWhite, randomColour} from '../../helperFunctions';
+
 const bootstrap = require('bootstrap');
 
 export default {
     name: "add-tag-modal",
-    data () {
+    data() {
         return {
             addFormVisible: false,
             ajaxTagData: null,
             ajaxUrl: '/tags/store-from-js',
             findSimilar: false,
             tagBgColor: randomColour(),
-            tagIcon: '',
+            tagIcon: 'question',
             tagName: '',
         }
     },
@@ -135,7 +138,10 @@ export default {
             return this.$store.state.modalTransactionId
         },
         fontAwesomeIcon () {
-            return `fa-3x ${this.tagIcon}`
+            return {
+                icon: this.tagIcon,
+                size: '3x'
+            };
         },
         allFieldsSet () {
             return (null != this.tagBgColor && null != this.tagIcon && null != this.tagName);

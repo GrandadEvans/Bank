@@ -16,86 +16,56 @@
 
                 <li class="nav-item">
                     <a class="nav-link" :href="transactions__index">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             class="feather feather-file">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                            <polyline points="13 2 13 9 20 9"></polyline>
-                        </svg>
-                        Transactions
-                    </a>
+                        <font-awesome-icon icon="fa-solid fa-calendar-days"/>&nbsp;Transactions</a>
                     <ul>
                         <li class="nav-item">
                             <a class="nav-link" :href="transactions__create">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Create Transaction
-                            </a>
+                                <font-awesome-icon icon="fa-solid fa-calendar-days"/>&nbsp;Add Transaction</a>
                         </li>
                     </ul>
                     <ul>
                         <li class="nav-item">
                             <a class="nav-link" :href="transactions__import">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Import Transactions
-                            </a>
+                                <font-awesome-icon
+                                    icon="fa-solid fa-calendar-days"/>&nbsp;Import Transaction</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" :href="providers__index">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             class="feather feather-bar-chart-2">
-                            <line x1="18" y1="20" x2="18" y2="10"></line>
-                            <line x1="12" y1="20" x2="12" y2="4"></line>
-                            <line x1="6" y1="20" x2="6" y2="14"></line>
-                        </svg>
-                        Providers
-                    </a>
+                    <a class="nav-link" :href="providers__create">
+                        <font-awesome-icon icon="fa-solid fa-shop"
+                        />
+                        Providers;</a>
                     <ul>
                         <li class="nav-item">
+                            <!-- 2 different links due to Codeception not recognising link with icon and space in -->
                             <a class="nav-link" :href="providers__create">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Create Provider
-                            </a>
+                                <font-awesome-icon icon="fa-solid fa-shop"
+                                />&nbsp;Add Provider</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- 2 different links due to Codeception not recognising link with icon and space in -->
+                            <a class="nav-link" :href="providers__index">
+                                <font-awesome-icon icon="fa-solid fa-shop"
+                                />&nbsp;List Provider</a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" :href="tags__index">
-                        <i class="fa fa-tag"></i> Tags
-                    </a>
+                        <font-awesome-icon icon="fa-solid fa-tags"/>&nbsp;Tags</a>
                     <ul>
                         <li class="nav-item">
+                            <!-- 2 different links due to Codeception not recognising link with icon and space in -->
                             <a class="nav-link" :href="tags__create">
-                                <i class="fa fa-tag"></i> Create Tag
-                            </a>
+                                <font-awesome-icon icon="fa-solid fa-tags"/>&nbsp;Add Tag</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- 2 different links due to Codeception not recognising link with icon and space in -->
+                            <a class="nav-link" :href="tags__index">
+                                <font-awesome-icon icon="fa-solid fa-tags"/>&nbsp;List Tags</a>
                         </li>
                     </ul>
                 </li>
@@ -104,24 +74,21 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" :href="regulars__index">
-                        <i class="fa fa-tag"></i> Regulars
-                    </a>
+                        <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
+                        Regulars</a>
                     <ul>
                         <!-- TODO: Change icon -->
                         <li class="nav-item">
-                            <a class="nav-link" :href="possible_regulars__scan"
-                               @click.stop.prevent="scanForNewRegulars">
-                                <i class="fa fa-tag"></i> Scan for new Regulars
-                            </a>
+                            <a class="nav-link" :href="possible_regulars__scan" @click.stop.prevent="scanForNewRegulars"
+                            >
+                                <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
+                                Scan for new Regulars</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" :href="possible_regulars__scan_results">
-                                <i class="fa fa-tag"></i>
-                                <span style="position: relative">
-                                    View latest scan results
-                                    <badge-component :count="regularsBadgeCount" v-if="regularsBadgeCount > 0">
-                                    </badge-component>
-                                </span>
+                                <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
+                                <span style="position: relative">View latest scan results<badge-component
+                                    :count="regularsBadgeCount" v-if="regularsBadgeCount > 0"></badge-component></span>
                             </a>
                         </li>
                     </ul>

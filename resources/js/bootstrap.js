@@ -1,7 +1,6 @@
 window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 window.daterangepicker = require('daterangepicker');
-
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -18,9 +17,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Echo from 'laravel-echo';
 import Swal from "sweetalert2";
 
+require('./font-awesome');
+
 window.Pusher = require('pusher-js');
-require('./vueComponents');
-require('bootstrap');
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
