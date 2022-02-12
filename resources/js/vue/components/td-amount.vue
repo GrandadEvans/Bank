@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { currency } from '../helperFunctions'
+import {currency} from '../../includes/helpers'
+
 export default {
     name: "td-amount",
     props: [

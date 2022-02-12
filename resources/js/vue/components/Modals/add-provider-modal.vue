@@ -1,5 +1,5 @@
 <template>
-    <modal id="add-provider-modal">
+    <modal-base id="add-provider-modal">
         <template v-slot:modal-header>
             Add a new Provider
         </template>
@@ -83,9 +83,10 @@
                 id="add-provider-and-search-submit-button"
                 type="button"
                 @click="submitAndSearch"
-            >Add &amp; look for others</button>
+            >Add &amp; look for others
+            </button>
         </template>
-    </modal>
+    </modal-base>
 </template>
 
 <script>

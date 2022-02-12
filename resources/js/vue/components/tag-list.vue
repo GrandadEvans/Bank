@@ -28,7 +28,7 @@
 
 <script>
 const bootstrap = require('bootstrap');
-import {blackOrWhite} from '../helperFunctions'
+import {blackOrWhite} from '../../includes/helpers'
 
 export default {
     name: "tags-list",

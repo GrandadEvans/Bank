@@ -1,5 +1,5 @@
 <template>
-    <modal id="add-similar-transactions-modal">
+    <modal-base id="add-similar-transactions-modal">
         <template v-slot:modal-header>
             Add similar transactions?
         </template>
@@ -23,22 +23,25 @@
                         </option>
                     </select>
                     <div id="similar-transactions-help" class="form-text">
-                        You can also apply the new {{ typeOfSimilarity }} to these transaction<br />
-                        Click this link to select the similar transactions shown above.</div>
+                        You can also apply the new {{ typeOfSimilarity }} to these transaction<br/>
+                        Click this link to select the similar transactions shown above.
+                    </div>
                 </div>
             </form>
         </template>
 
         <template v-slot:modal-footer>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" form="similar-transactions-form" @click="addTransactions" id="add-similar-transactions-button">Associate Transactions</button>
+            <button type="button" class="btn btn-primary" form="similar-transactions-form" @click="addTransactions"
+                    id="add-similar-transactions-button">Associate Transactions
+            </button>
         </template>
-    </modal>
+    </modal-base>
 </template>
 
 <script>
 const bootstrap = require('bootstrap');
-const { currency, formatDate } = require("../../helperFunctions");
+const {currency, formatDate} = require("../../../includes/helpers");
 
 export default {
     name: "add-similar-transactions-modal",

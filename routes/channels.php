@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('users.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+$id = \Illuminate\Support\Facades\Auth::id();
+Broadcast::channel('user.'.$id, function ($user) {
+    return true;
 });

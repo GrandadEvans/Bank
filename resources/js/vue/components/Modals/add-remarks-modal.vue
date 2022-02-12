@@ -1,5 +1,5 @@
 <template>
-    <modal id="add-remarks-modal">
+    <modal-base id="add-remarks-modal">
         <template v-slot:modal-header>
             Add a remark
         </template>
@@ -31,7 +31,8 @@
                 data-bs-dismiss="modal"
                 type="button"
                 @click="dismissModal"
-            >Cancel</button>
+            >Cancel
+            </button>
 
             <button
                 aria-label="Submit the form and associate the chosen remark with the parent item eg transaction"
@@ -39,9 +40,10 @@
                 form="add-remark-form"
                 id="add-remark-submit-button"
                 type="submit"
-            >Add remark</button>
+            >Add remark
+            </button>
         </template>
-    </modal>
+    </modal-base>
 </template>
 
 <script>

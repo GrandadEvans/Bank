@@ -1,8 +1,9 @@
-require('./bootstrap');
+require('./includes/bootstrap');
 require('./tagsPieChart');
-import {store} from './vueComponents';
+require('./vue/vueComponents');
+import {store} from './vue/vueComponents';
 
-$(function() {
+$(function () {
     let token = document.head.querySelector('meta[name="csrf-token"]');
     if (token) {
         $.ajaxSetup({
@@ -33,6 +34,6 @@ $(function() {
 
     let chartArea = document.getElementById('curve_chart');
     if (chartArea) {
-        require('./yearsIncomeExpenditureChart');
+        require('./charts/yearsIncomeExpenditureChart');
     }
 });

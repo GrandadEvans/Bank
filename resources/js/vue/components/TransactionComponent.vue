@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {currency, formatDate} from "../helperFunctions";
+import {currency, formatDate} from "../../includes/helpers";
 
 export default {
     methods: {

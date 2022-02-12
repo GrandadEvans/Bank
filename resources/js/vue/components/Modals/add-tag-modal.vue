@@ -1,5 +1,5 @@
 <template>
-    <modal id="add-tag-modal">
+    <modal-base id="add-tag-modal">
         <template v-slot:modal-header>
             Add a new tag
         </template>
@@ -110,13 +110,14 @@
                 id="add-tag-and-search-submit-button"
                 type="button"
                 @click="submitAndSearch"
-            >Add &amp; look for others</button>
+            >Add &amp; look for others
+            </button>
         </template>
-    </modal>
+    </modal-base>
 </template>
 
 <script>
-import {blackOrWhite, randomColour} from '../../helperFunctions';
+import {blackOrWhite, randomColour} from '../../../includes/helpers';
 
 const bootstrap = require('bootstrap');
 
