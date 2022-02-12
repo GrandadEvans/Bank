@@ -84,11 +84,11 @@
                                 <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
                                 Scan for new Regulars</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" @click="resetNewRegularsCounter">
                             <a class="nav-link" :href="possible_regulars__scan_results">
                                 <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
-                                <span style="position: relative">View latest scan results<badge-component
-                                    :count="regularsBadgeCount" v-if="regularsBadgeCount > 0"></badge-component></span>
+                                <span style="position: relative">View latest scan results<badge
+                                    :count="regularsBadgeCount" v-if="regularsBadgeCount > 0"></badge></span>
                             </a>
                         </li>
                     </ul>
@@ -121,6 +121,7 @@ export default {
     ],
     data() {
         return {
+            /* @todo: Persist to the session, not just the page */
             regularsBadgeCount: 0
         }
     },
@@ -146,6 +147,12 @@ export default {
                 'title': title,
                 'text': text,
             });
+        },
+        increaseCount() {
+            return this.regularsBadgeCount++;
+        },
+        resetNewRegularsCounter() {
+            return this.regularsBadgeCount = 0;
         }
     }
 }

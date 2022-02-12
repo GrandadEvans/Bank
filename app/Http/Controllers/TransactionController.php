@@ -36,6 +36,7 @@ class TransactionController extends Controller
      */
     public function index($search = null)
     {
+//        PossibleRegularScanFinished::dispatch();
 //        return $this->all();
         return view('transactions.index')
             ->with(['search' => $search]);
@@ -103,8 +104,6 @@ class TransactionController extends Controller
 //            ->average('amount');
 
 
-
-
         $stats = [
             'totalRecords' => (int) $totalRecords,
             'filteredRecords' => (int) $filteredRecords,
@@ -114,7 +113,7 @@ class TransactionController extends Controller
             'limit' => (int) $limit,
 //            'average_in' => $query2,
 //            'average_out' => $query3
-            ];
+        ];
 
         return [
             'data' => $data,
@@ -138,8 +137,7 @@ class TransactionController extends Controller
         try {
             $transaction->provider_id = $provider_id;
             $transaction->save();
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             return new Response('Failed: '.$exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
         $prov = Provider::where('id', $provider_id)->pluck('name');
@@ -153,8 +151,7 @@ class TransactionController extends Controller
                 ->where('tag_id', $tag_id)
                 ->where('transaction_id', $transaction->id)
                 ->delete();
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             return new Response($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
         return new Response('OK', Response::HTTP_ACCEPTED);
@@ -171,7 +168,7 @@ class TransactionController extends Controller
                 'default_color' => $tag->default_color,
                 'contrasted_color' => $tag->contrasted_color,
                 'icon' => $tag->icon
-                ];
+            ];
         }
         return $tagString;
     }
@@ -398,8 +395,7 @@ class TransactionController extends Controller
                 'transaction_id' => $transaction->id,
                 'remark' => $transaction->remarks
             ];
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $errors[] = [
                 'action' => 'find and update transaction remark',
                 'error' => $e->getMessage(),

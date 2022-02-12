@@ -39,6 +39,6 @@ class ScanForRegulars implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('users.1');
+        return new PrivateChannel('user.'.$this->user->id);
     }
 }

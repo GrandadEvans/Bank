@@ -11,9 +11,11 @@ window.Echo = new Echo({
 });
 
 let user = JSON.parse(document.querySelector("meta[name='user']").getAttribute('content'));
-window.Echo.private(`user.${user.id}`)
+let channel = `user.${user.id}`;
+window.Echo.private(channel)
     .listen('PossibleRegularScanFinished', (e) => {
-        //Increment the regularBadgeCount
-        $vm.regularsBadgeCount++;
-        console.dir(e);
+        window.app.$children[0].increaseCount();
+    })
+    .listen('ScanForRegulars', (e) => {
+        console.info('scan begun');
     });

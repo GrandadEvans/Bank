@@ -20,6 +20,8 @@ $(function () {
         store
     });
 
+    window.app = app;
+
     window.Toast = Swal.mixin({
         toast: true,
         position: 'top-end',

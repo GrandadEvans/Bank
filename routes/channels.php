@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 $id = \Illuminate\Support\Facades\Auth::id();
-Broadcast::channel('user.'.$id, function ($user) {
+Broadcast::channel('user.{userId}', function ($user, $userId) {
     return true;
 });

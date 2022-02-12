@@ -5,6 +5,7 @@ namespace Bank\Listeners;
 use Bank\Events\PossibleRegularScanFinished;
 use Bank\Events\ScanForRegulars;
 use Bank\UtilityClasses\NewRegularFinder;
+use Illuminate\Support\Facades\Auth;
 
 class StartNewRegularsScan
 {
@@ -28,6 +29,6 @@ class StartNewRegularsScan
     public function handle(ScanForRegulars $event): void
     {
         new NewRegularFinder(returnFindings: false);
-        PossibleRegularScanFinished::dispatch();
+        PossibleRegularScanFinished::dispatch(Auth::user());
     }
 }
