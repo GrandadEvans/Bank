@@ -197,10 +197,7 @@ export const storeConfig = {
             state.tagList = tags;
         },
         updateTransactionRow(state, details) {
-            const index = details.index;
-            const remark = details.remark;
-
-            state.latestTransactionTableData[index].remarks = remark;
+            state.latestTransactionTableData[details.index].remarks = details.remark;
         },
         regularsLoaded(state, loadedState) {
             state.regularsLoaded = loadedState;
@@ -212,4 +209,4 @@ export const storeConfig = {
             state.possibleNewRegularsLoaded = loadedState;
         }
     }
-}
+};

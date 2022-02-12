@@ -1,15 +1,15 @@
 <template>
     <div v-if="transactionsLoaded === true">
         <keep-alive>
-            <search></search>
+            <search/>
         </keep-alive>
         <keep-alive>
-            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"></pagination-links>
+            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
         </keep-alive>
         <keep-alive>
             <table
                 v-if="transactionsLoaded === true"
-                :source=this.source
+                :source="this.source"
                 id="transactions-table"
                 class="table table-striped table-hover table-bordered transactions-table">
 
@@ -20,7 +20,7 @@
             </table>
         </keep-alive>
         <keep-alive>
-            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"></pagination-links>
+            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
         </keep-alive>
     </div>
 </template>
@@ -58,8 +58,4 @@
 </script>
 
 <style>
-    .transaction_table {
-        width: 98%;
-        margin: 1rem auto;
-    }
 </style>

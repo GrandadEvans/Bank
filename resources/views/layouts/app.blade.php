@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="user" content="{{ Auth::user() }}">
+    <meta name="user" content="{{ json_encode(Auth::user()) }}">
 
     <title>{{ env('APP_NAME') }}</title>
 

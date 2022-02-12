@@ -21,7 +21,7 @@
             <section style="margin-top: 0.5rem;">
                 <table
                     v-if="regularsLoaded === true"
-                    :source=this.source
+                    :source="this.source"
                     id="regulars-table"
                     class="table table-striped table-hover table-bordered regulars-table">
 
@@ -86,7 +86,7 @@
             <section style="margin-top: 0.5rem;">
                 <table
                     v-if="regularsLoaded === true"
-                    :source=this.source
+                    :source="this.source"
                     id="regulars-table"
                     class="table table-striped table-hover table-bordered regulars-table">
 
