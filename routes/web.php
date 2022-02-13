@@ -1,6 +1,7 @@
 <?php
 
 use Bank\Http\Controllers\Auth\LoginController;
+use Bank\Http\Controllers\BadgeController;
 use Bank\Http\Controllers\GraphController;
 use Bank\Http\Controllers\ImporterController;
 use Bank\Http\Controllers\PaymentMethodController;
@@ -107,11 +108,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/simple_list', [TagController::class, 'simpleList']);
     });
 
+    // Badges
+    Route::prefix('/badges')->name('badges.')->group(function () {
+        Route::get('/', [BadgeController::class, 'index'])->name('index');
+        Route::get('/update/{route}/{action}', [BadgeController::class, 'update'])->name('update');
+    });
+
     // Predictions
     Route::get('/predictions', [PredictionsController::class, 'index'])->name('predictions');
 
     Route::get('/payment_methods/all', [PaymentMethodController::class, 'all']);
 
     Route::post('/search', [SearchController::class, 'search'])->name('search');
+
 });
 Route::get('/transfer_statement', [ImporterController::class, 'statement_transferer']);
