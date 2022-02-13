@@ -1,4 +1,4 @@
-import {blackOrWhite, currency, randomColour} from '@/helpers.js'
+import {blackOrWhite, currency, randomColour} from '@/../includes/helpers.js'
 
 describe('Check the COLOUR helper', () => {
     it('if background colour is white, we should get a black foreground', () => {

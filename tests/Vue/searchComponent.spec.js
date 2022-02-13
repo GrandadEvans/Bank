@@ -1,6 +1,6 @@
-import { mount } from '@vue/test-utils'
-import { axios } from 'axios';
-import SearchComponent from '@/components/SearchComponent.vue'
+import {mount} from '@vue/test-utils'
+import Search from '@/components/search.vue'
+import {axios} from 'axios';
 
 describe('Test the allowed parameters', () => {
     it('an empty string should be rejected', () => {

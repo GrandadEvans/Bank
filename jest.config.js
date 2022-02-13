@@ -24,7 +24,7 @@ module.exports = {
     // "import Counter from '@/Counter.vue'"
     // (no need for a full path)
     "moduleNameMapper": {
-        "^@/(.*)$": "<rootDir>/resources/js/$1"
+        "^@/(.*)$": "<rootDir>/resources/js/vue/$1"
     },
     "notify": true
 }

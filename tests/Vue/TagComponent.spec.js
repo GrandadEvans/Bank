@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
-import TagComponent from '@/components/TagComponent.vue'
+import {mount} from '@vue/test-utils';
+import TagComponent from '@/components/tag.vue';
 
 const validPropsData = {
     'icon': 'fa fa-circle',
