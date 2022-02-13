@@ -14,6 +14,7 @@ export const storeConfig = {
         possibleNewRegularsLoaded: false,
         providersData: [],
         providersLoaded: false,
+        routeBadges: {},
         similarTransactions: [],
         similarTransactionsEntityId: [],
         similarTransactionsType: null,
@@ -180,6 +181,9 @@ export const storeConfig = {
         },
         updateProvidersLoaded(state, boolState) {
             state.providersLoaded = boolState;
+        },
+        updateRouteBadges(state, details) {
+            state.routeBadges = details;
         },
         updateSimilarTransactions(state, transactions) {
             state.similarTransactions = transactions;

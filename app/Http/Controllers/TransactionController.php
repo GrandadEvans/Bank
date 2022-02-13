@@ -352,7 +352,10 @@ class TransactionController extends Controller
     {
         $id = Auth::id();
 
-        ImportTransactions::dispatch(Auth::user());
+        /*
+         * @todo: switch back to dispatch & figure out why sync si not working on server
+         */
+        ImportTransactions::dispatchSync(Auth::user());
         $flashData = [
             'type' => 'info',
             'title' => 'Transactions transacting!',

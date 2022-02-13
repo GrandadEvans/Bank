@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
-window.daterangepicker = require('daterangepicker');
+// window.daterangepicker = require('daterangepicker');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

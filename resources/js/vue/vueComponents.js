@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import {storeConfig} from "./vuex.store";
 import VueSweetalert2 from 'vue-sweetalert2';
+// import {default as User} from '../includes/user';
 
 Vue.use(Vuex);
 
@@ -11,17 +12,9 @@ export const store = new Vuex.Store(storeConfig);
 Vue.use(VueSweetalert2);
 
 window.Vue = Vue;
-// https://webpack.js.org/guides/dependency-management/#require-context
-const requireComponent = require.context(
-    './components/', // Look for files in the current directory
-    true, // include subdirectories
-    // Only include "_base-" prefixed .vue files
-    //   /_base-[\w-]+\.vue$/
-    //   /[\w-]+\.vue$/
-    /\.vue$/
-);
 
-// For each matching file name...
+// https://webpack.js.org/guides/dependency-management/#require-context
+const requireComponent = require.context('./components/', true, /* include subdirectories*/ /\.vue$/);
 requireComponent.keys().forEach(fileName => {
     // Get the component config
     const componentConfig = requireComponent(fileName);
@@ -33,3 +26,5 @@ requireComponent.keys().forEach(fileName => {
     // Globally register the component
     Vue.component(componentName, componentConfig.default || componentConfig);
 });
+
+// store.commit('updateRouteBadges', User().badges);

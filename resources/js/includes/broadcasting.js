@@ -1,4 +1,5 @@
 import Echo from "laravel-echo";
+import {default as User} from "./user";
 
 window.Pusher = require('pusher-js');
 
@@ -10,10 +11,11 @@ window.Echo = new Echo({
     forceTLS: true
 });
 
-let user = JSON.parse(document.querySelector("meta[name='user']").getAttribute('content'));
-let channel = `user.${user.id}`;
+let channel = `user.${User.id}`;
+
 window.Echo.private(channel)
     .listen('PossibleRegularScanFinished', (e) => {
+
         window.app.$children[0].increaseCount();
     })
     .listen('ScanForRegulars', (e) => {

@@ -72,7 +72,7 @@ export default {
                 return;
             }
             this.isDisabled(true);
-            let provider_id = this.selected,
+            let provider_id = this.providerSelected,
                 transaction_id,
                 url = `/transactions/${this.transaction_id}/update_provider/${provider_id}`;
 

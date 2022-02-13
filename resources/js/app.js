@@ -1,7 +1,9 @@
 require('./includes/bootstrap');
-require('./tagsPieChart');
 require('./vue/vueComponents');
+require('./tagsPieChart');
+require('./includes/user');
 import {store} from './vue/vueComponents';
+import {default as User} from './includes/user';
 
 $(function () {
     let token = document.head.querySelector('meta[name="csrf-token"]');
@@ -38,4 +40,11 @@ $(function () {
     if (chartArea) {
         require('./charts/yearsIncomeExpenditureChart');
     }
+
+    let routeBadges = store.routeBadges;
+    console.log(routeBadges);
+
+
+    console.log('User', User);
+    console.log('User Badges', User.badges);
 });
