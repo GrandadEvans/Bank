@@ -10,19 +10,19 @@ const validPropsData = {
     'mode': 'list',
     'transaction_id': 34,
     'index': 3
-}
+};
 describe('Make sure the icons work ok', () => {
     it('If there\'s an icon, it should display', () => {
         let validIcon = Object.assign(validPropsData, {'icon': 'fab fa-visa'});
         const wrapper = mount(TagComponent, {propsData: validPropsData});
         expect(wrapper.html()).toMatch(/fab fa-visa/);
-    })
+    });
 
     it('If there\'s NO icon, it should display a circle', () => {
         let validIcon = Object.assign(validPropsData, {'icon': null});
         const wrapper = mount(TagComponent, {propsData: validPropsData});
-        expect(wrapper.html()).toMatch(/far fa-circle/);
-    })
+        expect(wrapper.html()).toMatch(/'fas fa-circle/);
+    });
 });
 //
 // describe('Make sure we can edit the tag', () => {
