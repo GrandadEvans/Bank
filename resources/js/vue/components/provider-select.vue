@@ -72,12 +72,11 @@ export default {
                 return;
             }
             this.isDisabled(true);
-            let provider_id = this.providerSelected,
-                transaction_id,
-                url = `/transactions/${this.transaction_id}/update_provider/${provider_id}`;
+            let provider_id = this.providerSelected;
+            let url = `/transactions/${this.transaction_id}/update_provider/${provider_id}`;
 
             const returnedData = await axios.get(url);
-            this.$emit('provider-updated', returnedData.data);
+            this.$emit('provider-updated', returnedData.data[0]);
 
             Toast.fire({icon: 'success', title: 'Transaction updated'});
         },

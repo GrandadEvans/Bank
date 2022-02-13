@@ -140,7 +140,7 @@ class TransactionController extends Controller
         } catch (Exception $exception) {
             return new Response('Failed: '.$exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $prov = Provider::where('id', $provider_id)->pluck('name');
+        $prov = Provider::where('id', $provider_id)->get();
         return new Response($prov, Response::HTTP_ACCEPTED);
     }
 
