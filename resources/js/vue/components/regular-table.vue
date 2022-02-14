@@ -21,7 +21,6 @@
             <section style="margin-top: 0.5rem;">
                 <table
                     v-if="regularsLoaded === true"
-                    :source="this.source"
                     id="regulars-table"
                     class="table table-striped table-hover table-bordered regulars-table">
 
@@ -86,7 +85,6 @@
             <section style="margin-top: 0.5rem;">
                 <table
                     v-if="regularsLoaded === true"
-                    :source="this.source"
                     id="regulars-table"
                     class="table table-striped table-hover table-bordered regulars-table">
 
@@ -182,7 +180,7 @@ export default {
             let url = `/regulars/possible-new`;
             this.$store.commit('regularsLoaded', false);
             const returnedData = await axios.get(url);
-            console.dir(returnedData);
+            // console.dir(returnedData);
             this.$store.commit('updateLatestregularTableData', returnedData.data.data);
             this.$store.commit('updateLatestregularTableStats', returnedData.data.stats);
             this.$store.commit('regularsLoaded', true);

@@ -304,7 +304,7 @@ export default {
         },
         async accept() {
             let returnedData = await axios.post(`/possible-regulars/accept`);
-            console.log(returnedData)
+            // console.log(returnedData)
             if (returnedData.status === 202) {
                 Toast.fire('Marked as ACCEPTED :-)');
                 this.loadPage(returnedData)
@@ -315,7 +315,7 @@ export default {
         },
         async decline() {
             let returnedData = await axios.post(`/possible-regulars/decline`);
-            console.log(returnedData)
+            // console.log(returnedData)
             if (returnedData.status === 202) {
                 Toast.fire('Marked at DECLINED :-)');
                 this.loadPage(returnedData)
@@ -326,7 +326,7 @@ export default {
         },
         async postpone() {
             let returnedData = await axios.post(`/possible-regulars/postpone`);
-            console.log(returnedData)
+            // console.log(returnedData)
             if (returnedData.status === 202) {
               Toast.fire('Marked at POSTPONED :-)');
               this.loadPage(returnedData)
@@ -346,7 +346,7 @@ export default {
         window.addRegularModal.show();
       },
       async updateProviders() {
-        console.log('updating providers')
+          // console.log('updating providers')
         this.providerContent = '';
         let url = `/providers/simple_list`;
         const returnedData = await axios.get(url);

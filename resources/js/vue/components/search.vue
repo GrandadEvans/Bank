@@ -47,7 +47,7 @@ export default {
                 term: this.search
             });
 
-            console.log(results);
+            // console.log(results);
 
             if (results.status === 200) {
                 this.$store.commit('updateLatestTransactionTableData', results.data.data);

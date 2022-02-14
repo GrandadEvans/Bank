@@ -182,7 +182,7 @@ export default {
                     title: "There are no similar transactions"
                 });
             } else {
-                console.dir(this);
+                // console.dir(this);
                 this.$store.commit('updateSimilarTransactions', similar);
                 this.$store.commit('updateSimilarTransactionsEntityId', providerId);
                 this.$store.commit('updateSimilarTransactionsType', 'provider');
