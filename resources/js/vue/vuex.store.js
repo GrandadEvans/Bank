@@ -142,6 +142,16 @@ export const storeConfig = {
             }
         ],
         userDetails: {},
+        preferences: {
+            debug: false,
+            locale: "en-GB",
+            currency: "GBP",
+            dateFormat: "ddd, DD MMM YY",
+            pageLimits: {
+                default: 50,
+                transactions: 50
+            }
+        }
     },
     mutations: {
         updateLatestTransactionTableData(state, data) {
@@ -206,6 +216,9 @@ export const storeConfig = {
         },
         updateUserDetails(state, details) {
             state.userDetails = details;
+        },
+        updatePreferences(state, preferences) {
+            state.preferences = preferences;
         },
         regularsLoaded(state, loadedState) {
             state.regularsLoaded = loadedState;
