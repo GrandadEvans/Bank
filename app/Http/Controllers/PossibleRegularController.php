@@ -19,6 +19,11 @@ class PossibleRegularController extends Controller
         return $possibles->first();
     }
 
+    public static function getOutstandingCount()
+    {
+        return PossibleRegular::outstanding()->get()->count();
+    }
+
     public function view()
     {
         $possibilities = PossibleRegular::outstanding()->get();

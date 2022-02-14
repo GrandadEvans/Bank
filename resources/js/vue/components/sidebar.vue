@@ -73,16 +73,17 @@
                     <ul>
                         <!-- TODO: Change icon -->
                         <li class="nav-item">
-                            <a class="nav-link" :href="possible_regulars__scan" @click.stop.prevent="scanForNewRegulars"
-                            >
+                            <a class="nav-link" :href="possible_regulars__scan"
+                               @click.stop.prevent="scanForNewRegulars">
                                 <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
                                 Scan for new Regulars</a>
                         </li>
-                        <li class="nav-item" @click="resetNewRegularsCounter">
+                        <li class="nav-item">
                             <a class="nav-link" :href="possible_regulars__scan_results">
                                 <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
-                                <span style="position: relative">View latest scan results<badge
-                                    :count="regularsBadgeCount" v-if="regularsBadgeCount > 0"></badge></span>
+                                <span style="position: relative">Outstanding scan results<badge
+                                    route="possible_regulars__scan_results"/>
+                                </span>
                             </a>
                         </li>
                     </ul>
