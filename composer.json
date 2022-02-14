@@ -19,7 +19,9 @@
         "league/flysystem-sftp": "~1.0",
         "mattkingshott/axiom": "^3.2.1",
         "pusher/pusher-php-server": "^7.0",
-        "rmccue/requests": "^v1.7.0"
+        "rmccue/requests": "^v1.7.0",
+      "ext-intl": "*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "codeception/c3": "^2.6.2",
