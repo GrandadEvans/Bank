@@ -42,9 +42,12 @@ $(function () {
     }
 
     let routeBadges = store.routeBadges;
-    console.log(routeBadges);
+    store.commit('updateRouteBadges', User.badges);
+    // console.log(routeBadges);
 
 
-    console.log('User', User);
-    console.log('User Badges', User.badges);
+    console.groupCollapsed('User Details');
+    console.info('User', User);
+    console.info('User Badges', User.badges);
+    console.groupEnd();
 });

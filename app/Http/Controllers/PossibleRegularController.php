@@ -28,10 +28,10 @@ class PossibleRegularController extends Controller
     {
         $possibilities = PossibleRegular::outstanding()->get();
 
-         if ($possibilities->count() === 0) {
+        if ($possibilities->count() === 0) {
             return 'no results';
         }
-         $possibility = $possibilities->first();
+        $possibility = $possibilities->first();
 
         $userId = (int) Auth::id();
 
@@ -165,7 +165,8 @@ class PossibleRegularController extends Controller
             'text' => 'A new scan is underway, and you\\\'ll be informed of the results in a few minutes'
         ];
 
-        session()->flash('alert', $flashData);
+        // flash message is handled by JS on the front end
+        // session()->flash('alert', $flashData);
 
         /*
          * This is not the correct way to move the user back to the previous url.

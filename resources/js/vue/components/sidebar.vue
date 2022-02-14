@@ -3,14 +3,17 @@
         <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/home">
+                    <a class="nav-link" href="/home">
                         <font-awesome-icon icon="fa-solid fa-home"/>
-                        Dashboard</a>
+                        <span style="position: relative">Dashboard<badge route="home"/></span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" :href="transactions__index">
-                        <font-awesome-icon icon="fa-solid fa-calendar-days"/>&nbsp;Transactions</a>
+                        <font-awesome-icon icon="fa-solid fa-calendar-days"/>
+                        <span style="position: relative">Transactions<badge route="transactions__index"/></span>
+                    </a>
                     <ul>
                         <li class="nav-item">
                             <a class="nav-link" :href="transactions__create">
@@ -27,10 +30,10 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" :href="providers__create">
-                        <font-awesome-icon icon="fa-solid fa-shop"
-                        />
-                        Providers</a>
+                    <a class="nav-link" :href="providers__index">
+                        <font-awesome-icon icon="fa-solid fa-shop"/>
+                        <span style="position: relative">Providers<badge route="providers__index"/></span>
+                    </a>
                     <ul>
                         <li class="nav-item">
                             <!-- 2 different links due to Codeception not recognising link with icon and space in -->
@@ -49,7 +52,9 @@
 
                 <li class="nav-item">
                     <a class="nav-link" :href="tags__index">
-                        <font-awesome-icon icon="fa-solid fa-tags"/>&nbsp;Tags</a>
+                        <font-awesome-icon icon="fa-solid fa-tags"/>
+                        <span style="position: relative">Tags<badge route="tags__index"/></span>
+                    </a>
                     <ul>
                         <li class="nav-item">
                             <!-- 2 different links due to Codeception not recognising link with icon and space in -->
@@ -67,9 +72,12 @@
 
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" :href="regulars__index">
+                    <a class="nav-link" :href="possible_regulars__scan_results">
                         <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
-                        Regulars</a>
+                        <!--                        <span style="position: relative">Regulars Payments<badge-->
+                        <!--                            route="possible_regulars__index"/></span>-->
+                        Regular Payments
+                    </a>
                     <ul>
                         <!-- TODO: Change icon -->
                         <li class="nav-item">
@@ -86,8 +94,6 @@
                                 </span>
                             </a>
                         </li>
-                    </ul>
-                    <ul>
                     </ul>
                 </li>
             </ul>

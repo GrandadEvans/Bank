@@ -2,6 +2,7 @@
 
 namespace Bank\Events;
 
+use Bank\Http\Controllers\PossibleRegularController;
 use Bank\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -41,4 +42,10 @@ class PossibleRegularScanFinished implements ShouldBroadcast
     {
         return new PrivateChannel('user.'.$this->user->id);
     }
+
+    public function broadcastWith()
+    {
+        return ['outstanding-possibles' => PossibleRegularController::getOutstandingCount()];
+    }
+
 }

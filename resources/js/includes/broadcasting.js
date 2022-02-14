@@ -15,8 +15,7 @@ let channel = `user.${User.id}`;
 
 window.Echo.private(channel)
     .listen('PossibleRegularScanFinished', (e) => {
-
-        window.app.$children[0].increaseCount();
+        console.log(e);
     })
     .listen('ScanForRegulars', (e) => {
         console.info('scan begun');

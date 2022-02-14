@@ -1,5 +1,4 @@
 import Vue from 'vue';
-
 import Vuex from 'vuex';
 import {storeConfig} from "./vuex.store";
 import VueSweetalert2 from 'vue-sweetalert2';
