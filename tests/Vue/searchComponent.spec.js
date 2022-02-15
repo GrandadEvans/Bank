@@ -1,14 +1,22 @@
-import { mount } from '@vue/test-utils'
-import { axios } from 'axios';
-import SearchComponent from '@/components/SearchComponent.vue'
+import {mount} from '@vue/test-utils'
+import Search from '@/components/search.vue'
+import {axios} from 'axios';
 
 describe('Test the allowed parameters', () => {
+    it('should disallow under3 characters', () => {
+        const wrapper = mount(Search, {});
+        wrapper.search = '12';
+        expect(wrapper.getResults()).toBeFalsy();
+    });
     it('an empty string should be rejected', () => {
-        let results = axios.post('/search', {
-            search: ''
-        });
-        console.dir(results);
-        // expect(results).
+        const wrapper = mount(Search, {});
+        wrapper.setData({search: ''});
+        expect(wrapper.getResults()).toMatch(null);
+        // .toMatch(/fab fa-visa/);        let results = axios.post('/search', {
+        //     term: ''
+        // });
+        // console.dir(results);
+        // expect(results).toMatch('test');
     })
 });
 //

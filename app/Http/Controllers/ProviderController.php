@@ -8,7 +8,6 @@ use Bank\Models\Provider;
 use Bank\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class ProviderController extends Controller
@@ -45,10 +44,10 @@ class ProviderController extends Controller
                 'text' => 'Do you want to run the new regular expression against the transactions now?',
                 'showConfirmButton' => 'true',
                 'showCancelButton' => 'true',
-                'cancelButtonText' => '<i class="fa fa-thumbs-down" />No',
+                'cancelButtonText' => '<font-awesome-icon icon="fa-solid fa-thumbs-down" />No',
                 'confirmButtonText' =>
-                    '<a href="/transactions/filter/' . session()->get('updatedProviderRegex') .'"'.
-                    'style="text-decoration: none; color: white;"><i class="fa fa-thumbs-up" />Yes</a>'
+                    '<a href="/transactions/filter/'.session()->get('updatedProviderRegex').'"'.
+                    'style="text-decoration: none; color: white;"><font-awesome-icon icon="fa-solid fa-thumbs-up" />Yes</a>'
             ];
 
             session()->flash('alert', $flashData);
@@ -112,23 +111,40 @@ class ProviderController extends Controller
      */
     public function storeFromJs(ProviderRequest $request)
     {
-        $validated = $request->validated();
-        $responseText = 'OK';
-        $responseCode = Response::HTTP_CREATED;
+        $statusCode = Response::HTTP_CREATED;
 
         try {
-            $provider = new Provider($validated);
-            $provider->saveOrFail();
+            $validated = $request->validated();
+
+            if (isset($validated['provider_id']) && $validated['provider_id'] > 0) {
+                $provider = Provider::findOrFail($validated['provider_id']);
+            } else {
+                $provider = $this->createNewProvider($validated);
+            }
 
             $transaction = Transaction::findOrFail($validated['transaction_id']);
             $transaction->provider_id = $provider->id;
             $transaction->save();
+
+            $similarTransactions = [];
+            if ($validated['find_similar'] == 1) {
+                $entryText = $transaction->entry;
+                $similarTransactions = Transaction::where('entry', $entryText)->
+                    where('id', '!=', $validated['transaction_id'])->
+                    get();
+            }
+
+             $reply = [
+                'provider_id' => $provider->id,
+                'provider_name' => $provider->name,
+                'similar_transactions' => $similarTransactions
+            ];
+      }
+        catch(\Exception $e) {
+            $statusCode = Response::HTTP_BAD_REQUEST;
+            $reply = $e->getMessage();
         }
-        catch (\Exception $e) {
-            $responseText = $e->getMessage();
-            $responseCode = Response::HTTP_BAD_REQUEST;
-        }
-        return new Response($responseText, $responseCode);
+        return new Response($reply, $statusCode);
     }
 
     /**
@@ -208,5 +224,75 @@ class ProviderController extends Controller
     public function simple_list()
     {
         return Provider::all()->get();
+    }
+
+    private function createNewProvider(array $validated)
+    {
+        $provider = new Provider();
+        $provider->name = $validated['name'];
+        $provider->remarks = $validated['remarks'];
+        $provider->regular_expressions = $validated['regular_expressions'];
+        $provider->payment_method_id = $validated['payment_method_id'];
+        $provider->saveOrFail();
+
+        return $provider;
+    }
+
+    public function assignTransactions(Request $request)
+    {
+        $assignedTransactions = [];
+        $errors = [];
+        $entityDetails = [];
+        $failedTransactions = [];
+        $providerDetails = [];
+        $providerId = intval($request->get('entity'));
+        $responseCode = Response::HTTP_ACCEPTED;
+        $transactions = $request->get('transactions');
+
+        try {
+            $provider = Provider::findOrFail($providerId);
+            $entityDetails = [
+                'name' => $provider->name,
+                'id' => $provider->id
+            ];
+        }
+        catch(\Exception $e) {
+            $errors[] = [
+                'action' => 'find provider',
+                'error' => $e->getMessage(),
+                'providerId' => $providerId
+            ];
+            $responseCode = Response::HTTP_BAD_REQUEST;
+        }
+
+        if ($responseCode !== Response::HTTP_BAD_REQUEST) {
+            $sanitized = [];
+            foreach ($transactions as $transaction) {
+                if (intval($transaction) !== 0) {
+                    $sanitized[] = intval($transaction); // @todo do I really need this twice
+                }
+            }
+            $sanitized = array_unique($sanitized);
+
+            Transaction::whereIn('id', $sanitized)->update(['provider_id' => $providerId]);
+
+            $transactions = Transaction::whereIn('id', $sanitized)->get();
+
+            foreach ($transactions as $transaction) {
+                if ($transaction->provider_id === $providerId) {
+                    $assignedTransactions[] = $transaction->id;
+                } else {
+                    $failedTransactions[] = $transaction->id;
+                }
+            }
+        }
+
+        $responseText = [
+            'errors' => $errors,
+            'failedTransactions' => $failedTransactions,
+            'assignedTransactions' => $assignedTransactions,
+            'entityDetails' => $entityDetails
+        ];
+        return new Response($responseText, $responseCode);
     }
 }

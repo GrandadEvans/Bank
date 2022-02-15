@@ -19,6 +19,6 @@ class ProviderSeeder extends Seeder
             'name' => 'N/A',
             'payment_method_id' => 7
         ]);
-        Provider::factory()->count(19)->create();
+        Provider::factory()->count(9)->create();
     }
 }

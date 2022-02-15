@@ -1,9 +1,11 @@
-require('./bootstrap');
+require('./includes/bootstrap');
+require('./vue/vueComponents');
 require('./tagsPieChart');
-import {store} from './vueComponents';
-import Swal from "sweetalert2";
+require('./includes/user');
+import {store} from './vue/vueComponents';
+import {default as User} from './includes/user';
 
-$(document).ready(function () {
+$(function () {
     let token = document.head.querySelector('meta[name="csrf-token"]');
     if (token) {
         $.ajaxSetup({
@@ -20,6 +22,8 @@ $(document).ready(function () {
         store
     });
 
+    window.app = app;
+
     window.Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -34,6 +38,16 @@ $(document).ready(function () {
 
     let chartArea = document.getElementById('curve_chart');
     if (chartArea) {
-        require('./yearsIncomeExpenditureChart');
+        require('./charts/yearsIncomeExpenditureChart');
     }
+
+    let routeBadges = store.routeBadges;
+    store.commit('updateRouteBadges', User.badges);
+    // console.log(routeBadges);
+
+
+    console.groupCollapsed('User Details');
+    console.info('User', User);
+    console.info('User Badges', User.badges);
+    console.groupEnd();
 });

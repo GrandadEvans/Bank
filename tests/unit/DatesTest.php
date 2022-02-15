@@ -2,9 +2,7 @@
 
 namespace Tests\Unit;
 
-use Bank\Models\BaseModel;
-use Bank\Models\Dates;
-use Bank\Models\Transaction;
+use Bank\UtilityClasses\Dates;
 use Carbon\Carbon;
 use DateTime;
 use Tests\TestCase;

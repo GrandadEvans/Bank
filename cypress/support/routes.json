@@ -121,6 +121,16 @@
       "HEAD"
     ]
   },
+  "telescope": {
+    "name": "telescope",
+    "domain": null,
+    "action": "Laravel\\Telescope\\Http\\Controllers\\HomeController@index",
+    "uri": "telescope/{view?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
   "get_logout": {
     "name": "get_logout",
     "domain": null,
@@ -203,6 +213,16 @@
     "domain": null,
     "action": "\\Illuminate\\Routing\\ViewController",
     "uri": "home",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "graphs.": {
+    "name": "graphs.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\GraphController@totalsByMonth",
+    "uri": "graph/totalsByMonth",
     "method": [
       "GET",
       "HEAD"
@@ -395,6 +415,73 @@
     "domain": null,
     "action": "Bank\\Http\\Controllers\\RegularController@destroy",
     "uri": "regulars/{regular}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "possibleRegulars.index": {
+    "name": "possibleRegulars.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@index",
+    "uri": "possible-regulars",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "possibleRegulars.update": {
+    "name": "possibleRegulars.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@update",
+    "uri": "possible-regulars/edit/{possibleRegular}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "possibleRegulars.scan": {
+    "name": "possibleRegulars.scan",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@scan",
+    "uri": "possible-regulars/scan",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "possibleRegulars.scanResults": {
+    "name": "possibleRegulars.scanResults",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@scanResults",
+    "uri": "possible-regulars/scan_results",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "possibleRegulars.": {
+    "name": "possibleRegulars.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@postpone",
+    "uri": "possible-regulars/postpone",
+    "method": [
+      "POST"
+    ]
+  },
+  "possibleRegulars.view": {
+    "name": "possibleRegulars.view",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@view",
+    "uri": "possible-regulars/first",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "possibleRegulars.delete": {
+    "name": "possibleRegulars.delete",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\PossibleRegularController@destroy",
+    "uri": "possible-regulars/{possibleRegular}",
     "method": [
       "DELETE"
     ]

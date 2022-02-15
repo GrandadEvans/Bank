@@ -2,10 +2,8 @@
 
 namespace Bank\Http\Controllers;
 
-use Bank\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use function MongoDB\BSON\toJSON;
 
 class GraphController extends Controller
 {
@@ -46,6 +44,7 @@ class GraphController extends Controller
             $delta
         ];
     }
+
     public function totalsByMonth()
     {
         $income = DB::table('transactions')

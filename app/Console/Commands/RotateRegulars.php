@@ -2,8 +2,8 @@
 
 namespace Bank\Console\Commands;
 
-use Bank\Models\Dates;
 use Bank\Models\Regular;
+use Bank\UtilityClasses\Dates;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;

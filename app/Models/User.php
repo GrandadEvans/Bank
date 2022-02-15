@@ -2,7 +2,7 @@
 
 namespace Bank\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Bank\Http\Controllers\PossibleRegularController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,6 +32,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getBadgesAttribute($value)
+    {
+        $badges = json_decode($value);
+        $possibleRegulars = PossibleRegularController::getOutstandingCount();
+        $badges->possible_regulars__scan_results = $possibleRegulars;
+        return $badges;
+    }
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -39,8 +47,14 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'badges' => 'object'
     ];
 
+
+//    public function getBadgesAttribute()
+//    {
+//        return json_encode($this->badges);
+//    }
 
     public function transactions()
     {

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('Bank.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+$id = \Illuminate\Support\Facades\Auth::id();
+Broadcast::channel('user.{userId}', function ($user, $userId) {
+    return true;
 });

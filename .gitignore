@@ -9,9 +9,11 @@
 /public/css
 /public/images
 /public/storage
+/public/vendor/telescope
 /resources/stubs
 /resources/csv
 /resources/har
+/resources/newRegularScans
 /resources/sql
 /resources/statements
 /storage
@@ -33,3 +35,4 @@
 /public/resources/tmp/app.css
 
 /bootstrap/cache/**
+bank_dev--local.session.sql

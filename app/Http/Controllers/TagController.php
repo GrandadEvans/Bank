@@ -211,7 +211,7 @@ class TagController extends Controller
     public function assignTransactions(Request $request)
     {
         $transactions = $request->get('transactions');
-        $tagId = intval($request->get('tag'));
+        $tagId = intval($request->get('entity'));
 
         $failedTransactions = [];
         $assignedTransactions = [];

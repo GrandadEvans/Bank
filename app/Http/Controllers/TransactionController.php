@@ -2,26 +2,22 @@
 
 namespace Bank\Http\Controllers;
 
-use Bank\Jobs\ImportTransactions;
-use Bank\Models\Dates;
+use Bank\Exceptions\InvalidPaymentMethodException;
+use Bank\Exceptions\ResourceAccessException;
 use Bank\Http\Requests\TransactionAjaxRemarkRequest;
+use Bank\Http\Requests\TransactionRequest;
+use Bank\Jobs\ImportTransactions;
+use Bank\Models\PaymentMethod;
+use Bank\Models\Provider;
+use Bank\Models\Transaction;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\DB;
-use Bank\Exceptions\FileNotFoundException;
-use Bank\Exceptions\ResourceAccessException;
-use Bank\Exceptions\InvalidPaymentMethodException;
-use Bank\Models\Provider;
-use Bank\Models\Transaction;
-use Bank\Models\PaymentMethod;
-use Bank\Http\Requests\TransactionRequest;
-use Bank\UtilityClasses\CsvFileParser;
-use Exception;
-use \ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Throwable;
@@ -40,6 +36,7 @@ class TransactionController extends Controller
      */
     public function index($search = null)
     {
+//        PossibleRegularScanFinished::dispatch();
 //        return $this->all();
         return view('transactions.index')
             ->with(['search' => $search]);
@@ -107,8 +104,6 @@ class TransactionController extends Controller
 //            ->average('amount');
 
 
-
-
         $stats = [
             'totalRecords' => (int) $totalRecords,
             'filteredRecords' => (int) $filteredRecords,
@@ -118,7 +113,7 @@ class TransactionController extends Controller
             'limit' => (int) $limit,
 //            'average_in' => $query2,
 //            'average_out' => $query3
-            ];
+        ];
 
         return [
             'data' => $data,
@@ -142,11 +137,10 @@ class TransactionController extends Controller
         try {
             $transaction->provider_id = $provider_id;
             $transaction->save();
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             return new Response('Failed: '.$exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $prov = Provider::where('id', $provider_id)->pluck('name');
+        $prov = Provider::where('id', $provider_id)->get();
         return new Response($prov, Response::HTTP_ACCEPTED);
     }
 
@@ -157,8 +151,7 @@ class TransactionController extends Controller
                 ->where('tag_id', $tag_id)
                 ->where('transaction_id', $transaction->id)
                 ->delete();
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             return new Response($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
         return new Response('OK', Response::HTTP_ACCEPTED);
@@ -175,7 +168,7 @@ class TransactionController extends Controller
                 'default_color' => $tag->default_color,
                 'contrasted_color' => $tag->contrasted_color,
                 'icon' => $tag->icon
-                ];
+            ];
         }
         return $tagString;
     }
@@ -209,7 +202,7 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Bank\Transaction  $transaction
+     * @param  Transaction  $transaction
      * @return Response
      */
     public function edit(Transaction $transaction)
@@ -225,7 +218,7 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bank\Transaction  $transaction
+     * @param  Transaction  $transaction
      * @return Response
      */
     public function update(TransactionRequest $request, Transaction $transaction)
@@ -315,9 +308,19 @@ class TransactionController extends Controller
         // Get a list of all providers
         $providers = Provider::all()->get();
 
+        $userId = Auth::id();
         $path = $request->file_input->path();
+        $directory = base_path()."/resources/statements/user_{$userId}";
 
-        return $this->importFromFilename($path);
+        if (!file_exists($directory)) {
+            mkdir($directory);
+        }
+        try {
+            copy($path, $directory.'/latest.csv');
+        } catch (Exception $e) {
+            throw new FileException($e->getMessage());
+        }
+        return $this->importFromFilename();
     }
 
     public function autoImport()
@@ -345,9 +348,25 @@ class TransactionController extends Controller
         unlink($filename);
     }
 
-    protected function importFromFilename(string $path): Factory|View|Application
+    protected function importFromFilename(): Factory|View|Application
     {
-        ImportTransactions::dispatch($path);
+        $id = Auth::id();
+
+        /*
+         * @todo: switch back to dispatch & figure out why sync si not working on server
+         */
+        ImportTransactions::dispatchSync(Auth::user());
+        $flashData = [
+            'type' => 'info',
+            'title' => 'Transactions transacting!',
+            'text' => "Don't worry, your transactions are being added in the background, and will be available to view
+                soon, so keep checking back",
+            'showConfirmButton' => 'true',
+            'showCancelButton' => 'false'
+        ];
+
+        session()->flash('alert', $flashData);
+
         return $this->index();
     }
 
@@ -379,8 +398,7 @@ class TransactionController extends Controller
                 'transaction_id' => $transaction->id,
                 'remark' => $transaction->remarks
             ];
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $errors[] = [
                 'action' => 'find and update transaction remark',
                 'error' => $e->getMessage(),

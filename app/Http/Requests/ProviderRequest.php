@@ -27,28 +27,12 @@ class ProviderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'between:2,100',
-                'required'
-            ],
-            'payment_method_id' => [
-                'integer',
-                'required'
-            ],
-            'regular_expressions' => [
-                'max:1000'
-            ],
-            'remarks' => [
-                'between:2,255'
-            ],
-            'transaction_id' => [
-                'integer',
-                'required'
-            ]
-//            'logo' => [
-//                'url',
-//                'sometimes'
-//            ]
+            'name'                => 'between:2,100|required',
+            'payment_method_id'   => 'integer|required',
+            'regular_expressions' => 'max:1000',
+            'remarks'             => 'string|nullable|between:2,255',
+            'transaction_id'      => 'integer',
+            'find_similar'        => 'boolean'
         ];
     }
 }

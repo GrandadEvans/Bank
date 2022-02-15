@@ -25,6 +25,7 @@ before(() => {
 
 describe('Check the Login page', () => {
     it('checks the home page login link works', () => {
+        cy.visit('/logout');
         cy.visit('/');
         cy.get('.login-link').click();
         cy.url().should('include', '/login');
