@@ -140,7 +140,8 @@ export const storeConfig = {
                 label: 'Edit',
                 columnPath: ''
             }
-        ]
+        ],
+        userDetails: {},
     },
     mutations: {
         updateLatestTransactionTableData(state, data) {
@@ -202,6 +203,9 @@ export const storeConfig = {
         },
         updateTransactionRow(state, details) {
             state.latestTransactionTableData[details.index].remarks = details.remark;
+        },
+        updateUserDetails(state, details) {
+            state.userDetails = details;
         },
         regularsLoaded(state, loadedState) {
             state.regularsLoaded = loadedState;

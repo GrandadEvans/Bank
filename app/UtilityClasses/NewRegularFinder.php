@@ -8,12 +8,12 @@
 namespace Bank\UtilityClasses;
 
 use Bank\Models\PossibleRegular;
-use Bank\Models\Regular;
 use Bank\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class to find possible regular entries for a user in the database
@@ -84,12 +84,12 @@ class NewRegularFinder
      * This will get a Collection of distinct transactions that are not already part of a regular
      *
      * @return  Collection
-     * @uses    \Bank\Models\Regular::findDistinctEntries() to get a list of repeated transactions for this user
+     * @uses    \Bank\Models\Transaction::findDistinctEntries() to get a list of repeated transactions for this user
      *
      */
     public function getDistinctEntries(): Collection
     {
-        return Regular::findDistinctEntries(allowRegularEntries: false);
+        return Transaction::findDistinctEntries(allowRegularEntries: false);
     }
 
     /**
@@ -102,33 +102,49 @@ class NewRegularFinder
      */
     public function testEachDistinctEntry(Transaction $transaction, array $timePeriods): void
     {
-        $similarTransactions = $this->getSimilarTransactions(transaction: $transaction);
+        foreach ($timePeriods as $period) {
+            $carbon = Carbon::now()->copy()->sub($period, 2);
+            $isBefore = $carbon->isBefore($transaction->date);
+            Log::debug('Date details', [
+                'original_date' => Carbon::now()->format('Y-m-d'),
+                'period_name' => $period,
+                'period_multiplier' => 2,
+                'carbon_date' => $carbon->format('Y-m-d'),
+                'transaction_date' => $transaction->date->format('Y-m-d'),
+                'is_carbon_before_transaction' => $isBefore
+            ]);
+            if ($isBefore) {
+                Log::debug('Carbon is before the transaction date');
+                $similarTransactions = $this->getSimilarTransactions(transaction: $transaction);
 
-        /*
-         * for each transaction list
-         * start at 1st tx
-         * add day, then week, then 4 week etc
-         * When/if one fits, test next tx with same period
-         */
-        $countToTest = $this->numberTransactionsToTest(transactions: $similarTransactions);
+                /*
+                 * for each transaction list
+                 * start at 1st tx
+                 * add day, then week, then 4 week etc
+                 * When/if one fits, test next tx with same period
+                 */
+                $countToTest = $this->numberTransactionsToTest(transactions: $similarTransactions);
+                Log::debug('Number of tx to test', [$countToTest]);
+                for ($i = 0; $i < ($countToTest - 1); $i++) { // the -1 is because we're testing against the date on the next iteration
+                    Log::debug('i', [$i]);
+//                    foreach ($timePeriods as $periodName) {
+                    Log::debug('periodName', [$period]);
 
-        for ($i=0; $i < ($countToTest-1); $i++) { // the -1 is because we're testing against the date on the next iteration
-            foreach ($timePeriods as $period) {
-                $multiplier = 1;
-                if (str_starts_with($period, 'every ')) {
-                    $parts = explode(' ', $period);
-                    $multiplier = intval($parts[1]);
-                    $period = $parts[2];
+                    for ($multiplier = 1; $multiplier <= 4; $multiplier++) {
+                        Log::debug('multiplier', [$multiplier]);
+                        $transaction = $similarTransactions[$i];
+                        $nextTransaction = $similarTransactions[$i + 1];
+                        $nextDate = $transaction->date->copy()->sub($period, $multiplier);
+                        $range = $this->getRangeOfDates(nextDate: $nextDate);
+
+                        foreach ($range as $date) {
+                            $this->checkForMatchingDates($transaction, $nextTransaction, $date, $period);
+                        }
+                    }
+//                    }
                 }
-
-                $transaction = $similarTransactions[$i];
-                $nextTransaction = $similarTransactions[$i + 1];
-                $nextDate = $transaction->date->copy()->sub($period, $multiplier);
-                $range = $this->getRangeOfDates(nextDate: $nextDate);
-
-                foreach ($range as $date) {
-                    $this->checkForMatchingDates($transaction, $nextTransaction, $date, $period);
-                }
+            } else {
+                Log::debug('Carbon is AFTER transaction');
             }
         }
     }
@@ -227,9 +243,9 @@ class NewRegularFinder
     }
 
     /**
-     * @param Transaction $transaction
-     * @param Transaction $nextTransaction
-     * @param string $period
+     * @param  Transaction  $transaction
+     * @param  Transaction  $nextTransaction
+     * @param  string  $periodName
      *
      * @return void
      *
@@ -238,15 +254,15 @@ class NewRegularFinder
     public function addTransactionToPossibleRegulars(
         Transaction $transaction,
         Transaction $nextTransaction,
-        string $period,
+        string $periodName,
     ): void {
         $collection = PossibleRegular::where('user_id', Auth::id())
             ->where('entry', $transaction->entry)
-            ->where('period', $period)
+            ->where('period_name', $periodName)
             ->get();
         if ($collection->count() === 0) {
-            $this->persistFindings($transaction->entry, $period);
-            $this->possibleRegulars[$transaction->entry] = $period;
+            $this->persistFindings($transaction->entry, $periodName);
+            $this->possibleRegulars[$transaction->entry] = $periodName;
         }
     }
 
@@ -261,11 +277,11 @@ class NewRegularFinder
      *
      * @return void
      */
-    private function persistFindings($entry, $period): void
+    private function persistFindings($entry, $periodName): void
     {
         $pr = new PossibleRegular();
         $pr->entry = $entry;
-        $pr->period = $period;
+        $pr->period_name = $periodName;
         $pr->last_Action = 'created';
         $pr->user_id = Auth::id();
         $pr->save();

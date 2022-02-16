@@ -44,17 +44,17 @@ const bootstrap = require('bootstrap');
 const {currency, formatDate} = require("../../../includes/helpers");
 
 export default {
-    name: "add-similar-transactions-modal",
-    data () {
+    name: "bank-modal-add-similar-transactions",
+    data() {
         return {
             otherTransactions: []
         }
     },
     computed: {
-        similarTransactions () {
+        similarTransactions() {
             return this.$store.state.similarTransactions;
         },
-        typeOfSimilarity () {
+        typeOfSimilarity() {
             return this.$store.state.similarTransactionsType;
         }
     },

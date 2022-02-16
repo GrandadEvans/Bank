@@ -46,6 +46,6 @@ export const currency = (amount, currency = null) => {
     return internationalFormat.format(amount);
 }
 
-export function formatDate (date) {
+export function formatDate(date) {
     return moment(date).format(globalConfig.preferredDateFormat);
 }

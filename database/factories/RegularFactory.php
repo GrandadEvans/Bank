@@ -23,16 +23,24 @@ class RegularFactory extends Factory
      */
     public function definition()
     {
+        $periods = [
+            'day',
+            'week',
+            'month',
+            'quarter',
+            'year'
+        ];
+
         return [
             'user_id' => $this->for(User::class),
             'provider_id' => $this->faker->numberBetween(1, Provider::all()->count()),
             'payment_method_id' => $this->faker->numberBetween(1, 16),
-            'nextDue' => $this->faker->date(),
-            'description' => $this->faker->sentence(3),
             'amount' => $this->faker->randomFloat(2, -2000, 2000),
-            'estimated' => $this->faker->boolean(25),
-            'days' => $this->faker->numberBetween(1, 9) . $this->faker->randomElement(['d', 'w', 'm', 'q', 'y']),
+            'amount_varies' => $this->faker->boolean(25),
+            'period_name' => $this->faker->randomElement($periods),
+            'period_multiplier' => $this->faker->numberBetween(1, 4),
             'remarks' => $this->faker->sentence(),
+            'next_due' => $this->faker->date(),
         ];
     }
 }

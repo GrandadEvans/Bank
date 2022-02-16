@@ -55,7 +55,6 @@
                     <div id="payment-method-help" class="form-text">What is the payment method this provider likes to use?</div>
                 </div>
             </form>
-
         </template>
 
         <template v-slot:modal-footer>
@@ -93,8 +92,8 @@
 const bootstrap = require('bootstrap');
 
 export default {
-    name: "add-provider-modal",
-    data () {
+    name: "bank-modal-add-provider",
+    data() {
         return {
             ajaxProviderData: null,
             ajaxUrl: `/providers/store-from-js`,
@@ -182,7 +181,6 @@ export default {
                     title: "There are no similar transactions"
                 });
             } else {
-                // console.dir(this);
                 this.$store.commit('updateSimilarTransactions', similar);
                 this.$store.commit('updateSimilarTransactionsEntityId', providerId);
                 this.$store.commit('updateSimilarTransactionsType', 'provider');

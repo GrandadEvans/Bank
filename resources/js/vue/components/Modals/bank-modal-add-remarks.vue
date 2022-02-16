@@ -50,8 +50,8 @@
 const bootstrap = require('bootstrap');
 
 export default {
-    name: "add-remarks-modal",
-    data () {
+    name: "bank-modal-add-remarks",
+    data() {
         return {
             remark: '',
             ajaxUrl: '/transactions/add-remark-from-js',

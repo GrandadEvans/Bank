@@ -6,69 +6,103 @@
 
         <template v-slot:modal-body>
             <form id="add-regular-form">
+                <!-- Entry -->
+                <div class="mb-3">
+                    <label for="regular-entry" class="form-label">Entry text</label>
+                    <div class="input-group">
+                        <input
+                            aria-describedby="regular-entry-help"
+                            aria-label="Disabled input example"
+                            aria-required="true"
+                            class="form-control"
+                            disabled="disabled"
+                            id="regular-entry"
+                            readonly="readonly"
+                            required="required"
+                            type="text"
+                            value="Disabled readonly input"
+                            v-model="regularDetails.entry"
+                        >
+                        <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            id="button-copy-entry-to-alias"
+                            @click.stop.prevent="copyEntryToAlias"
+                        >
+                            <font-awesome-icon icon="fa-arrow-down"/>
+                            Copy to <strong>Alias</strong>
+                            <font-awesome-icon icon="fa-arrow-down"/>
+                        </button>
+                    </div>
+                    <div id="regular-entry-help" class="form-text">
+                        <p>
+                            This is the text that is show in your banking app, or your bank statement etc. You are not
+                            able to alter this as it is what the <abbr title="Artificial Intelligence">AI</abbr> will
+                            look for in future entries.
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Alias -->
-                <div class="mb-3 form-floating">
-                    <label for="regular-alias" class="form-label">Regular Alias</label>
+                <div class="mb-3">
+                    <label for="regular-alias" class="form-label" data-required="true">Regular Alias</label>
                     <input
                         type="text"
                         class="form-control"
                         id="regular-alias"
                         aria-describedby="regular-alias-help"
                         placeholder="eg Home Insuarance"
-                        v-model="regularAlias"
+                        required="required"
+                        aria-required="true"
+                        v-model="regularDetails.alias"
                     >
                     <div id="regular-alias-help" class="form-text">
-                        You can give this regular payment an alias that
-                        makes it easier to recognise in the transactions list?
+                        <p>
+                            You can give this regular payment an alias that makes it easier to recognise in the
+                            transactions list?
+                        </p>
                     </div>
                 </div>
 
                 <!-- Amount -->
-                <div class="mb-3 form-floating">
-                    <label for="regular-amount" class="form-label">Regular Amount</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="regular-amount"
-                        aria-describedby="regular-amount-help"
-                        placeholder="eg £12.34"
-                        v-model="regularDetails.amount"
-                    >
-                    <div id="regular-amount-help" class="form-text">
-                        Is there a set amount that this regular transaction should be?
-                    </div>
-                </div>
-
-                <!-- Estimated -->
                 <div class="mb-3">
-                    <label for="regular-variable-amount" class="form-label">Variable Amount?</label>
-                    <select
-                        class="form-control"
-                        id="regular-variable-amount"
-                        aria-describedby="regular-variable-amount-help"
-                        v-model="regularVariableAmount"
-                    >
-                        <option value="false">Set Amount</option>
-                        <option value="true">Variable Amount</option>
-                    </select>
-                    <div id="regular-variable-amount-help" class="form-text">
-                        Is the amount of this regular transaction set or can it be a variable amount
+                    <label for="regular-amount" class="form-label">Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">&pound;</span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="regular-amount"
+                            aria-describedby="regular-amount-help"
+                            aria-required="false"
+                            placeholder="eg 12.34"
+                            v-model="regularDetails.amount"
+                        >
+                    </div>
+                    <div id="regular-amount-help" class="form-text">
+                        <p>
+                            Is there a set amount that this regular transaction should be?
+                        </p>
                     </div>
                 </div>
 
                 <!-- Next due date -->
                 <div class="mb-3">
-                    <label for="regular-next-due" class="form-label">Date next due</label>
+                    <label for="regular-next-due" class="form-label" data-required="true">Date next due</label>
                     <input
                         type="date"
                         class="form-control"
                         id="regular-next-due"
                         aria-describedby="regular-next-due-help"
+                        aria-required="true"
+                        required="required"
                         placeholder="31/01/2022"
                         v-model="regularDetails.date"
                     >
                     <div id="regular-next-due-help" class="form-text">
-                        What is the date the next transaction is due to be deducted?
+                        <p>
+                            What is the date the next transaction is due to be deducted?
+                        </p>
                     </div>
                 </div>
 
@@ -79,21 +113,27 @@
                         class="form-control"
                         id="regular-remarks"
                         aria-describedby="regular-remarks-help"
+                        aria-required="false"
                         placeholder="eg Due for renewal May 21st"
-                        v-model="regularRemarks"
+                        v-model="regularDetails.remarks"
                     ></textarea>
                     <div id="regular-remarks-help" class="form-text">
-                        Here you can put any other information you would like to note on this regular payment
+                        <p>
+                            Here you can put any other information you would like to note on this regular payment
+                        </p>
                     </div>
                 </div>
 
                 <!-- Payment method -->
                 <div class="mb-3">
-                    <label for="regular-payment-method" class="form-label">Preferred Payment Method</label>
+                    <label for="regular-payment-method" class="form-label" data-required="true">Preferred Payment
+                        Method</label>
                     <select
-                        class="form-control"
+                        class="form-select"
                         id="regular-payment-method"
                         name="regular-payment-method"
+                        required="required"
+                        aria-required="true"
                         v-model="regularDetails.payment_method_id"
                     >
                         <option v-for="method in paymentMethods" :key="method.id" :value="method.id">{{
@@ -101,19 +141,22 @@
                             }}
                         </option>
                     </select>
-                    <div id="regular-payment-method-help" class="form-text">What is the payment method this regular
-                        likes to
-                        use?
+                    <div id="regular-payment-method-help" class="form-text">
+                        <p>
+                            What is the payment method this regular likes to use?
+                        </p>
                     </div>
                 </div>
 
                 <!-- Provider -->
                 <div class="mb-3">
-                    <label for="regular-provider" class="form-label">Associated Provider</label>
+                    <label for="regular-provider" class="form-label" data-required="true">Associated Provider</label>
                     <select
-                        class="form-control"
+                        class="form-select"
                         id="regular-provider"
                         name="regular-provider"
+                        required="required"
+                        aria-required="true"
                         v-model="regularDetails.provider_id"
                     >
                         <option v-for="provider in providers" :key="provider.id" :value="provider.id">{{
@@ -121,9 +164,11 @@
                             }}
                         </option>
                     </select>
-                    <div id="regular-provider-help" class="form-text">Please select a default service or goods provider
-                        for this
-                        new regular transaction.<br/>Alternatively, you can select to create a new provider
+                    <div id="regular-provider-help" class="form-text">
+                        <p>
+                            Please select a default service or goods provider for this new regular transaction.<br/>
+                            Alternatively, you can select to create a new provider
+                        </p>
                     </div>
                 </div>
             </form>
@@ -155,20 +200,14 @@
 
 <script>
 const bootstrap = require('bootstrap');
+import User from '../../../includes/user';
 
 export default {
-    name: "add-regular-modal",
+    name: "bank-modal-add-regular",
     data() {
         return {
             ajaxRegularData: null,
-            ajaxUrl: `/regulars/store-from-js`,
-            regularAlias: '',
-            regularRemarks: '',
-            regularAmount: 0,
-            regularVariableAmount: false,
-            regularProvider: null,
-            regularPaymentMethod: null,
-            regularNextDue: null,
+            ajaxUrl: `/regulars/create_from_js`,
         }
     },
     computed: {
@@ -184,7 +223,11 @@ export default {
                     amount: 0,
                     provider_id: null,
                     payment_method_id: null,
-                    date: null
+                    date: null,
+                    variable_amount: 0,
+                    entry: '',
+                    remarks: '',
+                    alias: ''
                 };
             } else {
                 return this.$store.state.newRegularDetails;
@@ -193,16 +236,20 @@ export default {
     },
     methods: {
         async submit(event) {
-            if (0 === this.regularAlias.length) return;
+            if (0 === this.regularDetails.alias.length) return;
 
             this.disableSubmitButton();
             const ajaxData = {
-                find_similar: (this.findSimilar) ? 1 : 0,
-                name: this.regularName,
-                payment_method_id: this.paymentMethod,
-                regular_expressions: this.textEntries,
-                remarks: this.remarks,
-                transaction_id: this.$store.state.modalTransactionId,
+                user_id: User.id,
+                alias: this.regularDetails.alias,
+                payment_method_id: this.regularDetails.payment_method_id,
+                remarks: this.regularDetails.remarks,
+                amount: this.regularDetails.amount,
+                transaction_id: this.regularDetails.transaction_id,
+                variable: this.regularDetails.variable_amount,
+                provider_id: this.regularDetails.provider_id,
+                period_name: this.regularDetails.period_name,
+                period_multiplier: this.regularDetails.period_multiplier,
                 type: 'json'
             };
 
@@ -212,16 +259,16 @@ export default {
             window.addRegularModal.hide();
 
             if (returnedData.status === 201) {
-                const regularId = returnedData.data.regular_id;
+                const regularId = returnedData.data.regular.id;
                 this.regularSuccessfullyAdded({
                     id: regularId,
-                    name: returnedData.data.regular_name,
-                    // similarTransactions: returnedData.data.similar_transactions
+                    name: returnedData.data.regular.alias,
                 });
-
-                if (this.findSimilar === true) {
-                    this.showSimilar(returnedData.data.similar_transactions, regularId);
-                }
+                this.$store.commit('updateUserDetails', returnedData.data.user);
+                this.$store.commit('updateRouteBadges', returnedData.data.user.badges);
+                this.$emit('success');
+                // this.$store.commit('newRegularDetected', this.regularName);
+                Toast.fire({title: "Regular Added", icon: "success"})
             } else {
                 console.groupCollapsed('"Submit" action failed')
                 console.log('Status: ', returnedData.status);
@@ -230,13 +277,12 @@ export default {
                 console.info('Headers...');
                 console.log(returnedData.headers);
                 console.groupEnd();
-                this.$store.commit('newRegularDetected', this.regularName);
-                Toast.fire({title: "Regular Added", icon: "success"})
+                Toast.fire({title: "Something went wrong!", icon: "error"})
             }
         },
         dismissModal: function () {
             this.resetForm();
-            window.addRegularModal.dispose();
+            window.addRegularModal.hide();
         },
         enableSubmitButton() {
             document.getElementById("add-regular-submit-button").removeAttribute("disabled")
@@ -290,6 +336,12 @@ export default {
                 window.addRegularModal.hide();
                 console.log('Payment Method error: ', returnedData.data);
             }
+        },
+        copyEntryToAlias: function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.$set(this.regularDetails, 'alias', this.regularDetails.entry);
+            return false;
         }
     },
     mounted() {
@@ -301,3 +353,9 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+*[data-required="true"]::after {
+    content: " *";
+    color: red;
+}
+</style>

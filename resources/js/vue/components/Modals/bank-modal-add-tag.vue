@@ -122,7 +122,7 @@ import {blackOrWhite, randomColour} from '../../../includes/helpers';
 const bootstrap = require('bootstrap');
 
 export default {
-    name: "add-tag-modal",
+    name: "bank-modal-add-tag",
     data() {
         return {
             addFormVisible: false,

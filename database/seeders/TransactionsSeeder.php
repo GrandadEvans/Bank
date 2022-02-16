@@ -43,7 +43,7 @@ class TransactionsSeeder extends Seeder
 
         // Create Weekly Transactions
 //        $weeklyTransactions = [];
-        $startDate = '2020-05-23';
+        $startDate = '2022-02-15';
         $newDate = Carbon::create($startDate);
 
         for ($i = 1; $i < 5; $i++) {
@@ -53,6 +53,23 @@ class TransactionsSeeder extends Seeder
                 'user_id' => 1,
                 'provider_id' => $p2->id,
                 'entry' => 'Weekly match',
+                'date' => $newDate->format('Y-m-d'),
+                'amount' => 45.00
+            ])->create();
+//            $weeklyTransactions[] = $transaction;
+        }
+        // Create Weekly Transactions
+//        $weeklyTransactions = [];
+        $startDate = '2022-01-15';
+        $newDate = Carbon::create($startDate);
+
+        for ($i = 1; $i < 5; $i++) {
+            $newDate = $newDate->copy()->addWeek();
+
+            $transaction = Transaction::factory([
+                'user_id' => 1,
+                'provider_id' => $p2->id,
+                'entry' => 'Weekly match that shouldnt work',
                 'date' => $newDate->format('Y-m-d'),
                 'amount' => 45.00
             ])->create();

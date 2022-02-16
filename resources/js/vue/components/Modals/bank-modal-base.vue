@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    name: "modal",
+    name: "bank-modal-base",
     props: [
         'id'
     ]
