@@ -35,7 +35,7 @@ class User extends Authenticatable
     public function getBadgesAttribute($value)
     {
         $badges = json_decode($value);
-        $possibleRegulars = PossibleRegularController::getOutstandingCount();
+        $possibleRegulars = PossibleRegularController::getOutstandingCount() - 1;
         $badges->possible_regulars__scan_results = $possibleRegulars;
         return $badges;
     }

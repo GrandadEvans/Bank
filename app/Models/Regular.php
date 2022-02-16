@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class Regular extends BaseModel
@@ -20,15 +22,15 @@ class Regular extends BaseModel
      */
     protected $fillable = [
         'user_id',
-        'nextDue',
-        'description',
+        'next_due',
         'amount',
-        'period',
+        'period_name',
+        'period_multiplier',
         'remarks',
-        'days',
         'type',
-        'estimated',
-        'payment_method_id'
+        'amount_varies',
+        'payment_method_id',
+        'provider_id'
     ];
 
     /**
@@ -37,15 +39,22 @@ class Regular extends BaseModel
      * @var array
      */
     protected $dates = [
-        'nextDue',
-        'lastRotated'
+        'next_due',
+        'last_rotated'
     ];
 
+    /**
+     * @return mixed
+     */
     public static function yesterdays()
     {
-        return self::where('nextDue', Carbon::yesterday()->format('Y-m-d'))->get();
+        return self::where('next_due', Carbon::yesterday()->format('Y-m-d'))->get();
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeMyRecords($query)
     {
         return $query->where('user_id', Auth::id());
@@ -63,9 +72,9 @@ class Regular extends BaseModel
     {
         // If the date is the uk 'dd-mm-yyyy' then send it to be converted to sql format
         if (preg_match('/^\d{2}[\/-]\d{2}[\/-]\d{4}$/', $value)) {
-            $this->attributes['nextDue'] = Dates::convertBritishDateToMysql($value);
+            $this->attributes['next_due'] = Dates::convertBritishDateToMysql($value);
         } else {
-            $this->attributes['nextDue'] = $value;
+            $this->attributes['next_due'] = $value;
         }
     }
 
@@ -92,7 +101,7 @@ class Regular extends BaseModel
      */
     public function getIntervalAttribute(): string
     {
-        return (new Carbon($this->nextDue))->diffForHumans();
+        return (new Carbon($this->next_due))->diffForHumans();
     }
 
     /**
@@ -143,26 +152,28 @@ class Regular extends BaseModel
         return $o;
     }
 
-    public function user()
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function provider()
+    /**
+     * @return HasOne
+     */
+    public function provider(): HasOne
     {
         return $this->hasOne(Provider::class, 'id', 'provider_id');
     }
 
     /**
-     * I want to find distinct entries for this user
-     *
-     * They should obviously be for this user, and distinct on the entry text and the amount
+     * @return HasOne
      */
-    public static function findDistinctEntries($allowRegularEntries = true) {
-        return Transaction::where('user_id', Auth::id())
-            ->where('isPartOfRegular', $allowRegularEntries)
-            ->groupBy('entry')
-            ->get();
+    public function paymentMethod(): HasOne
+    {
+        return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
     }
 
 }

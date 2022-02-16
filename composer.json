@@ -21,7 +21,8 @@
         "pusher/pusher-php-server": "^7.0",
         "rmccue/requests": "^v1.7.0",
       "ext-intl": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
@@ -81,6 +82,8 @@
             "post-merge": [
                 "\necho ========= Composer install =========\n",
                 "composer install",
+                "\necho ========= NPM install =========\n",
+                "npm install",
                 "\necho ========= NPM install =========\n",
                 "npm install",
                 "\necho ========= Database Migration =========\n",

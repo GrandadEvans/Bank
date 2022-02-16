@@ -7,6 +7,7 @@ use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
 use Bank\Models\Regular;
 use Exception;
+use http\Exception\UnexpectedValueException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,28 +39,73 @@ class RegularController extends Controller
             ->with('providers', Provider::all()->get());
     }
 
+    public function storeFromJs(RegularRequest $request)
+    {
+        $flashDetails = [
+            'type' => 'success',
+            'title' => 'Success!',
+            'text' => 'Item successfully created'
+        ];
+
+        try {
+            $regular = $this->store($request);
+        } catch (Exception $e) {
+            // @todo log error
+            return response([], 403);
+        }
+
+        $user = Auth::user();
+
+        return response([
+            'regular' => $regular,
+            'user' => $user
+        ], 201);
+    }
+
+    public function storeFromPhp(RegularRequest $request)
+    {
+        $flashDetails = [
+            'type' => 'success',
+            'title' => 'Success!',
+            'text' => 'Item successfully created'
+        ];
+
+        try {
+            $regular = $this->store($request);
+        } catch (Exception $e) {
+            $flashDetails = [
+                'type' => 'error',
+                'title' => 'Error!',
+                'text' => 'There was an error saving the details you provided, please try again later or get in touch'
+            ];
+        }
+        return redirect(route('regulars.index'))
+            ->with('flashMessage', $flashDetails);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  RegularRequest  $request
-     *
-     * @return Response
+     * @return Regular
      * @throws \Throwable
+     * @todo    Handle the exception better
+     *
      */
-    public function store(RegularRequest $request)
+    public function store(RegularRequest $request): Regular
     {
         $validated = $request->validated();
 
         $regular = new Regular($validated);
         $regular->user_id = Auth::id();
-        $regular->saveOrFail();
 
-        return redirect(route('regulars.index'))
-            ->with('flashMessage', [
-                'type' => 'success',
-                'title' => 'Success!',
-                'text' => 'Item successfully created'
-            ]);
+        try {
+            $regular->saveOrFail();
+        } catch (Exception $e) {
+            throw new UnexpectedValueException('We were not able to save the details you provided. Please try again, or contact us,');
+        }
+
+        return $regular;
     }
 
     /**

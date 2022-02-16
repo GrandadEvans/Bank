@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -138,6 +139,19 @@ class Transaction extends BaseModel
             'lastDate' => $dayAfterLastTransaction,
             'yesterday' => $yesterday
         ];
+    }
+
+    /**
+     * I want to find distinct entries for this user
+     *
+     * They should obviously be for this user, and distinct on the entry text and the amount
+     */
+    public static function findDistinctEntries($allowRegularEntries = true)
+    {
+        return Transaction::where('user_id', Auth::id())
+            ->where('isPartOfRegular', $allowRegularEntries)
+            ->groupBy('entry')
+            ->get();
     }
 
 }

@@ -2,10 +2,9 @@
 
 namespace Bank\Http\Requests;
 
+use Alphametric\Validation\Rules\Equals;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Alphametric\Validation\Rules\Equals;
 
 class RegularRequest extends FormRequest
 {
@@ -16,7 +15,7 @@ class RegularRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -27,42 +26,40 @@ class RegularRequest extends FormRequest
     public function rules()
     {
         return [
-            'nextDue' => [
-                'date',
-                'required',
-                'between:8,30'
+            'user_id' => [
+                'integer',
+                'required'
             ],
-            'description' => [
-                'string',
-                'required',
-                'between:3,255'
+            'provider_id' => [
+                'integer',
+                'required'
             ],
             'payment_method_id' => [
-                'required',
-                'numeric'
+                'integer',
+                'required'
             ],
             'amount' => [
-                'required',
                 'numeric',
                 'regex:/^-?\d{1,4}(\.\d{0,2})?$/',
                 'max:2000' // £-9999.99
             ],
-            'estimated' => [
+            'amount_varies' => [
                 'nullable',
                 'boolean'
-                ],
-            'days' => [
-                'required',
-                'regex:/^\d\w$/'
+            ],
+            'period_name' => [
+                'in:day,week,month,quarter,year',
+                'required'
+            ],
+            'period_multiplier' => [
+                'between:1,4',
+                'required'
             ],
             'remarks' => [
                 'string',
                 'nullable',
                 'between:3,255'
             ],
-            'provider_id' => [
-                'integer'
-            ]
         ];
     }
 }
