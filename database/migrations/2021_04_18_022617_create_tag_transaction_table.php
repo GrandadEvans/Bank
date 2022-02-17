@@ -1,5 +1,7 @@
 <?php
 
+use Bank\Models\Tag;
+use Bank\Models\Transaction;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +17,8 @@ class CreateTagTransactionTable extends Migration
     {
         Schema::create('tag_transaction', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tag_id');
-            $table->unsignedBigInteger('transaction_id');
-
-            $table->foreign('tag_id')->references('id')->on('tags');
-            $table->foreign('transaction_id')->references('id')->on('transactions');
-
+            $table->foreignIdFor(Tag::class);
+            $table->foreignIdFor(Transaction::class);
             $table->timestamps();
         });
     }

@@ -240,7 +240,7 @@ export default {
                 this.name = stats.name;
                 this.periodName = returnedData.data.stats.period_name;
                 this.periodMultiplier = returnedData.data.stats.period_multiplier;
-                this.totalPages = stats.totalDistinct;
+                this.totalDistinct = stats.totalDistinct;
                 this.id = stats.id;
                 this.$store.commit('updateNewRegularDetails', {
                     payment_method_id: stats.paymentMethodId,

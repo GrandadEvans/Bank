@@ -16,9 +16,9 @@ class BaseSeeder extends Seeder
     {
         $this->call(PaymentMethodSeeder::class);
 
-        Provider::factory()->create([
+        Provider::create([
             'name' => 'N/A',
-            'payment_method_id' => 7
+            'payment_method_id' => 1
         ]);
 
     }
