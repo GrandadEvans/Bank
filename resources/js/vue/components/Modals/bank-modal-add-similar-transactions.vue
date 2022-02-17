@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-similar-transactions-modal">
+    <bank-modal-base id="add-similar-transactions-modal">
         <template v-slot:modal-header>
             Add similar transactions?
         </template>
@@ -36,7 +36,7 @@
                     id="add-similar-transactions-button">Associate Transactions
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>

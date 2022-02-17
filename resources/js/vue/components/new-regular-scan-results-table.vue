@@ -1,7 +1,7 @@
 <template>
     <div>
         <section>
-            <div v-if="regularsLoaded === true">
+            <div v-if="resultsAreReady">
                 <section style="margin:1rem">
                     <h1 style="flex-grow: 1; text-align: center">
                         &ldquo;{{ this.name }}&rdquo; appears every <strong>{{ this.periodString }}</strong>
@@ -162,11 +162,13 @@
 
             <div v-else>
                 <p style="font-size: 2rem">There are no <strong>new</strong> potential regulars left to decide upon.</p>
-                <p>Option #1: Perform a scan and see if any more are available.</p>
+                <p>Option #1: <a :href="possible_regulars__scan" @click.prevent.stop="scanForNewRegulars">Perform a
+                    scan</a> and see if any more are available.
+                </p>
                 <p>Option #2: Decide on the ones that you have previously chosen to postpone.</p>
             </div>
         </section>
-        <add-regular-modal v-on:success="accept"></add-regular-modal>
+        <bank-modal-add-regular v-on:success="accept"></bank-modal-add-regular>
 
     </div>
 </template>
@@ -198,9 +200,13 @@ export default {
         }
     },
     props: [
-        'read_only'
+        'read_only',
+        'possible_regulars__scan'
     ],
     computed: {
+        resultsAreReady() {
+            return (this.regularsLoaded === true && !this.noResults);
+        },
         possibleNewRegularsLoaded: function () {
             return this.$store.state.possibleNewRegularsLoaded;
         },
@@ -317,30 +323,52 @@ export default {
             // console.log(returnedData)
             if (returnedData.status === 202) {
               Toast.fire('Marked at POSTPONED :-)');
-              this.loadPage(returnedData)
+                this.loadPage(returnedData)
             } else {
-              Toast.fire('ERROR!');
-              // @todo Handle error
+                Toast.fire('ERROR!');
+                // @todo Handle error
             }
         },
-      async getData(url = '/possible-regulars/first') {
-        let data = await axios.get(url);
-        this.loadPage(data);
-      },
-      addNewRegular: function () {
-          this.waitingForRegularsModal = true;
-          this.$store.commit('updateModalToShow', 'add-regular-modal')
-          // this.$store.commit('updateModalTransactionId', this.transaction_id)
-          // this.$store.commit('updateModalIndex', this.$props.index)
-          window.addRegularModal.show();
-      },
-      async updateProviders() {
-          // console.log('updating providers')
-        this.providerContent = '';
-        let url = `/providers/simple_list`;
-        const returnedData = await axios.get(url);
-        this.$store.commit('updateProvidersData', returnedData.data);
-      },
+        async getData(url = '/possible-regulars/first') {
+            let data = await axios.get(url);
+            this.loadPage(data);
+        },
+        addNewRegular: function () {
+            this.waitingForRegularsModal = true;
+            this.$store.commit('updateModalToShow', 'add-regular-modal')
+            // this.$store.commit('updateModalTransactionId', this.transaction_id)
+            // this.$store.commit('updateModalIndex', this.$props.index)
+            window.addRegularModal.show();
+        },
+        async updateProviders() {
+            // console.log('updating providers')
+            this.providerContent = '';
+            let url = `/providers/simple_list`;
+            const returnedData = await axios.get(url);
+            this.$store.commit('updateProvidersData', returnedData.data);
+        },
+        async scanForNewRegulars() {
+            let returnedData = await axios.get('/possible-regulars/scan'),
+                type = '',
+                title = '',
+                text = '';
+
+            if (returnedData.status === 202) {
+                type = 'success';
+                title = 'Success';
+                text = 'A new scan is underway, and you\'ll be informed of the results in a few minutes';
+            } else {
+                type = 'error';
+                title = 'Error!';
+                text = 'There was an unknown error whilst requesting your latest regular transaction scan.<br />Please contact me if this has ruined your life';
+            }
+
+            Swal.fire({
+                'type': type,
+                'title': title,
+                'text': text,
+            });
+        },
 
     },
     mounted: function () {

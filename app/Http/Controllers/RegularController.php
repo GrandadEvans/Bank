@@ -16,7 +16,7 @@ class RegularController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -24,7 +24,7 @@ class RegularController extends Controller
         return view('regulars.index')
             ->with('transactions', Regular::myRecords()->with('provider:id,name')->get())
             ->with('total', array_sum($all->pluck('amount')->toArray()))
-            ->with('payment_methods', PaymentMethod::list())
+            ->with('payment_method', PaymentMethod::list())
             ->with('providers');
     }
 

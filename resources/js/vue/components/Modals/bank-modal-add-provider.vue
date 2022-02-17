@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-provider-modal">
+    <bank-modal-base id="add-provider-modal">
         <template v-slot:modal-header>
             Add a new Provider
         </template>
@@ -85,7 +85,7 @@
             >Add &amp; look for others
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>

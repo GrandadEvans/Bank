@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-regular-modal">
+    <bank-modal-base id="add-regular-modal">
         <template v-slot:modal-header>
             Add a new Regular
         </template>
@@ -195,7 +195,7 @@
             >Add Regular Transaction
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>

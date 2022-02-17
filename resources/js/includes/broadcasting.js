@@ -16,7 +16,6 @@ let channel = `user.${User.id}`;
 window.Echo.private(channel)
     .listen('PossibleRegularScanFinished', (e) => {
         console.log(e);
-        Vue.bankUser.getUserDetails();
     })
     .listen('ScanForRegulars', (e) => {
         console.info('scan begun');

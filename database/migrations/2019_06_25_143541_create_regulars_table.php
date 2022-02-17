@@ -19,6 +19,8 @@ class CreateRegularsTable extends Migration
             $table->foreignIdFor(\Bank\Models\Provider::class)->default(1);
             $table->foreignIdFor(\Bank\Models\PaymentMethod::class);
 
+            $table->string('alias');
+            $table->string('entry_text');
             $table->decimal('amount', 6, 2)->nullable();
             $table->boolean('amount_varies')->default(false);
             $table->string('period_name');

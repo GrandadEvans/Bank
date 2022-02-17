@@ -72,17 +72,17 @@
 
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" :href="possible_regulars__scan_results">
+                    <a class="nav-link" :href="regulars__index">
                         <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
                         <span style="position: relative">Regulars Payments
-                        <bank-base-badge route="possible_regulars__index"/>
+                        <bank-base-badge route="regulars__index"/>
                         </span>
-                        Regular Payments
                     </a>
                     <ul>
                         <!-- TODO: Change icon -->
                         <li class="nav-item">
-                            <a class="nav-link" :href="possible_regulars__scan" @click="scanForNewRegulars">
+                            <a class="nav-link" :href="possible_regulars__scan"
+                               @click.prevent.stop="scanForNewRegulars">
                                 <font-awesome-icon icon="fa-solid fa-arrow-rotate-left"/>
                                 Scan for new Regulars
                             </a>

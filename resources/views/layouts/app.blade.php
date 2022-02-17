@@ -80,10 +80,3 @@
 
 </body>
 </html>
-<script>
-    import BankUser from "../../js/vue/components/bank-user";
-
-    export default {
-        components: {BankUser}
-    }
-</script>

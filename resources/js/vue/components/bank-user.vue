@@ -5,6 +5,16 @@
 </template>
 
 <script>
+// export class user {
+//     constructor(details) {
+//         this.email = details.email || '';
+//         this.badgesDetails = details.badges || {};
+//     }
+//
+//     get badges() {
+//         return this.badgesDetails;
+//     }
+// };
 export default {
     name: "bank-user",
     data: function () {
@@ -26,11 +36,15 @@ export default {
             let returnedData = await axios.get(url);
             this.$store.commit('updateUserDetails', returnedData.data);
             this.$store.commit('updateRouteBadges', returnedData.data.badges);
+
+            return returnedData.data;
         }
     },
     mounted() {
-        Vue.bankUser = this;
-        this.getUserDetails();
+        // Vue.bankUser = this;
+        // let USER = new user(this.getUserDetails());
+        // console.log('User class', USER);
+        // console.log('User Badges', USER.badges)
     }
 }
 </script>

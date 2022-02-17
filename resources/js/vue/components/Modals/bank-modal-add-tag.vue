@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-tag-modal">
+    <bank-modal-base id="add-tag-modal">
         <template v-slot:modal-header>
             Add a new tag
         </template>
@@ -113,7 +113,7 @@
             >Add &amp; look for others
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>
