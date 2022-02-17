@@ -1,90 +1,43 @@
 <template>
     <div>
         <section>
-            <div v-if="regularsLoaded === true">
+            <div v-if="resultsAreReady">
                 <section style="margin:1rem">
                     <h1 style="flex-grow: 1; text-align: center">
-                        &ldquo;{{ this.name }}&rdquo; appears every <strong>{{ this.period }}</strong>
+                        &ldquo;{{ this.name }}&rdquo; appears every <strong>{{ this.periodString }}</strong>
                     </h1>
                     <div class="btn-group" style="display: flex">
-                      <button class="btn btn-warning" style="margin-right: 0.5rem" @click="this.decline">Decline
-                      </button>
-                      <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;"
-                              @click="this.postpone"
-                      >Not Sure
-                      </button>
-                      <button class="btn btn-primary" style="margin-left: 0.5rem" @click="this.addNewRegular">Accept
-                      </button>
+                        <button
+                            class="btn btn-warning"
+                            style="margin-right: 0.5rem"
+                            @click="this.decline"
+                            :disabled="buttonsDisabled"
+                        >Decline
+                        </button>
+                        <button class="btn btn-secondary" style="margin-left: 0.5rem; margin-right: 0.5rem;"
+                                @click="this.postpone"
+                                :disabled="buttonsDisabled"
+                        >Not Sure
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            style="margin-left: 0.5rem"
+                            @click="this.addNewRegular"
+                            :disabled="buttonsDisabled"
+                        >Accept
+                        </button>
                     </div>
                 </section>
 
-              <section class="col-md-6">
-                <form>
-                  <!-- Provider -->
-                  <div class="mb-3">
-                    <label class="form-label">Provider</label>
-                    <provider-select-for-pr :id="this.providerId"></provider-select-for-pr>
-                  </div>
+                <section style="margin-top: 0.5rem;">
+                    <table
+                        id="regulars-table"
+                        class="table table-striped table-hover table-bordered regulars-table">
+                        <caption>Latest transactions</caption>
 
-                  <!-- Payment Method -->
-                  <div class="mb-3">
-                    <label class="form-label">Payment Method</label>
-                    <payment-method-select :id="this.paymentMethodId"></payment-method-select>
-                  </div>
-
-                  <!-- Next Due -->
-                  <div class="mb-3">
-                    <label class="form-label">Next Due</label>
-                    <input type="date" id="input-date" name="input-date" v-model="inputDate"/>
-                  </div>
-
-                  <!-- Amount -->
-                  <div class="mb-3">
-                    <label class="form-label">Amount</label>
-                    <input type="text" id="input-amount" name="input-amount" v-model="inputAmount"/>
-                  </div>
-
-                  <!-- Description -->
-                  <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        class="form-control"
-                        v-model="inputDescription"></textarea>
-                  </div>
-
-                  <!-- Estimated -->
-                  <div class="mb-3">
-                    <label class="form-label">Estimated</label>
-                    <input type="checkbox" name="estimated" id="estimated" class="form-control"
-                           v-model="inputEstimated"/>
-                  </div>
-
-                  <!-- Remarks -->
-                  <div class="mb-3">
-                    <label class="form-label">Remarks</label>
-                    <textarea
-                        name="remarks"
-                        id="remarks"
-                        class="form-control"
-                        v-model="inputRemarks"></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <button>Add Details</button>
-                  </div>
-                </form>
-              </section>
-
-              <section style="margin-top: 0.5rem;">
-                <table
-                    id="regulars-table"
-                    class="table table-striped table-hover table-bordered regulars-table">
-                  <caption>Latest transactions</caption>
-
-                  <thead>
-                    <tr>
-                      <th scope="col">Date</th>
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Current Provider</th>
                                 <th scope="col">Payment Method</th>
@@ -203,10 +156,20 @@
                 </section>
 
             </div>
+            <div v-else-if="!noResults">
+                <base-loader/>
+            </div>
+
             <div v-else>
-                <h1>No Results</h1>
+                <p style="font-size: 2rem">There are no <strong>new</strong> potential regulars left to decide upon.</p>
+                <p>Option #1: <a :href="possible_regulars__scan" @click.prevent.stop="scanForNewRegulars">Perform a
+                    scan</a> and see if any more are available.
+                </p>
+                <p>Option #2: Decide on the ones that you have previously chosen to postpone.</p>
             </div>
         </section>
+        <bank-modal-add-regular v-on:success="accept"></bank-modal-add-regular>
+
     </div>
 </template>
 
@@ -215,28 +178,35 @@ export default {
     name: "new-regular-scan-results-table",
     data: function () {
         return {
-          period: '',
-          name: '',
-          transactions: [],
-          totalDistinct: 0,
-          providerSelected: null,
-          paymentMethodId: null,
-          providerId: null,
-          lastFiveEntries: null,
-          lastTenEntries: null,
-          lastSixMonths: null,
-          lastOneYear: null,
-          inputDate: '',
-          inputAmount: 0,
-          inputDescription: '',
-          inputRemarks: '',
-          inputEstimated: false
+            periodName: '',
+            periodMultiplier: 1,
+            name: '',
+            transactions: [],
+            totalDistinct: 0,
+            providerSelected: null,
+            paymentMethodId: null,
+            providerId: null,
+            lastFiveEntries: null,
+            lastTenEntries: null,
+            lastSixMonths: null,
+            lastOneYear: null,
+            inputDate: '',
+            inputAmount: 0,
+            inputDescription: '',
+            inputRemarks: '',
+            inputEstimated: false,
+            waitingForRegularsModal: false,
+            buttonsDisabled: false,
         }
     },
     props: [
-        'read_only'
+        'read_only',
+        'possible_regulars__scan'
     ],
     computed: {
+        resultsAreReady() {
+            return (this.regularsLoaded === true && !this.noResults);
+        },
         possibleNewRegularsLoaded: function () {
             return this.$store.state.possibleNewRegularsLoaded;
         },
@@ -245,6 +215,17 @@ export default {
         },
         noResults: function () {
             return this.totalDistinct === 0;
+        },
+        periodString: function () {
+            if (this.periodMultiplier > 1) {
+                return ` ${this.periodMultiplier} ${this.periodName}s`;
+            }
+            return this.periodName;
+        },
+        newRegularDetected: function () {
+            if (this.$store.state.newRegularDetails !== {} && this.waitingForRegularsModal) {
+                this.accept();
+            }
         }
     },
     methods: {
@@ -253,30 +234,35 @@ export default {
               this.$store.commit('possibleNewRegularsLoaded', false);
               this.$store.commit('regularsLoaded', false);
             } else {
-              this.transactions = returnedData.data.data.transactions;
+                this.transactions = returnedData.data.data.transactions;
 
-              let stats = returnedData.data.stats;
-              this.name = stats.name;
-              this.period = returnedData.data.stats.period;
-              this.totalPages = stats.totalDistinct;
-              this.id = stats.id;
-              this.$store.commit('updateNewRegularDetails', {
-                payment_method_id: stats.paymentMethodId,
-                provider_id: stats.providerId,
-                date: stats.nextDate,
-                amount: this.transactions[0].amount,
-              }),
-                  this.$store.commit('updateNewRegularDetailsLoaded', true);
-              this.$store.commit('updateLatestRegularTableData', this.transactions);
-              this.$store.commit('possibleNewRegularsLoaded', false);
-              this.$store.commit('regularsLoaded', false);
-              this.$store.commit('updateLatestRegularTableStats', returnedData.data.stats);
-              this.$store.commit('possibleNewRegularsLoaded', true);
-              this.$store.commit('regularsLoaded', true);
+                let stats = returnedData.data.stats;
+                this.name = stats.name;
+                this.periodName = returnedData.data.stats.period_name;
+                this.periodMultiplier = returnedData.data.stats.period_multiplier;
+                this.totalPages = stats.totalDistinct;
+                this.id = stats.id;
+                this.$store.commit('updateNewRegularDetails', {
+                    payment_method_id: stats.paymentMethodId,
+                    provider_id: stats.providerId,
+                    date: stats.nextDate,
+                    amount: this.transactions[0].amount,
+                    transaction_id: this.transactions[0].id,
+                    entry: this.transactions[0].entry,
+                    remarks: this.transactions[0].remarks,
+                    period_name: this.periodName,
+                    period_multiplier: this.periodMultiplier
+                }),
+                    this.$store.commit('updateNewRegularDetailsLoaded', true);
+                this.$store.commit('updateLatestRegularTableData', this.transactions);
+                this.$store.commit('possibleNewRegularsLoaded', false);
+                this.$store.commit('regularsLoaded', false);
+                this.$store.commit('updateLatestRegularTableStats', returnedData.data.stats);
+                this.$store.commit('possibleNewRegularsLoaded', true);
+                this.$store.commit('regularsLoaded', true);
 
-
-              this.lastFiveEntries = {
-                'total': stats.lastFiveEntries[0],
+                this.lastFiveEntries = {
+                    'total': stats.lastFiveEntries[0],
                     'count': stats.lastFiveEntries[1],
                     'avg': stats.lastFiveEntries[2]
                 }
@@ -303,11 +289,19 @@ export default {
             }
         },
         async accept() {
+            this.buttonsDisabled = true;
+            window.addRegularModal.hide();
+            this.buttonsDisabled = false;
+            this.waitingForRegularsModal = false;
             let returnedData = await axios.post(`/possible-regulars/accept`);
             // console.log(returnedData)
             if (returnedData.status === 202) {
                 Toast.fire('Marked as ACCEPTED :-)');
-                this.loadPage(returnedData)
+                if (returnedData.data === "no results") {
+                    this.totalDistinct = 0;
+                } else {
+                    this.loadPage(returnedData)
+                }
             } else {
                 Toast.fire('ERROR!');
                 // @todo Handle error
@@ -329,29 +323,52 @@ export default {
             // console.log(returnedData)
             if (returnedData.status === 202) {
               Toast.fire('Marked at POSTPONED :-)');
-              this.loadPage(returnedData)
+                this.loadPage(returnedData)
             } else {
-              Toast.fire('ERROR!');
-              // @todo Handle error
+                Toast.fire('ERROR!');
+                // @todo Handle error
             }
         },
-      async getData(url = '/possible-regulars/first') {
-        let data = await axios.get(url);
-        this.loadPage(data);
-      },
-      addNewRegular: function () {
-        this.$store.commit('updateModalToShow', 'add-regular-modal')
-        // this.$store.commit('updateModalTransactionId', this.transaction_id)
-        // this.$store.commit('updateModalIndex', this.$props.index)
-        window.addRegularModal.show();
-      },
-      async updateProviders() {
-          // console.log('updating providers')
-        this.providerContent = '';
-        let url = `/providers/simple_list`;
-        const returnedData = await axios.get(url);
-        this.$store.commit('updateProvidersData', returnedData.data);
-      },
+        async getData(url = '/possible-regulars/first') {
+            let data = await axios.get(url);
+            this.loadPage(data);
+        },
+        addNewRegular: function () {
+            this.waitingForRegularsModal = true;
+            this.$store.commit('updateModalToShow', 'add-regular-modal')
+            // this.$store.commit('updateModalTransactionId', this.transaction_id)
+            // this.$store.commit('updateModalIndex', this.$props.index)
+            window.addRegularModal.show();
+        },
+        async updateProviders() {
+            // console.log('updating providers')
+            this.providerContent = '';
+            let url = `/providers/simple_list`;
+            const returnedData = await axios.get(url);
+            this.$store.commit('updateProvidersData', returnedData.data);
+        },
+        async scanForNewRegulars() {
+            let returnedData = await axios.get('/possible-regulars/scan'),
+                type = '',
+                title = '',
+                text = '';
+
+            if (returnedData.status === 202) {
+                type = 'success';
+                title = 'Success';
+                text = 'A new scan is underway, and you\'ll be informed of the results in a few minutes';
+            } else {
+                type = 'error';
+                title = 'Error!';
+                text = 'There was an unknown error whilst requesting your latest regular transaction scan.<br />Please contact me if this has ruined your life';
+            }
+
+            Swal.fire({
+                'type': type,
+                'title': title,
+                'text': text,
+            });
+        },
 
     },
     mounted: function () {

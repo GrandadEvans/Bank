@@ -43,7 +43,8 @@ class PossibleRegularController extends Controller
         $transactionsQuery->orderBy('date', 'DESC');
         $transactionsCollection = $transactionsQuery->get();
 
-        $period = $possibility->period;
+        $periodName = $possibility->period_name;
+        $periodMultiplier = $possibility->period_multiplier;
 
         $lastSixMonths = $transactionsCollection->takeWhile(function ($item) {
             $now = Carbon::create('now');
@@ -67,14 +68,7 @@ class PossibleRegularController extends Controller
         $lastSixMonths = $this->getStatsPerPeriod($lastSixMonths);
         $lastYear = $this->getStatsPerPeriod($lastOneYear);
 
-        $multiplier = 1;
-        if (str_starts_with($period, 'every ')) {
-            $parts = explode(' ', $period);
-            $multiplier = intval($parts[1]);
-            $period = $parts[2];
-        }
-
-        $nextDate = $transactionsCollection->first()->date->copy()->add($period, $multiplier);
+        $nextDate = $transactionsCollection->first()->date->copy()->add($periodName, $periodMultiplier);
 
         return [
             'data' => [
@@ -87,7 +81,8 @@ class PossibleRegularController extends Controller
                 'lastOneYear' => $lastYear,
                 'allTime' => $allTime,
                 'name' => $transactionsCollection->first()->entry,
-                'period' => $period,
+                'period_name' => $periodName,
+                'period_multiplier' => $periodMultiplier,
                 'totalDistinct' => $possibilities->count(),
                 'paymentMethodId' => $transactionsCollection->first()->payment_method_id,
                 'providerId' => $transactionsCollection->first()->provider_id,

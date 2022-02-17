@@ -11,7 +11,7 @@
 // import {store} from '../vueComponents'
 
 export default {
-    name: "badge",
+    name: "bank-base-badge",
     props: [
         'route'
     ],

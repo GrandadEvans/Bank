@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-similar-transactions-modal">
+    <bank-modal-base id="add-similar-transactions-modal">
         <template v-slot:modal-header>
             Add similar transactions?
         </template>
@@ -36,7 +36,7 @@
                     id="add-similar-transactions-button">Associate Transactions
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>
@@ -44,17 +44,17 @@ const bootstrap = require('bootstrap');
 const {currency, formatDate} = require("../../../includes/helpers");
 
 export default {
-    name: "add-similar-transactions-modal",
-    data () {
+    name: "bank-modal-add-similar-transactions",
+    data() {
         return {
             otherTransactions: []
         }
     },
     computed: {
-        similarTransactions () {
+        similarTransactions() {
             return this.$store.state.similarTransactions;
         },
-        typeOfSimilarity () {
+        typeOfSimilarity() {
             return this.$store.state.similarTransactionsType;
         }
     },

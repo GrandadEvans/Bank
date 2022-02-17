@@ -8,7 +8,8 @@
 
     <section id="report-summary">
         <article class="section-body">
-            <new-regular-scan-results-table source="/regulars/possible-new"/>
+            <new-regular-scan-results-table source="/regulars/possible-new"
+                                            possible_regulars__scan="{{ route('possibleRegulars.scan') }}"/>
         </article>
 
         <footer>

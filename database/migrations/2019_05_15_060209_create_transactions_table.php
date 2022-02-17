@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
 {
@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('provider_id')->default(1);
             $table->unsignedBigInteger('payment_method_id');
+            $table->boolean('isPartOfRegular')->default(false);
             $table->date('date')->index('transaction_date');
             $table->string('entry', 255)->index('transaction_entry');
             $table->decimal('amount')->nullable();

@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
             <p>Total for all regular transactions: <span
-                    class="strong">{{ \Bank\BaseModel::formatMoneyForTable($total) }}</span>
+                    class="strong">&pound;&nbsp;{{ $total }}</span>
             </p>
             <p class="help-note">This does not include all transactions that can not be predicted<br/>
                 all-though, I will try in the future</p>
@@ -20,14 +20,18 @@
     <table id="regularsTable" class="table-bordered table-hover table-striped" style="width: 100%">
         <thead>
             <tr>
-                {{--                <th>ID</th>--}}
-                <td>Next Due</td>
-                <td>Last Updated</td>
-                <td>Remarks</td>
-                <td>Frequency</td>
-                <td>Amount</td>
-                <td>Description</td>
+                <th>ID</th>
                 <td>Provider</td>
+                <td>Payment Method</td>
+                <td>Amount</td>
+                <td>Amount Varies</td>
+                <td>Period Name</td>
+                <td>Period Multiplier</td>
+                <td>Remarks</td>
+                <td>Next Due</td>
+                <td>Last Rotated</td>
+                {{--                <td>Entry Text</td>--}}
+                <td>Alias</td>
                 <td>
                     <font-awesome-icon icon="fa-solid fa-pen-to-square"/>
                 </td>
@@ -39,15 +43,17 @@
         <tbody>
             @foreach($transactions as $transaction)
                 <tr>
-                    {{--                <td>{{ $transaction->id }}</td>--}}
-                    <td>{{ Dates::formatDateForTable($transaction->nextDue) }}</td>
-                    <td>{{ Dates::formatDateForTable($transaction->lastRotated) }}</td>
-                    <td>{{ Str::limit($transaction->remarks, 40) }}</td>
-                    <td>Every {{ Dates::makeShortDurationReadable($transaction->days) }}</td>
-                    <td class="amount">@if ($transaction->estimated) <span
-                            class="strong">c.</span> @endif {{ $transaction->formattedAmount }}</td>
-                    <td>{{ Str::limit($transaction->description, 30) }}</td>
-                    <td>@if (is_object($transaction->provider) && $transaction->provider->name) {{ $transaction->provider->name }} @endif()</td>
+                    <td>{{ $transaction->id }}</td>
+                    <td>{{ $transaction->provider->name }}</td>
+                    <td>{{ $transaction->paymentMethod->method }}</td>
+                    <td class="amount">@if ($transaction->amount_varies) <span class="strong">c.</span> @endif {{
+                        '£ ' . $transaction->amount }}</td>
+                    <td>{{ ($transaction->amount_varies) ? 'Yes' : 'No' }}</td>
+                    <td>{{ $transaction->period_name }}</td>
+                    <td>{{ $transaction->period_multiplier }}</td>
+                    <td>{{ Str::limit($transaction->remarks, 50) }}</td>
+                    <td>{{ Dates::formatDateForTable($transaction->next_due) }}</td>
+                    <td>{{ (null === $transaction->last_rotated) ? 'Never' : Dates::formatDateForTable($transaction->last_rotated) }}</td>
                     <td class="text-center">
                         <form action="{{ route('regulars.edit', [$transaction->id]) }}" method="GET"
                               class="form-inline">

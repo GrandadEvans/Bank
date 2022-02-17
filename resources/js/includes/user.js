@@ -14,8 +14,18 @@ User.prototype.get = function (field = null) {
     return obj;
 };
 
+User.prototype.updateUser = function (newDetails = {}) {
+    for (let i = 0; i < User.length; i++) {
+        if (newDetails[User[i]]) {
+            User[i] = newDetails[i];
+        }
+    }
+}
+
 User.prototype.badges = function (...vars) {
     let badges = User.get('badges')
     return badges;
 }
+
+window.user = User;
 export default User();

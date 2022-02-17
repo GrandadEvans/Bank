@@ -1,5 +1,5 @@
 <template>
-    <modal-base id="add-remarks-modal">
+    <bank-modal-base id="add-remarks-modal">
         <template v-slot:modal-header>
             Add a remark
         </template>
@@ -43,15 +43,15 @@
             >Add remark
             </button>
         </template>
-    </modal-base>
+    </bank-modal-base>
 </template>
 
 <script>
 const bootstrap = require('bootstrap');
 
 export default {
-    name: "add-remarks-modal",
-    data () {
+    name: "bank-modal-add-remarks",
+    data() {
         return {
             remark: '',
             ajaxUrl: '/transactions/add-remark-from-js',

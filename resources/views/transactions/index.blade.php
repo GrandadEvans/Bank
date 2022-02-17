@@ -8,11 +8,8 @@
 
     <section id="transactions">
         <article class="section-body">
-            <transaction-table source="/transactions/all" search="{{$search ?? ''}}">
+            <transaction-table source="/transactions/all" search="{{$search ?? ''}}"/>
         </article>
-
-        <footer>
-        </footer>
     </section>
 
 @endsection

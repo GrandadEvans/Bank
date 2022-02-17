@@ -25,5 +25,3 @@ requireComponent.keys().forEach(fileName => {
     // Globally register the component
     Vue.component(componentName, componentConfig.default || componentConfig);
 });
-
-// store.commit('updateRouteBadges', User().badges);

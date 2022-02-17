@@ -21,6 +21,11 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('get_logout');
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/get-user-details', function () {
+        return Auth::user();
+    });
+    
     // Home
     Route::view('/home', 'home')->name('home');
 
@@ -58,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('/regulars')->name('regulars.')->group(function () {
         Route::get('/', [RegularController::class, 'index'])->name('index');
         Route::get('/create', [RegularController::class, 'create'])->name('create');
-        Route::post('/create', [RegularController::class, 'store'])->name('store');
+        Route::post('/create_from_js', [RegularController::class, 'storeFromJs'])->name('storeFromJs');
         Route::get('/edit/{regular}', [RegularController::class, 'edit'])->name('edit');
         Route::put('/edit/{regular}', [RegularController::class, 'update'])->name('update');
         Route::delete('/{regular}', [RegularController::class, 'destroy'])->name('delete');
