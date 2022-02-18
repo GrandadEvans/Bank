@@ -1,5 +1,8 @@
 <?php
 
+use Bank\Models\PaymentMethod;
+use Bank\Models\Provider;
+use Bank\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,20 +18,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('provider_id')->default(1);
-            $table->unsignedBigInteger('payment_method_id');
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Provider::class)->default(1);
+            $table->foreignIdFor(PaymentMethod::class);
             $table->boolean('isPartOfRegular')->default(false);
             $table->date('date')->index('transaction_date');
-            $table->string('entry', 255)->index('transaction_entry');
+            $table->string('entry', 255)->index('transaction_entry')->fulltext();
             $table->decimal('amount')->nullable();
             $table->decimal('balance')->nullable();
-            $table->string('remarks', 255)->nullable();
+            $table->text('remarks', 255)->nullable()->fulltext();
             $table->timestamps();
-
-            $table->foreign('user_id'          )->references('id')->on('users');
-            $table->foreign('provider_id'      )->references('id')->on('providers');
-            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
         });
     }
 

@@ -151,6 +151,7 @@ class Transaction extends BaseModel
         return Transaction::where('user_id', Auth::id())
             ->where('isPartOfRegular', $allowRegularEntries)
             ->groupBy('entry')
+            ->orderBy('date', 'desc')
             ->get();
     }
 

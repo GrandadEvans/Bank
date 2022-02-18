@@ -103,17 +103,21 @@ class NewRegularFinder
     public function testEachDistinctEntry(Transaction $transaction, array $timePeriods): void
     {
         foreach ($timePeriods as $period) {
+            // eg 2 weeks before today
             $carbon = Carbon::now()->copy()->sub($period, 2);
-            $isBefore = $carbon->isBefore($transaction->date);
+
+            // If the transaction date is before the earliest point (ie 2 weeks)...
+            $isAfter = $transaction->date->isAfter($carbon);
             Log::debug('Date details', [
+                'entry' => $transaction->entry,
                 'original_date' => Carbon::now()->format('Y-m-d'),
                 'period_name' => $period,
                 'period_multiplier' => 2,
                 'carbon_date' => $carbon->format('Y-m-d'),
                 'transaction_date' => $transaction->date->format('Y-m-d'),
-                'is_carbon_before_transaction' => $isBefore
+                'is_carbon_before_transaction' => $isAfter
             ]);
-            if ($isBefore) {
+            if (!$isAfter) {
                 Log::debug('Carbon is before the transaction date');
                 $similarTransactions = $this->getSimilarTransactions(transaction: $transaction);
 

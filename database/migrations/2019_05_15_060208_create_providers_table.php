@@ -1,9 +1,9 @@
 <?php
 
 use Bank\Provider;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateProvidersTable extends Migration
 {
@@ -16,17 +16,12 @@ class CreateProvidersTable extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('payment_method_id');
+            $table->foreignIdFor(\Bank\Models\PaymentMethod::class);
             $table->string('name', 100)->index('provider_name')->unique();
             $table->text('regular_expressions')->nullable();
             $table->string('logo', 255)->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
-
-        });
-
-        Schema::table('providers', function($table) {
-            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
         });
     }
 

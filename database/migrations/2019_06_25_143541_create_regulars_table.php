@@ -1,5 +1,9 @@
 <?php
 
+use Bank\Models\PaymentMethod;
+use Bank\Models\Provider;
+use Bank\Models\User;
+use Bank\UtilityClasses\TimePeriods;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,17 +19,17 @@ class CreateRegularsTable extends Migration
     {
         Schema::create('regulars', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Bank\Models\User::class);
-            $table->foreignIdFor(\Bank\Models\Provider::class)->default(1);
-            $table->foreignIdFor(\Bank\Models\PaymentMethod::class);
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Provider::class)->default(1);
+            $table->foreignIdFor(PaymentMethod::class);
 
-            $table->string('alias');
-            $table->string('entry_text');
+            $table->string('alias')->fulltext();
+            $table->string('entry_text')->fulltext();
             $table->decimal('amount', 6, 2)->nullable();
             $table->boolean('amount_varies')->default(false);
-            $table->string('period_name');
+            $table->enum('period_name', TimePeriods::$availablePeriods);
             $table->string('period_multiplier');
-            $table->string('remarks', 255)->nullable();
+            $table->text('remarks')->nullable()->fulltext();
 
             $table->date('next_due')->index('regulars_date');
             $table->date('last_rotated')->nullable();

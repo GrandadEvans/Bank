@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 
-use Bank\Models\PaymentMethod;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +16,10 @@ class PaymentMethodSeeder extends Seeder
     public function run()
     {
         $values = [
+            [
+                'abbreviation' => '---',
+                'method' => 'Unknown'
+            ],
             [
                 'abbreviation' => 'CHG',
                 'method' => 'Bank Charge'
@@ -77,10 +80,6 @@ class PaymentMethodSeeder extends Seeder
                 'abbreviation' => 'TFR',
                 'method' => 'Transfer'
             ],
-            [
-                'abbreviation' => '---',
-                'method' => 'Unknown'
-            ]
         ];
 
         DB::table('payment_methods')->insert($values);

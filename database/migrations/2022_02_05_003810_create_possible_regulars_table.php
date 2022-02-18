@@ -15,10 +15,14 @@ class CreatePossibleRegularsTable extends Migration
     {
         Schema::create('possible_regulars', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('entry')->comment('The text value of the entry searched for');
-            $table->string('period_name', 100)->comment('The period the entry was declined for');
-            $table->integer('period_multiplier')->default(1);
+            $table->foreignIdFor(\Bank\Models\User::class);
+            $table
+                ->string('entry')
+                ->comment('The text value of the entry searched for');
+            $table
+                ->string('period_name', 100)
+                ->comment('The period the entry was declined for');
+            $table->integer('period_multiplier');
             $table
                 ->enum('last_action', [
                     'accepted',
@@ -30,7 +34,6 @@ class CreatePossibleRegularsTable extends Migration
                 ->comment('What did the user choose to do with this suggestion?');
             $table->dateTime('last_action_happened')->default(now());
             $table->timestamps();
-            // I'm not creating an index as it would have to be ['user_id', 'entry', 'period']
         });
     }
 

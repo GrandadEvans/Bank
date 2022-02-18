@@ -25,7 +25,6 @@
                         >
                         <button
                             class="btn btn-outline-secondary"
-                            type="button"
                             id="button-copy-entry-to-alias"
                             @click.stop.prevent="copyEntryToAlias"
                         >
@@ -341,7 +340,6 @@ export default {
             event.stopPropagation();
             event.preventDefault();
             this.$set(this.regularDetails, 'alias', this.regularDetails.entry);
-            return false;
         }
     },
     mounted() {

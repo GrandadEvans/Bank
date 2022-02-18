@@ -43,16 +43,16 @@
                     regulars_badge-count="{{ session()->get('regulars-badge-count') }}"
                     possible_regulars__scan="{{ route('possibleRegulars.scan') }}"
                     possible_regulars__scan_results="{{ route('possibleRegulars.scanResults') }}"
-                />
+                ></bank-the-sidebar>
             @endif
             <main class="col-md-10 ml-sm-auto col-lg-10 px-md-4" role="main">
                 @yield('content')
                 @if (auth()->check())
-                    <bank-modal-add-tag/>
-                    <bank-modal-add-provider/>
-                    <bank-modal-add-similar-transactions/>
-                    <bank-modal-add-remarks/>
-                    <bank-user/>
+                    <bank-modal-add-tag></bank-modal-add-tag>
+                    <bank-modal-add-provider></bank-modal-add-provider>
+                    <bank-modal-add-similar-transactions></bank-modal-add-similar-transactions>
+                    <bank-modal-add-remarks></bank-modal-add-remarks>
+                    <bank-user></bank-user>
                 @endif
             </main>
         </div>

@@ -42,13 +42,4 @@ class PossibleRegularScanFinished implements ShouldBroadcast
         return new PrivateChannel('user.'.$this->user->id);
     }
 
-    public function broadcastWith()
-    {
-        return [
-            'badges' => json_encode(
-                $this->user->badges->toJson()
-            )
-        ];
-    }
-
 }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Bank\Models\Provider;
 use Bank\Models\Regular;
 use Bank\Models\User;
+use Bank\UtilityClasses\TimePeriods;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RegularFactory extends Factory
@@ -23,13 +24,7 @@ class RegularFactory extends Factory
      */
     public function definition()
     {
-        $periods = [
-            'day',
-            'week',
-            'month',
-            'quarter',
-            'year'
-        ];
+        $periods = TimePeriods::$availablePeriods;
 
         return [
             'user_id' => $this->for(User::class),
