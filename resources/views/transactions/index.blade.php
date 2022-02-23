@@ -8,7 +8,7 @@
 
     <section id="transactions">
         <article class="section-body">
-            <transaction-table source="/transactions/all" search="{{$search ?? ''}}"/>
+            <bank-transaction-table search="{{$search ?? ''}}"></bank-transaction-table>
         </article>
     </section>
 
