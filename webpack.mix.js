@@ -21,12 +21,10 @@ mix
         'vue',
         'vue-sweetalert',
         'moment',
-        'daterangepicker',
-        'toastify-js'
     ], 'public/js/vendor.js')
     .sass('resources/sass/sass.scss', 'public/css/app.css')
     // .postCss('resources/tmp/app.css', 'public/css/')
     .sass('resources/sass/vendor.scss', 'public/css/vendor.css')
-    .copy('resources/images', 'public/images')
+    // .copy('resources/images', 'public/images')
     .sourceMaps()
 ;
