@@ -3,5 +3,12 @@
     "projectId": "62a2aj",
     "env": {
         "APP_ENV": "testing"
-    }
+    },
+    "testFiles": "**/*.spec.js",
+    "componentFolder": "/resources/js/vue/components",
+    "component": {
+        "componentFolder": "/home/john/Projects/bank/resources/js/vue/components",
+        "testFiles": "**/*.spec.{js,jsx,ts,tsx}"
+    },
+    "browser": "firefox"
 }

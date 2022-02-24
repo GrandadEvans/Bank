@@ -382,11 +382,11 @@
       "HEAD"
     ]
   },
-  "regulars.store": {
-    "name": "regulars.store",
+  "regulars.storeFromJs": {
+    "name": "regulars.storeFromJs",
     "domain": null,
-    "action": "Bank\\Http\\Controllers\\RegularController@store",
-    "uri": "regulars/create",
+    "action": "Bank\\Http\\Controllers\\RegularController@storeFromJs",
+    "uri": "regulars/create_from_js",
     "method": [
       "POST"
     ]
@@ -638,6 +638,26 @@
     "uri": "tags/{tag}",
     "method": [
       "DELETE"
+    ]
+  },
+  "badges.index": {
+    "name": "badges.index",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\BadgeController@index",
+    "uri": "badges",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "badges.update": {
+    "name": "badges.update",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\BadgeController@update",
+    "uri": "badges/update/{route}/{action}",
+    "method": [
+      "GET",
+      "HEAD"
     ]
   },
   "predictions": {
