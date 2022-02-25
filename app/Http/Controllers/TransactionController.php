@@ -64,23 +64,22 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function all($page = 1, $limit = 25)
+    public function all(int $page = 1, int $limit = 25, string $search = '')
     {
-        $userId                  = (int) Auth::id();
-        $search                  = '';// !empty($value = request()->get('search', ['value' => ''])) ? $value['value'] : '';
-        $orderByColumn           = !empty($sort =  request()->get('orderBy')) ? '0' : 'transactions.id';
-        $orderByDirection        = request()->get('ascending') == 1 ? 'asc' : 'desc';
-        $startingRecord          = ($limit * ($page - 1)) + 1;
-        $endRecord               = $limit * $page;
+        $userId = (int) Auth::id();
+        $orderByColumn = !empty($sort = request()->get('orderBy')) ? '0' : 'transactions.id';
+        $orderByDirection = request()->get('ascending') == 1 ? 'asc' : 'desc';
+        $startingRecord = ($limit * ($page - 1)) + 1;
+        $endRecord = $limit * $page;
 
-        $query = Transaction::with(['tags','provider','paymentMethod'])
+        $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
             ->where('transactions.user_id', Auth::id());
 
         $totalRecords = $query->count();
 
         if (!empty($search)) {
             $query
-                ->where(  'transactions.entry',   'like', '%%'.$search.'%')
+                ->where('transactions.entry', 'like', '%%'.$search.'%')
                 ->orWhere('transactions.remarks', 'like', '%%'.$search.'%')
                 ->orWhere('transactions.amount',  'like', '%%'.$search.'%');
 //                ->orWhere('providers.name',       'like', '%%'.$search.'%');
