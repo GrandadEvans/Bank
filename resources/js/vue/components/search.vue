@@ -1,13 +1,16 @@
 <template>
     <div class="row">
         <div class="container">
-            <form class="mb-6 offset-6">
+            <form
+                class="mb-6 offset-6"
+                v-on:submit.stop.prevent
+            >
                 <div class="input-group">
                     <span class="input-group-text" id="search-input-icon">@</span>
                     <input
                         aria-label="Search term"
                         aria-describedby="search-help"
-                        class="form-control"
+                        :class="isValidSearch"
                         id="search-input"
                         type="search"
                         placeholder="What do you want to search for?"
@@ -17,8 +20,9 @@
                 </div>
                 <div id="search-help" class="form-text">
                     <p>
-                        Use this search field to filter the transactions using the transaction text.<br />
-                        Top Tip: You can filter by provider by prepending the search term with "@provider" or ":provider"
+                        Use this search field to filter the transactions using the transaction text.<br/>
+                        <!--                        Top Tip: You can filter by provider by prepending the search term with "@provider" or ":provider"-->
+                        Searching will only be applied to {{ minimumValidLength }} of more characters
                     </p>
                 </div>
             </form>
@@ -32,36 +36,30 @@ export default {
     data: function () {
         return {
             search: '',
-            previousTransactions: this.$store.state
+            minimumValidLength: 3
         }
     },
-    props: [
-    ],
-    computed: {},
+    computed: {
+        isValidSearch: function () {
+            let inputClass = 'form-control';
+            let len = this.search.length;
+
+            if (len > 0) {
+                if (this.search.length >= this.minimumValidLength) {
+                    inputClass += ' is-valid';
+                } else {
+                    inputClass += ' is-invalid';
+                }
+            }
+            return inputClass;
+        }
+    },
     methods: {
-        async getResults () {
-            if (this.search.length < 3) return;
-
-            this.$store.commit('transactionsLoaded', false);
-            const results = await axios.post('/search', {
-                term: this.search
-            });
-
-            // console.log(results);
-
-            if (results.status === 200) {
-                this.$store.commit('updateLatestTransactionTableData', results.data.data);
-                this.$store.commit('updateLatestTransactionTableStats', results.data.stats);
-                this.$store.commit('transactionsLoaded', true);
-            } else {
-                Toast.fire({
-                    icon: 'error',
-                    text: 'Unable to perform the search'
-                })
+        getResults() {
+            if (!_.inRange(this.search.length, 1, this.minimumValidLength)) {
+                this.$emit('search', this.search);
             }
         }
     }
 }
 </script>
-
-<style lang="scss"></style>

@@ -9,7 +9,6 @@ use Bank\Http\Controllers\PossibleRegularController;
 use Bank\Http\Controllers\PredictionsController;
 use Bank\Http\Controllers\ProviderController;
 use Bank\Http\Controllers\RegularController;
-use Bank\Http\Controllers\SearchController;
 use Bank\Http\Controllers\TagController;
 use Bank\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-user-details', function () {
         return Auth::user();
     });
-    
+
     // Home
     Route::view('/home', 'home')->name('home');
 
@@ -48,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/import', [TransactionController::class, 'import'])->name('import');
         Route::get('/providerChoice', [TransactionController::class, 'providerChoice'])->name('providerChoice');
         Route::post('/manual_import', [TransactionController::class, 'manual_import'])->name('manual_import');
-        Route::get('/all/{page?}/{limit?}', [TransactionController::class, 'all'])->name('all');
+        Route::get('/all/{page?}/{limit?}/{search?}', [TransactionController::class, 'all'])->name('all');
         Route::get('/{transaction}/update_provider/{provider}', [TransactionController::class, 'updateProvider']);
         Route::get('/{transaction}/unlink_tag/{tag}', [TransactionController::class, 'unlinkTag']);
 
@@ -123,8 +122,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/predictions', [PredictionsController::class, 'index'])->name('predictions');
 
     Route::get('/payment_methods/all', [PaymentMethodController::class, 'all']);
-
-    Route::post('/search', [SearchController::class, 'search'])->name('search');
-
 });
 Route::get('/transfer_statement', [ImporterController::class, 'statement_transferer']);
