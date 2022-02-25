@@ -31,7 +31,7 @@
 export default {
     name: "provider-select",
     props: [
-        'transaction_id',
+        'transaction',
         'simple_list'
     ],
     data: function () {
@@ -53,9 +53,13 @@ export default {
             return state;
         },
         showNewProviderModal: function() {
-            this.$store.commit('updateModalTransactionId', this.transaction_id);
+            this.$store.commit('updateModalTransactionId', this.transaction.id);
             window.addProviderModal.show();
             const providerModalEl = document.getElementById('add-provider-modal');
+            document.getElementById('bank-modal-add-provider-name').value = this.transaction.entry;
+            document.getElementById('bank-modal-add-provider-text-entries').value = this.transaction.entry;
+            document.getElementById('bank-modal-add-provider-remarks').value = '';
+            document.getElementById('bank-modal-add-provider-payment-method').value = '1';
             providerModalEl.addEventListener('hidden.bs.modal', (event) => {
                 if (null !== this.$store.state.newEntityDetails) {
                     const newProvider = this.$store.state.newEntityDetails;
@@ -65,15 +69,19 @@ export default {
                     this.$store.commit('updateNewEntityDetails', null);
                 }
             });
+            providerModalEl.addEventListener('shown.bs.modal', (event) => {
+                document.getElementById('bank-modal-add-provider-name').select();
+                document.getElementById('bank-modal-add-provider-name').focus();
+            });
         },
-        async chooseProvider (event) {
+        async chooseProvider(event) {
             if (event.target.value === 'add-new') {
                 this.showNewProviderModal();
                 return;
             }
             this.isDisabled(true);
             let provider_id = this.providerSelected;
-            let url = `/transactions/${this.transaction_id}/update_provider/${provider_id}`;
+            let url = `/transactions/${this.transaction.id}/update_provider/${provider_id}`;
 
             const returnedData = await axios.get(url);
             this.$emit('provider-updated', returnedData.data[0]);
