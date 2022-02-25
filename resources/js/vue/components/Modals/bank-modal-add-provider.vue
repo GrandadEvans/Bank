@@ -7,11 +7,12 @@
         <template v-slot:modal-body>
             <form id="add-provider-form">
                 <div class="mb-3">
-                    <label for="provider-name" class="form-label">Provider Name</label>
+                    <label for="bank-modal-add-provider-name" class="form-label">Provider Name</label>
                     <input
                         type="text"
                         class="form-control"
-                        id="provider-name"
+                        id="bank-modal-add-provider-name"
+                        name="bank-modal-add-provider-name"
                         aria-describedby="provider-name-help"
                         placeholder="eg Asda"
                         v-model="providerName"
@@ -20,10 +21,11 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="text-entries" class="form-text">Text Entries</label>
+                    <label for="bank-modal-add-provider-text-entries" class="form-text">Text Entries</label>
                     <textarea
                         class="form-control"
-                        id="text-entries"
+                        id="bank-modal-add-provider-text-entries"
+                        name="bank-modal-add-provider-text-entries"
                         aria-describedby="text-entries-help"
                         placeholder="eg Halifax Mortgage"
                         v-model="textEntries"
@@ -32,21 +34,22 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="remarks" class="form-label">Remarks</label>
+                    <label for="bank-modal-add-provider-remarks" class="form-label">Remarks</label>
                     <input
                         type="text"
                         class="form-control"
-                        id="remarks"
+                        id="bank-modal-add-provider-remarks"
                         v-model="remarks"
                     >
                     <div id="remarks-help" class="form-text">Is there anything you want to add about this provider?</div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="payment-method" class="form-label">Preferred Payment Method</label>
+                    <label for="bank-modal-add-provider-payment-method" class="form-label">Preferred Payment
+                        Method</label>
                     <select
                         class="form-control"
-                        id="payment-method"
+                        id="bank-modal-add-provider-payment-method"
                         name="payment-method"
                         v-model="paymentMethod"
                     >
@@ -171,7 +174,7 @@ export default {
             this.providerName = '';
             this.remarks = '';
             this.textEntries = '';
-            this.paymentMethod = '---';
+            this.paymentMethod = 1;
             this.enableSubmitButton();
         },
         showSimilar: function (similar, providerId) {

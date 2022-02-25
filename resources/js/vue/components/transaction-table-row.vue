@@ -8,12 +8,12 @@
         <td>
             <td-provider
                 v-if="row.provider.name === 'N/A'"
-                :transaction_id="row.id"
+                :transaction="row"
             ></td-provider>
 
             <td-provider
                 v-else
-                :transaction_id="row.id"
+                :transaction="row"
                 v-on:db-click="dbClickProvider"
             >{{ row.provider.name }}</td-provider>
         </td>

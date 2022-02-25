@@ -2,7 +2,7 @@
     <div v-on:dblclick="showProviderSelectBox">
         <slot>
             <provider-select
-                :transaction_id="transaction_id"
+                :transaction="transaction"
                 v-on:provider-updated="providerUpdated"
                 v-if="!read_only"
             ></provider-select>
@@ -14,7 +14,7 @@
 export default {
     name: "td-provider",
     props: [
-        'transaction_id',
+        'transaction',
         'read_only'
     ],
     methods: {
