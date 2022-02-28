@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 
 use Bank\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -16,11 +15,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'email' => 'john@grandadevans.com',
-            'password' => bcrypt(env('DEFAULT_USER_PASSWORD')),
-            'name' => 'John Evans'
-        ]);
+//        User::create([
+//            'email' => 'john@grandadevans.com',
+//            'password' => bcrypt(env('DEFAULT_USER_PASSWORD')),
+//            'name' => 'John Evans'
+//        ]);
 
         User::factory()->count(10)->create();
     }

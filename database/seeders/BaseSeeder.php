@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Bank\Models\User;
 use Bank\Models\Provider;
+use Bank\Models\User;
 use Illuminate\Database\Seeder;
 
 class BaseSeeder extends Seeder
@@ -22,10 +22,12 @@ class BaseSeeder extends Seeder
             'payment_method_id' => 1
         ]);
 
-        User::create([
-            'email' => 'john@grandadevans.com',
-            'password' => bcrypt(env('DEFAULT_USER_PASSWORD')),
-            'name' => 'John Evans'
-        ]);
+        if (env('APP_ENV') !== 'testing') {
+            User::create([
+                'email' => 'john@grandadevans.com',
+                'password' => bcrypt(env('DEFAULT_USER_PASSWORD')),
+                'name' => 'John Evans'
+            ]);
+        }
     }
 }
