@@ -1,7 +1,16 @@
+const correctPassword = 'password123';
+const incorrectPassword = `${correctPassword}1`;
+const email = 'john@grandadevans.com';
+const distinctEmail = 'john1@grandadevans.com';
+
+const loginDetails = {'email': email, 'password': correctPassword};
+
 before(() => {
-    cy.artisan('migrate:fresh')
-    cy.artisan('db:seed BaseSeeder')
-    cy.login();
+    cy
+        .artisan('migrate:fresh')
+        .seed('BaseSeeder')
+        .create('Bank\\Models\\User', 1, loginDetails)
+        .login(loginDetails);
 });
 
 describe('Test the transaction section', () => {
