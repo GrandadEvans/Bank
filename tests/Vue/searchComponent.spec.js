@@ -3,7 +3,7 @@ import Search from '@/components/search.vue'
 import {axios} from 'axios';
 
 describe('Test the allowed parameters', () => {
-    it('should disallow under3 characters', () => {
+    it('should disallow under 3 characters', () => {
         const wrapper = mount(Search, {});
         wrapper.search = '12';
         expect(wrapper.getResults()).toBeFalsy();

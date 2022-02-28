@@ -9,19 +9,19 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-intl": "*",
+        "ext-pdo": "*",
         "guzzlehttp/guzzle": "^7.0.1",
         "influxdata/influxdb-client-php": "^2.3",
         "laravel/framework": "^8.12",
         "laravel/helpers": "^v1.4.1",
         "laravel/telescope": "^4.6",
-        "laravel/ui": "^3.0",
+        "laravel/ui": "^3.4",
         "league/flysystem-cached-adapter": "~1.0",
         "league/flysystem-sftp": "~1.0",
         "mattkingshott/axiom": "^3.2.1",
         "pusher/pusher-php-server": "^7.0",
-        "rmccue/requests": "^v1.7.0",
-      "ext-intl": "*",
-        "ext-pdo": "*"
+        "rmccue/requests": "^v1.7.0"
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",

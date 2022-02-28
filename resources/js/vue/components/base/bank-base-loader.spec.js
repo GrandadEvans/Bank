@@ -1,8 +1,10 @@
 import {mount} from '@cypress/vue';
 import BankBaseLoader from './bank-base-loader.vue';
 
-it('bank-base-loader', () => {
-    mount(BankBaseLoader, {});
+describe('BankBaseLoader', () => {
+    it('is a valid loader', () => {
+        const wrapper = mount(BankBaseLoader);
 
-    cy.get('bank-base-loader').contains('Loading...');
-})
+        expect(wrapper.find('div').text()).toEqual('Loading...');
+    });
+});

@@ -26,5 +26,12 @@ module.exports = {
     "moduleNameMapper": {
         "^@/(.*)$": "<rootDir>/resources/js/vue/$1"
     },
+    "testURL": "http://192.168.0.3:8001",
+    "moduleFileExtensions": [
+        "js",
+        "jsx",
+        "vue"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|js?)$",
     "notify": true
 }
