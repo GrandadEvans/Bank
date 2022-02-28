@@ -121,16 +121,6 @@
       "HEAD"
     ]
   },
-  "telescope": {
-    "name": "telescope",
-    "domain": null,
-    "action": "Laravel\\Telescope\\Http\\Controllers\\HomeController@index",
-    "uri": "telescope/{view?}",
-    "method": [
-      "GET",
-      "HEAD"
-    ]
-  },
   "get_logout": {
     "name": "get_logout",
     "domain": null,
@@ -327,7 +317,7 @@
     "name": "transactions.all",
     "domain": null,
     "action": "Bank\\Http\\Controllers\\TransactionController@all",
-    "uri": "transactions/all/{page?}/{limit?}",
+    "uri": "transactions/all/{page?}/{limit?}/{search?}",
     "method": [
       "GET",
       "HEAD"
@@ -668,15 +658,6 @@
     "method": [
       "GET",
       "HEAD"
-    ]
-  },
-  "search": {
-    "name": "search",
-    "domain": null,
-    "action": "Bank\\Http\\Controllers\\SearchController@search",
-    "uri": "search",
-    "method": [
-      "POST"
     ]
   }
 }
