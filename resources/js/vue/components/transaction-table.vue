@@ -16,52 +16,75 @@
 </template>
 
 <script>
-    export default {
-        name: "transaction-table",
-        props: ['source'],
-        computed: {
-            transactionsLoaded: function () {
-                return this.$store.state.transactionsLoaded;
+
+export default {
+    name: "transaction-table",
+    props: ['source'],
+    computed: {
+        transactionsLoaded: function () {
+            return this.$store.state.transactionsLoaded;
+        },
+        limit: {
+            get: function () {
+                let prefs = this.$store.state.preferences;
+                console.log(prefs);
+                return prefs.pageLimits.transactions;
+            },
+            set: function (newLimit) {
+                console.log('setting new limit', newLimit);
+                this.setPreference('page-limits.transactions', newLimit);
             }
         },
-        data: function () {
-            return {
-                page: 1,
-                limit: 25,
-                searchTerm: ''
-            }
+    },
+    data: function () {
+        return {
+            page: 1,
+            searchTerm: ''
+        }
+    },
+    methods: {
+        async setPreference(preference, newLimit) {
+            let url = `/preferences/update/page-limits.transactions/${newLimit}`
+            let data = {
+                preference: 'page-limits.transactions',
+                value: newLimit
+            };
+            let returnedData = await axios.patch(url, data);
+            console.log(returnedData);
+            let existingPrefs = this.$store.state.preferences;
+            existingPrefs.pageLimits.transactions = newLimit;
+            this.$store.commit('updatePreferences', existingPrefs);
         },
-        methods: {
-            onChangePage: function (page) {
-                this.page = page;
-                let limit = this.$store.state.latestTransactionTableStats.limit;
-                this.limit = limit;
-                this.loadPage();
-            },
-            onChangeLimit: function (limit) {
-                this.limit = limit;
-                this.loadPage();
-            },
-            async loadPage() {
-                let page = this.page;
-                let limit = this.limit;
-                let search = this.searchTerm;
-                let url = `/transactions/all/${page}/${limit}/${search}`;
-                // this.$store.commit('transactionsLoaded', false);
-                const returnedData = await axios.get(url);
-                this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);
-                this.$store.commit('updateLatestTransactionTableStats', returnedData.data.stats);
-                this.$store.commit('transactionsLoaded', true);
-            },
-            search: function (term) {
-                this.searchTerm = term;
-                this.loadPage();
-            }
-        },
-        mounted: function() {
+        onChangePage: function (page) {
+            this.page = page;
+            let limit = this.$store.state.latestTransactionTableStats.limit;
+            this.limit = limit;
             this.loadPage();
         },
-    }
+        onChangeLimit: function (limit) {
+            this.limit = limit;
+            this.loadPage();
+        },
+        async loadPage() {
+            let page = this.page;
+            let limit = this.limit;
+            let search = this.searchTerm;
+            let url = `/transactions/all/${page}/${limit}/${search}`;
+            // this.$store.commit('transactionsLoaded', false);
+            const returnedData = await axios.get(url);
+            this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);
+            this.$store.commit('updateLatestTransactionTableStats', returnedData.data.stats);
+            this.$store.commit('transactionsLoaded', true);
+        },
+        search: function (term) {
+            this.searchTerm = term;
+            this.loadPage();
+        }
+    },
+    mounted: function () {
+        this.loadPage();
+    },
+}
 </script>
 
 <style>
