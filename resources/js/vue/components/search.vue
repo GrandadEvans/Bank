@@ -58,6 +58,8 @@ export default {
         getResults() {
             if (!_.inRange(this.search.length, 1, this.minimumValidLength)) {
                 this.$emit('search', this.search);
+            } else {
+                return false;
             }
         }
     }

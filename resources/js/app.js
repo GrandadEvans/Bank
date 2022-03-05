@@ -1,9 +1,9 @@
 require('./includes/bootstrap');
 require('./vue/vueComponents');
-require('./tagsPieChart');
-require('./includes/user');
+// require('.tagsPieChart');
 import {store} from './vue/vueComponents';
-import {default as User} from './includes/user';
+import User from './includes/User';
+
 
 $(function () {
     let token = document.head.querySelector('meta[name="csrf-token"]');
@@ -17,9 +17,13 @@ $(function () {
         console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
     }
 
+    let userdata = new User();
+    store.commit('updateUser', userdata);
     let app = new Vue({
         el: '#app',
-        store
+        store,
+        data: {
+        }
     });
 
     window.app = app;
@@ -36,18 +40,9 @@ $(function () {
         }
     })
 
-    let chartArea = document.getElementById('curve_chart');
-    if (chartArea) {
-        require('./charts/yearsIncomeExpenditureChart');
-    }
+    // let chartArea = document.getElementById('curve_chart');
+    // if (chartArea) {
+    //     require('./charts/yearsIncomeExpenditureChart');
+    // }
 
-    let routeBadges = store.routeBadges;
-    store.commit('updateRouteBadges', User.badges);
-    // console.log(routeBadges);
-
-
-    console.groupCollapsed('User Details');
-    console.info('User', User);
-    console.info('User Badges', User.badges);
-    console.groupEnd();
 });

@@ -25,3 +25,6 @@ requireComponent.keys().forEach(fileName => {
     // Globally register the component
     Vue.component(componentName, componentConfig.default || componentConfig);
 });
+// import BankTheNavbar from './components/bank-the-navbar';
+
+// Vue.component('bank-the-navbar', BankTheNavbar);

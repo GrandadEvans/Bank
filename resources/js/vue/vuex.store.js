@@ -142,6 +142,7 @@ export const storeConfig = {
             }
         ],
         userDetails: {},
+        user: null,
     },
     mutations: {
         updateLatestTransactionTableData(state, data) {
@@ -206,6 +207,9 @@ export const storeConfig = {
         },
         updateUserDetails(state, details) {
             state.userDetails = details;
+        },
+        updateUser(state, user) {
+            state.user = user;
         },
         regularsLoaded(state, loadedState) {
             state.regularsLoaded = loadedState;
