@@ -9,19 +9,14 @@
 
     <title>{{ env('APP_NAME') }}</title>
 
-    <!-- Scripts -->
-    @if (auth()->check())
-        <script src="{{ asset('/js/manifest.js') }}"></script>
-        <script src="{{ asset('/js/vendor.js') }}"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{{ asset('/js/manifest.js') }}"></script>
+    <script src="{{ asset('/js/vendor.js') }}"></script>
+    <script src="{{ asset('/js/app.js') }}"></script>
 
-        <script src="{{ asset('/js/app.js') }}"></script>
-@endif
-
-<!-- Styles -->
+    <!-- Styles -->
     <link href="{{ asset('css/vendor.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    @yield('extra-css')
 </head>
 <body>
 <div id="app" class="wrapper">
