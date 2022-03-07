@@ -11,10 +11,11 @@ use Bank\Http\Controllers\ProviderController;
 use Bank\Http\Controllers\RegularController;
 use Bank\Http\Controllers\TagController;
 use Bank\Http\Controllers\TransactionController;
+use Bank\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('get_logout');
 Auth::routes();

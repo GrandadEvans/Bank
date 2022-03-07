@@ -4,8 +4,9 @@
             <span class="add-new-tag" @click="addNewTag" v-on:tag-added="tagAdded" v-if="!read_only">
             <font-awesome-icon icon="fa-solid fa-circle-plus"/>
             </span>
+
             <span v-if="validTags" class="exit-edit-mode" v-on:click="changeTagMode">
-                <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
+            <font-awesome-icon icon="fa-solid fa-circle-xmark"/>
             </span>
         </li>
         <tag

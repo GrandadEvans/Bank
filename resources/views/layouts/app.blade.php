@@ -9,28 +9,27 @@
 
     <title>{{ env('APP_NAME') }}</title>
 
-    <!-- Scripts -->
-    @if (auth()->check())
-        <script src="{{ asset('/js/manifest.js') }}"></script>
-        <script src="{{ asset('/js/vendor.js') }}"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{{ asset('/js/manifest.js') }}"></script>
+    <script src="{{ asset('/js/vendor.js') }}"></script>
+    <script src="{{ asset('/js/app.js') }}"></script>
 
-        <script src="{{ asset('/js/app.js') }}"></script>
-@endif
-
-<!-- Styles -->
+    <!-- Styles -->
     <link href="{{ asset('css/vendor.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    @yield('extra-css')
 </head>
 <body>
 <div id="app" class="wrapper">
-    @include('partials.navbar')
+    <bank-the-navbar
+        route_home="{{ route('home') }}"
+        route_login="{{ route('login') }}"
+        route_logout="{{ route('logout') }}"
+        route_register="{{ route('register') }}"
+    ></bank-the-navbar>
 
     <div class="container-fluid" id="container-fluid">
         <div class="row" id="sidebar-surround">
             @if (auth()->check())
-                {{--                @include('partials.sidebar')--}}
                 <bank-the-sidebar
                     transactions__index="{{ route('transactions.index') }}"
                     transactions__create="{{ route('transactions.create')}}"
@@ -47,6 +46,7 @@
             @endif
             <main class="col-md-10 ml-sm-auto col-lg-10 px-md-4" role="main">
                 @yield('content')
+
                 @if (auth()->check())
                     <bank-modal-add-tag></bank-modal-add-tag>
                     <bank-modal-add-provider></bank-modal-add-provider>

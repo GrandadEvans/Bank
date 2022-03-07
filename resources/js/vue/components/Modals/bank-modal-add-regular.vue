@@ -199,7 +199,7 @@
 
 <script>
 const bootstrap = require('bootstrap');
-import User from '../../../includes/user';
+import User from '../../../includes/User';
 
 export default {
     name: "bank-modal-add-regular",
@@ -351,7 +351,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style>
 *[data-required="true"]::after {
     content: " *";
     color: red;

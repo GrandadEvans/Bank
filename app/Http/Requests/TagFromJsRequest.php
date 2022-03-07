@@ -31,7 +31,7 @@ class TagFromJsRequest extends FormRequest
             'transaction_id' => 'integer',
             'tag_icon' => [
                 'string',
-                'between:8,100'
+                'between:1,100'
             ],
             'default_color' => 'between:6,7',
             'tag_name' => [

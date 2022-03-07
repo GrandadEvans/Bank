@@ -2,7 +2,7 @@ import {mount} from '@vue/test-utils';
 import Cell from '@/components/td-amount.vue';
 
 describe('testing the way the passed amount is presented', () => {
-    const cell = mount(Cell, {
+    let cell = mount(Cell, {
         propsData: {
             currency: 'GBP',
             amount: -23.65,
@@ -12,6 +12,7 @@ describe('testing the way the passed amount is presented', () => {
             formatted: null
         }
     });
+
     it('is has a valid currency symbol', () => {
         expect(cell.html()).toContain('£');
     })
@@ -23,9 +24,17 @@ describe('testing the way the passed amount is presented', () => {
     it('has the negative class', () => {
         expect(cell.html()).toContain('currency-negative');
     })
-
     it('has the positive class', () => {
-        cell.setProps({amount: '23.66'})
+        cell = mount(Cell, {
+            propsData: {
+                currency: 'GBP',
+                amount: 23.66,
+                symbol: '£',
+                prepend: '',
+                post: '',
+                formatted: null
+            }
+        });
         expect(cell.html()).toContain('currency-positive');
     })
 });

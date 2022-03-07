@@ -1,5 +1,5 @@
 import Echo from "laravel-echo";
-import {default as User} from "./user";
+import {default as User} from "./User";
 
 window.Pusher = require('pusher-js');
 
@@ -11,12 +11,14 @@ window.Echo = new Echo({
     forceTLS: true
 });
 
-let channel = `user.${User.id}`;
+if (User.loggedIn) {
+    let channel = `user.${User.id}`;
 
-window.Echo.private(channel)
-    .listen('PossibleRegularScanFinished', (e) => {
-        console.log(e);
-    })
-    .listen('ScanForRegulars', (e) => {
-        console.info('scan begun');
-    });
+    window.Echo.private(channel)
+        .listen('PossibleRegularScanFinished', (e) => {
+            console.log(e);
+        })
+        .listen('ScanForRegulars', (e) => {
+            console.info('scan begun');
+        });
+}

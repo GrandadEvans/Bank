@@ -1,66 +1,76 @@
 <template>
-    <div>
-    <nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" :href="route_home">Banking App</a>
+    <nav class="nav navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+        <a class="nav-link navbar-brand col-md-3 col-lg-2 mr-0 px-3" v-bind:href="route_home">
+            Banking App
+        </a>
 
-        <button
-            class="navbar-toggler position-absolute d-md-none collapsed"
-            type="button"
-            data-toggle="collapse"
-            data-target="#sidebarMenu"
-            aria-controls="sidebarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-
+        <a class="navbar-toggler position-absolute d-md-none collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-target="#sidebarMenu"
+                data-cy="navbar-toggle"
+                aria-controls="sidebarMenu"
+                id="navbarDropdownGuest"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-        </button>
+        </a>
 
-        <a class="nav-link" :href="route_home">Home</a>
+        <a class="nav-link" v-bind:href="route_home" data-cy="home-link">
+            Home
+        </a>
 
         <ul class="navbar-nav px-3" v-if="loggedIn">
             <li class="nav-item px-3 dropdown">
-                <a
-                    class="nav-link dropdown-toggle"
-                    href="#"
-                    id="navbarDropdown1"
-                    role="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-
-                    {{  greeting }}
+                <a class="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        data-cy="navbarDropdownAuth"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    Hi, {{ name }} - see your Account
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                    <a class="dropdown-item" :href="route_logout">Logout</a>
+                <div class="dropdown-menu navbar-dark" aria-labelledby="navbarDropdownAuth" style="position: absolute;">
+                    <a class="dropdown-item" v-bind:href="route_logout" data-cy="logout-link">
+                        Logout
+                    </a>
                 </div>
             </li>
         </ul>
 
-        <ul class="navbar-nav px-3" v-else>
-            <li class="nav-item px-3 dropdown">
-                <a
-                    class="nav-link dropdown-toggle"
+        <li class="nav-item dropdown" v-else>
+            <a class="nav-link dropdown-toggle"
                     href="#"
-                    id="navbarDropdown4"
+                    id="navbarDropdownGuest"
                     role="button"
-                    data-toggle="dropdown"
+                    data-bs-toggle="dropdown"
+                    data-cy="navbarDropdownGuest"
                     aria-haspopup="true"
                     aria-expanded="false">
+                Login/Register
+            </a>
 
-                    Login/Register
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                    <a class="dropdown-item" :href="route_login">Login</a>
-                    <a class="dropdown-item" :href="route_register">Register</a>
-                </div>
-            </li>
-        </ul>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" v-bind:href="route_register" data-cy="registration-link">
+                        Register
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" v-bind:href="route_login" data-cy="login-link">
+                        Login
+                    </a>
+                </li>
+            </ul>
+        </li>
     </nav>
-    </div>
-
 </template>
 
 <script>
+import * as bootstrap from "bootstrap";
+
 export default {
     name: "bank-the-navbar",
     props: [
@@ -69,24 +79,37 @@ export default {
         'route_login',
         'route_register',
     ],
-    data () {
-        return {
-            user () {
-                return this.$store.state.userDetails;
-            }
-        }
-    },
     computed: {
         loggedIn: function () {
-            return this.user.loggedIn;
+            return (this.$store.state.user.loggedIn === true);
         },
-        greeting: function () {
-            return `Hi, ${this.user.firstName}`;
+        name: function () {
+            return this.$store.state.user.name;
         }
     },
     mounted() {
-        console.log('navbar')
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl, {
+                popperConfig: function (defaultBsPopperConfig) {
+                    let newConfig = {
+                        strategy: 'absolute'
+                    };
+                    return newConfig;
+                }
+            })
+        })
+
     }
 }
 </script>
 
+<style>
+.dropdown-menu {
+    position: absolute;
+    color: var(--bs-body-color);
+}
+nav {
+    padding-right: 1rem;
+}
+</style>

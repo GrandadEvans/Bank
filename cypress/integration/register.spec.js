@@ -3,29 +3,38 @@ const incorrectPassword = `${correctPassword}1`;
 const email = 'john@grandadevans.com';
 const distinctEmail = 'john1@grandadevans.com';
 
-before(() => {
-    cy.artisan('migrate:fresh').then(() => {
-        cy.seed('BaseSeeder')
-        cy.create('Bank\\Models\\User', 1, {
-            'email': email
-        })
-    });
-});
-
 describe('Check the Registration page', () => {
+    before(() => {
+        cy.artisan('migrate:fresh').then(() => {
+            cy.seed('BaseSeeder')
+            cy.create('Bank\\Models\\User', 1, {
+                'email': email
+            })
+        });
+    });
+
+    beforeEach(() => {
+        cy.logout();
+    })
+
+    beforeEach(() => {
+    })
     it('checks the home page registration link works', () => {
         cy.visit('/');
-        cy.get('.registration-link').click();
+        cy.get('#navbarDropdownGuest').click();
+        cy.get('.register-link').click();
         cy.url().should('include', '/register');
     });
 
     it('check the registration form works', () => {
         cy.visit('/register');
+        cy.get('#navbarDropdownGuest');
         cy.get('#name').type('John Evans');
         cy.get('#email').type(email);
         cy.get('#password').type(correctPassword);
         cy.get('#password-confirm').type(incorrectPassword);
         cy.get('#submit').click()
+        cy.get('#navbarDropdownGuest');
         cy.get('form#registration-form').contains('The password confirmation does not match.');
         cy.get('form#registration-form').contains('The email has already been taken.');
         cy.get('#password').clear().type(correctPassword);

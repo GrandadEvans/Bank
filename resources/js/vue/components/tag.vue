@@ -2,7 +2,7 @@
     <li class="tag-list-li" :style="{'justify-content': justifyTags}">
         <div class="justify-start">
             <div class="icon-round" :style="{ 'background-color': background_color, 'color': contrasted_color, }">
-                <font-awesome-icon v-if="null != icon" :title="tagTitle" v-bind:icon="icon"/>
+                <font-awesome-icon v-if="null != icon" v-bind:title="tagTitle" v-bind:icon="icon"/>
                 <font-awesome-icon v-else icon="fa-solid fa-circle"/>
             </div>
             <div class="tag-title" v-if="mode === 'edit'">{{ tagTitle }}</div>
@@ -42,7 +42,7 @@ export default {
     methods: {
         async deleteTag () {
             let url = `/transactions/${this.transaction_id}/unlink_tag/${this.id}`;
-            const returnedData = await axios.get(url);
+            const returnedData = await axios.delete(url);
 
             if (returnedData.data === 'OK') {
                 this.$emit('tag-deleted', this.index);
