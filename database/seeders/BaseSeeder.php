@@ -22,10 +22,5 @@ class BaseSeeder extends Seeder
             'payment_method_id' => 1
         ]);
 
-        User::create([
-            'email' => 'john@grandadevans.com',
-            'password' => bcrypt(env('DEFAULT_USER_PASSWORD')),
-            'name' => 'John Evans'
-        ]);
     }
 }

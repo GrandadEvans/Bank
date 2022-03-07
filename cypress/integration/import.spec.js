@@ -1,20 +1,20 @@
 const importURL = '/transactions/import';
 
-before(() => {
-    cy.artisan('migrate:fresh').then(() => {
-        cy.seed('BaseSeeder')
-    });
-});
-
-beforeEach(() => {
-    cy.login();
-})
-
-afterEach(() => {
-    cy.wait(1000)
-})
-
 describe('Test the import functionality', () => {
+    before(() => {
+        cy.artisan('migrate:fresh').then(() => {
+            cy.seed('BaseSeeder')
+        });
+    });
+
+    beforeEach(() => {
+        cy.login();
+    })
+
+    afterEach(() => {
+        cy.wait(1000)
+    })
+
     it('verifies we can\'t import unless logged in', () => {
         cy.logout()
         cy.visit(importURL)

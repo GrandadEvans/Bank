@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b64eacef9491c06939546c5a2b661a6",
+    "content-hash": "1c7d18eb349897a822246b372aea6d8f",
     "packages": [
         {
             "name": "brick/math",
@@ -1877,6 +1877,72 @@
                 }
             ],
             "time": "2021-10-01T21:08:31+00:00"
+        },
+        {
+            "name": "mpbarlow/laravel-vue-component-helper",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpbarlow/laravel-vue-component-helper.git",
+                "reference": "18fd52724703cc12c2369ef0339666cdcc852ea1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpbarlow/laravel-vue-component-helper/zipball/18fd52724703cc12c2369ef0339666cdcc852ea1",
+                "reference": "18fd52724703cc12c2369ef0339666cdcc852ea1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/support": ">=5.5.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mpbarlow\\LaravelVueComponentHelper\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Vue": "Mpbarlow\\LaravelVueComponentHelper\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mpbarlow\\LaravelVueComponentHelper\\": "src/"
+                },
+                "files": [
+                    "src/Helpers/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Barlow",
+                    "email": "mattpeterbarlow@gmail.com"
+                }
+            ],
+            "description": "Configure and return Vue components from your Laravel app",
+            "keywords": [
+                "component",
+                "helper",
+                "laravel",
+                "vue",
+                "vuejs"
+            ],
+            "support": {
+                "issues": "https://github.com/mpbarlow/laravel-vue-component-helper/issues",
+                "source": "https://github.com/mpbarlow/laravel-vue-component-helper/tree/master"
+            },
+            "abandoned": true,
+            "time": "2019-03-26T23:02:08+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -6152,16 +6218,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.29",
+            "version": "4.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "f8dec8f2bf5347cc596aaf141753f4fb2504c17c"
+                "reference": "a035d77d070fa57fad438e07a65447aeca248c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f8dec8f2bf5347cc596aaf141753f4fb2504c17c",
-                "reference": "f8dec8f2bf5347cc596aaf141753f4fb2504c17c",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/a035d77d070fa57fad438e07a65447aeca248c45",
+                "reference": "a035d77d070fa57fad438e07a65447aeca248c45",
                 "shasum": ""
             },
             "require": {
@@ -6238,7 +6304,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.29"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.30"
             },
             "funding": [
                 {
@@ -6246,7 +6312,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-01-29T16:56:03+00:00"
+            "time": "2022-03-05T18:12:30+00:00"
         },
         {
             "name": "codeception/lib-asserts",

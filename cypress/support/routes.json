@@ -121,6 +121,16 @@
       "HEAD"
     ]
   },
+  "telescope": {
+    "name": "telescope",
+    "domain": null,
+    "action": "Laravel\\Telescope\\Http\\Controllers\\HomeController@index",
+    "uri": "telescope/{view?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
   "welcome": {
     "name": "welcome",
     "domain": null,

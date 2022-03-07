@@ -1,60 +1,70 @@
 <template>
     <nav class="nav navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
-        <a class="nav-link navbar-brand col-md-3 col-lg-2 mr-0 px-3" :href="route_home">Banking App</a>
+        <a class="nav-link navbar-brand col-md-3 col-lg-2 mr-0 px-3" v-bind:href="route_home">
+            Banking App
+        </a>
 
-        <a
-             class="navbar-toggler position-absolute d-md-none collapsed"
-             type="button"
-             data-bs-toggle="collapse"
-             data-target="#sidebarMenu"
-             aria-controls="sidebarMenu"
-             aria-expanded="false"
-             aria-label="Toggle navigation">
+        <a class="navbar-toggler position-absolute d-md-none collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-target="#sidebarMenu"
+                data-cy="navbar-toggle"
+                aria-controls="sidebarMenu"
+                id="navbarDropdownGuest"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </a>
 
-                <span class="navbar-toggler-icon"></span>
-
-           </a>
-
-        <a class="nav-link" :href="route_home">Home</a>
+        <a class="nav-link" v-bind:href="route_home" data-cy="home-link">
+            Home
+        </a>
 
         <ul class="navbar-nav px-3" v-if="loggedIn">
             <li class="nav-item px-3 dropdown">
-                <a
-                    class="nav-link dropdown-toggle"
-                    href="#"
-                    id="navbarDropdownAuth"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-
+                <a class="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        data-cy="navbarDropdownAuth"
+                        aria-haspopup="true"
+                        aria-expanded="false">
                     Hi, {{ name }} - see your Account
                 </a>
                 <div class="dropdown-menu navbar-dark" aria-labelledby="navbarDropdownAuth" style="position: absolute;">
-                    <a class="dropdown-item" :href="route_logout">Logout</a>
+                    <a class="dropdown-item" v-bind:href="route_logout" data-cy="logout-link">
+                        Logout
+                    </a>
                 </div>
             </li>
         </ul>
 
         <li class="nav-item dropdown" v-else>
-            <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownGuest"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false">
-
-                Login/Register</a>
+            <a class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdownGuest"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    data-cy="navbarDropdownGuest"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                Login/Register
+            </a>
 
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item register-link" :href="route_register">Register</a></li>
-                <li><a class="dropdown-item login-link" :href="route_login">Login</a></li>
+                <li>
+                    <a class="dropdown-item" v-bind:href="route_register" data-cy="registration-link">
+                        Register
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" v-bind:href="route_login" data-cy="login-link">
+                        Login
+                    </a>
+                </li>
             </ul>
         </li>
-
-        <div>&nbsp;</div>
     </nav>
 </template>
 
@@ -98,5 +108,8 @@ export default {
 .dropdown-menu {
     position: absolute;
     color: var(--bs-body-color);
+}
+nav {
+    padding-right: 1rem;
 }
 </style>
