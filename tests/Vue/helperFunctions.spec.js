@@ -1,4 +1,10 @@
-import {blackOrWhite, currency, randomColour} from '@/../includes/helpers.js'
+import {globalConfig} from '../../resources/js/includes/config';
+import {
+    blackOrWhite,
+    currency,
+    randomColour,
+    formatDate,
+} from '@/../includes/helpers.js'
 
 describe('Check the COLOUR helper', () => {
     it('if background colour is white, we should get a black foreground', () => {
@@ -29,3 +35,19 @@ describe('Check the CURRENCY helpers', () => {
         expect(result).toBe('US$1,234.56');
     })
 });
+
+describe('Make sure the date formats according to the config', () => {
+    it('returns the correct format', () => {
+        globalConfig.preferredDateFormat = 'YYYY-MM-DD';
+        const date1In = '2017-05-26';
+        const date1ExpectOut = '2017-05-26';
+        const date1ActualOut = formatDate(date1In);
+        expect(date1ActualOut).toEqual(date1ExpectOut);
+
+        globalConfig.preferredDateFormat = 'DD-MM-YYYY';
+        const date2In = '2016-01-31';
+        const date2ExpectOut = '31-01-2016';
+        const date2ActualOut = formatDate(date2In);
+        expect(date2ActualOut).toEqual(date2ExpectOut);
+    })
+})

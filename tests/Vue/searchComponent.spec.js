@@ -8,6 +8,13 @@ describe('Test the allowed parameters', () => {
         wrapper.search = '12';
         expect(wrapper.getResults()).toBeFalsy();
     });
+
+    it('should allow above 3 characters', () => {
+        const wrapper = mount(Search, {});
+        wrapper.setData({search: '1234'});
+        expect(wrapper.vm.getResults()).toBeFalsy();
+    });
+
     it('an empty string should be rejected', () => {
         const wrapper = mount(Search, {});
         wrapper.setData({search: ''});
@@ -19,17 +26,3 @@ describe('Test the allowed parameters', () => {
         // expect(results).toMatch('test');
     })
 });
-//
-// describe('Make sure we can edit the tag', () => {
-//     it('It unlink the tag from the transaction if we click delete', () => {
-//         import axios from 'axios';
-//         jest.mock('axios');
-//
-//         let url = `/transactions/${validPropsData.transaction_id}/unlink_tag/${validPropsData.id}`;
-//         axios.get.mockResolvedValue({data: 'OK'});
-//         const wrapper = mount(TagComponent, {propsData: validPropsData});
-//         const deleteLink = wrapper.find()
-//         return Users.all().then(data => expect(data).toEqual(users));
-//         });
-//     })
-// })

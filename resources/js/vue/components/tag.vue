@@ -42,7 +42,7 @@ export default {
     methods: {
         async deleteTag () {
             let url = `/transactions/${this.transaction_id}/unlink_tag/${this.id}`;
-            const returnedData = await axios.get(url);
+            const returnedData = await axios.delete(url);
 
             if (returnedData.data === 'OK') {
                 this.$emit('tag-deleted', this.index);
