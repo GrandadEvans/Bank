@@ -18,17 +18,6 @@ class TagIndexCest
         $this->login($I);
     }
 
-    /**
-     * @test
-     *
-     * @param FunctionalTester $I
-     */
-    public function clicking_the_tags_home_link_takes_us_to_the_tags_home_page(FunctionalTester $I): void
-    {
-       $I->click('List Tags');
-       $I->seeCurrentRouteIs('tags.index');
-       $I->canSeeElement('table', ['id' => 'TagsTable']);
-    }
 
     /**
      * @test

@@ -179,7 +179,7 @@ Cypress.Commands.add('refreshDatabase', (options = {}) => {
  */
 Cypress.Commands.add('seed', (seederClass) => {
     return cy.artisan('db:seed', {
-        '--class': seederClass,
+        '--class': seederClass || 'DatabaseSeeder',
     });
 });
 

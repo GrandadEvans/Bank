@@ -50,17 +50,6 @@ class ProviderCreateCest
         $I->seeElement('input', ['type' => 'hidden', 'name' => '_token']);
     }
 
-    public function we_should_only_see_the_providers_page_when_logged_in(FunctionalTester $I)
-    {
-        $I->amOnPage('/providers/create');
-        $I->see('Hi, '.$this->user->name);
-        $I->amOnPage('/logout');
-        $I->seeCurrentUrlEquals('/');
-        $I->dontSee('see your account');
-        $I->dontSeeAuthentication('web');
-        $I->amOnPage('/providers/create');
-        $I->seeInCurrentUrl('login');
-    }
 
     public function we_see_errors_when_empty_providers_form_submitted(FunctionalTester $I)
     {

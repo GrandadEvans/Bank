@@ -10,5 +10,11 @@
         "componentFolder": "/home/john/Projects/bank/resources/js/vue/components",
         "testFiles": "**/*.spec.{js,jsx,ts,tsx}"
     },
-    "browser": "firefox"
+    "browser": "firefox",
+    "cypress-watch-and-reload": {
+        "watch": [
+            "**/*tag*",
+            "routes/*"
+        ]
+    }
 }

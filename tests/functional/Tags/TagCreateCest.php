@@ -42,17 +42,6 @@ class TagCreateCest
         $I->seeElement('input', ['type' => 'hidden', 'name' => '_token']);
     }
 
-    public function we_should_only_see_the_tags_page_when_logged_in(FunctionalTester $I)
-    {
-        $I->amOnPage('/tags/create');
-        $I->see('Hi, '.$this->user->name);
-        $I->amOnPage('/logout');
-        $I->seeCurrentUrlEquals('/');
-        $I->dontSee('see your account');
-        $I->dontSeeAuthentication('web');
-        $I->amOnPage('/tags/create');
-        $I->seeInCurrentUrl('login');
-    }
 
     public function we_see_errors_when_empty_tags_form_submitted(FunctionalTester $I)
     {
