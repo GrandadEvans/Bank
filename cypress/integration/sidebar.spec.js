@@ -1,15 +1,15 @@
-describe('Test the transaction section', () => {
-    before(() => {
-        cy.artisan('migrate:fresh')
-        cy.artisan('db:seed BaseSeeder')
-        cy.login();
-    });
+describe('sidebar.spec', () => {
+    describe('Test the transaction section', () => {
+        before(() => {
+            cy.resetWithFullSeed();
+            cy.login();
+        });
 
-    it('has a link to add a manual transaction', () => {
-        cy.visit('/home')
-        cy.get('#sidebarMenu');
-        // cy.route('transactions.create');
-        cy.get('a[href*="/transactions/create"]').click();
-        cy.get('h1').contains('Add a new manual trasaction');
+        it('has a link to add a manual transaction', () => {
+            cy.visit({route:'home'})
+            cy.wait(3000).get('[data-cy=sidebar-link_dashboard]').scrollIntoView();
+            cy.get('[data-cy=sidebar-link_transaction-add]').click();
+            cy.get('h1').contains('Add a new manual trasaction');
+        })
     })
 })

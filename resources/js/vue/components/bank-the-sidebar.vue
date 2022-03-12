@@ -1,9 +1,9 @@
 <template>
-    <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
+    <nav class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse" data-cy="sidebar">
         <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="/home">
+                    <a class="nav-link" href="/home" data-cy="sidebar-link_dashboard">
                         <font-awesome-icon icon="fa-solid fa-home"/>
                         <span style="position: relative">Dashboard<bank-base-badge route="home"/></span>
                     </a>
@@ -17,7 +17,7 @@
                     </a>
                     <ul>
                         <li class="nav-item">
-                            <a class="nav-link" :href="transactions__create">
+                            <a class="nav-link" :href="transactions__create"  data-cy="sidebar-link_transaction-add">
                                 <font-awesome-icon icon="fa-solid fa-calendar-days"/>&nbsp;Add Transaction
                             </a>
                         </li>

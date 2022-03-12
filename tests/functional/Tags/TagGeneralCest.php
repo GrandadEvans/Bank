@@ -15,14 +15,4 @@ class TagGeneralCest
         ];
         $this->login($I);
     }
-
-    /**
-     * @test
-     *
-     * @param FunctionalTester $I
-     */
-    public function we_see_a_link_to_create_a_new_tag(FunctionalTester $I) :void {
-        $I->seeLink('Add Tag');
-    }
-
 }

@@ -15,14 +15,6 @@ class LoginCest
         'password' => 'password123'
     ];
 
-    public function the_page_displays_ok(FunctionalTester $I)
-    {
-        $I->amOnPage('/');
-        $I->seeLink('Login');
-        $I->click('Login');
-        $I->seeResponseCodeIs(200);
-        $I->seeCurrentUrlEquals('/login');
-    }
 
     public function we_should_not_be_able_to_login_with_incorrect_details(FunctionalTester $I)
     {
@@ -58,27 +50,5 @@ class LoginCest
         $I->seeInField('email', $this->validDetails['email']);
         $I->dontSeeInField('password', $this->invalidDetails['password']);
         $I->seeCurrentUrlEquals('/login');
-    }
-
-    public function we_should_be_able_to_login_ok_with_correct_details(FunctionalTester $I)
-    {
-        // Reset the DB
-        $I->callArtisan('migrate:fresh');
-        $I->haveRecord('users', [
-            'name' => $this->validDetails['name'],
-            'email' => $this->validDetails['email'],
-            'password' => bcrypt($this->validDetails['password'])
-        ]);
-
-        $I->amOnPage('/login');
-        $I->fillField('email', $this->validDetails['email']);
-        $I->fillField('password', $this->validDetails['password']);
-        $I->click('Login Now');
-
-        // Now we should be on the home page and logged in
-        $I->seeCurrentUrlEquals('/home');
-        $I->seeResponseCodeIs(200);
-        $I->see('Your Account');
-        $I->seeLink('Logout');
     }
 }

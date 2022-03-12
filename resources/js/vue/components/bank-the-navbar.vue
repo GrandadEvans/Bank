@@ -1,5 +1,5 @@
 <template>
-    <nav class="nav navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+    <nav class="nav navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow" data-cy="navbar">
         <a class="nav-link navbar-brand col-md-3 col-lg-2 mr-0 px-3" v-bind:href="route_home">
             Banking App
         </a>
@@ -24,6 +24,7 @@
             <li class="nav-item px-3 dropdown">
                 <a class="nav-link dropdown-toggle"
                         href="#"
+                        id="navbarDropdownAuth"
                         role="button"
                         data-bs-toggle="dropdown"
                         data-cy="navbarDropdownAuth"
@@ -31,40 +32,36 @@
                         aria-expanded="false">
                     Hi, {{ name }} - see your Account
                 </a>
-                <div class="dropdown-menu navbar-dark" aria-labelledby="navbarDropdownAuth" style="position: absolute;">
-                    <a class="dropdown-item" v-bind:href="route_logout" data-cy="logout-link">
-                        Logout
-                    </a>
-                </div>
+                <ul class="dropdown-menu navbar-dark" aria-labelledby="navbarDropdownAuth" style="position: absolute;">
+                    <li>
+                        <a class="dropdown-item" v-bind:href="route_logout" data-cy="logout-link">Logout</a>
+                    </li>
+                </ul>
             </li>
         </ul>
 
-        <li class="nav-item dropdown" v-else>
-            <a class="nav-link dropdown-toggle"
-                    href="#"
-                    id="navbarDropdownGuest"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    data-cy="navbarDropdownGuest"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                Login/Register
-            </a>
-
-            <ul class="dropdown-menu">
-                <li>
-                    <a class="dropdown-item" v-bind:href="route_register" data-cy="registration-link">
-                        Register
-                    </a>
-                </li>
-
-                <li>
-                    <a class="dropdown-item" v-bind:href="route_login" data-cy="login-link">
-                        Login
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <ul class="navbar-nav px-3" v-else>
+            <li class="nav-item px-3 dropdown">
+                <a class="nav-link dropdown-toggle"
+                        href="#"
+                        id="navbarDropdownGuest"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        data-cy="navbarDropdownGuest"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    Login/Register
+                </a>
+                <ul class="dropdown-menu navbar-dark" aria-labelledby="navbarDropdownGuest" style="position: absolute;">
+                    <li>
+                        <a class="dropdown-item" v-bind:href="route_register" data-cy="registration-link">Register</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" v-bind:href="route_login" data-cy="login-link">Login</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </nav>
 </template>
 

@@ -36,7 +36,7 @@ class TagFromJsRequest extends FormRequest
             'default_color' => 'between:6,7',
             'tag_name' => [
                 'string',
-                'between:2,100'
+                'between:1,100'
             ],
             'find_similar' => 'boolean'
         ];

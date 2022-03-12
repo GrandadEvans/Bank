@@ -13,42 +13,37 @@ const passwords = {
     }
 }
 
+describe('login.spec', () => {
 describe('Check the Login page', () => {
     before(() => {
-        cy.artisan('migrate:fresh').then(() => {
-            cy.seed('BaseSeeder')
-            // cy.create('Bank\\Models\\User', 1, {
-            //     'email': emails.correct,
-            //     'password': passwords.correct.hash
-            // })
-        });
+        cy.resetWithFullSeed();
     });
 
     it('checks the home page login link works', () => {
         cy.visit('/logout');
         cy.visit('/');
-        cy.get('#navbarDropdownGuest').click();
-        cy.get('.login-link').click();
+        cy.get('[data-cy=navbarDropdownGuest]').click();
+        cy.get('[data-cy=login-link]').click();
         cy.url().should('include', '/login');
     });
 
     it('check the form error for incorrect email', () => {
         cy.visit('/login');
-        cy.get('#navbarDropdownGuest');
+        cy.get('[data-cy=navbarDropdownGuest]');
         cy.get('#email').type(emails.incorrect);
         cy.get('#password').type(passwords.incorrect.text);
         cy.get('#submit').click()
-        cy.get('#navbarDropdownGuest');
+        cy.get('[data-cy=navbarDropdownGuest]');
         cy.get('form#login-form').contains('These credentials do not match our records.');
     })
 
     it('check the form error for incorrect email', () => {
         cy.visit('/login');
-        cy.get('#navbarDropdownGuest');
+        cy.get('[data-cy=navbarDropdownGuest]');
         cy.get('#email').type(emails.correct);
         cy.get('#password').type(passwords.incorrect.text);
         cy.get('#submit').click()
-        cy.get('#navbarDropdownGuest');
+        cy.get('[data-cy=navbarDropdownGuest]');
         cy.get('form#login-form').contains('These credentials do not match our records.');
     })
 
@@ -58,4 +53,5 @@ describe('Check the Login page', () => {
         cy.url().should('include', '/home');
         cy.wait(1000)
     })
+})
 })

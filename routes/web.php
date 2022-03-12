@@ -110,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/edit/{tag}', [TagController::class, 'update'])->name('update');
         Route::delete('/{tag}', [TagController::class, 'destroy'])->name('delete');
         Route::post('/assignTransactions', [TagController::class, 'assignTransactions']);
+
         Route::get('/simple_list', [TagController::class, 'simpleList']);
     });
 

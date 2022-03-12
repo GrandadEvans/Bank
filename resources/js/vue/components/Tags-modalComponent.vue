@@ -5,7 +5,6 @@
             <tag
                 v-for="tags in modalTags"
                 :icon="tags.icon"
-                :text="tags.tag"
                 :id="tags.id"
                 :tag="tags.tag"
                 :background_color="tags.default_color"
