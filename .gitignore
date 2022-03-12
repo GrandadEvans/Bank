@@ -36,3 +36,4 @@
 
 /bootstrap/cache/**
 bank_dev--local.session.sql
+/cypress.env.json

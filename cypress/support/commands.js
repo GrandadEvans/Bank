@@ -24,6 +24,28 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('resetWithFullSeed', () => {
+    const filePath = './database/full-seed-dump-2022_03_10_00_04_37.sql';
+    const command = `/bin/mysql /
+        -u ${Cypress.env('DB_USERNAME')} /
+        -p${Cypress.env('DB_PASSWORD')} /
+        -h ${Cypress.env('DB_HOST')} /
+        ${Cypress.env('DB_DATABASE')} /
+        < ${filePath}`;
+    cy.exec(command, {log: false, timeout: 60000});
+});
+
+Cypress.Commands.add('deleteTags', () => {
+    const query = `truncate table ${Cypress.env('DB_DATABASE')}.tags; truncate table ${Cypress.env('DB_DATABASE')}.tag_transaction;`;
+    const command = `/bin/mysql \
+        -h ${Cypress.env('DB_HOST')} \
+        -p${Cypress.env('DB_PASSWORD')} \
+        -u ${Cypress.env('DB_USERNAME')} \
+        ${Cypress.env('DB_DATABASE')} \
+        -e "${query}"`;
+    cy.exec(command, {timeout: 5000}, (result) => {log: 'Result Code: ' + result.code});
+});
+
 Cypress.Commands.add('register', (
     name = 'John Evans',
     email = 'john@grandadevans',

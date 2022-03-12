@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Bank\Models\Provider;
 use Bank\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class TransactionFactory extends Factory
      */
     private int $defaultUserId = 1;
 
+
     /**
      * Define the model's default state.
      *
@@ -26,9 +28,11 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
+        $providerCount = Provider::all()->count();
+
         return [
             'user_id' => $this->defaultUserId,
-            'provider_id' => $this->faker->numberBetween(1, 10),
+            'provider_id' => $this->faker->numberBetween(1, $providerCount),
             'payment_method_id' => $this->faker->numberBetween(1, 15),
             'date' => $this->faker->dateTimeBetween('-1 year'),
             'amount' => $this->faker->randomFloat(2, -2000, 2000),

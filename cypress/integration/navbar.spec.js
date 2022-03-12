@@ -25,28 +25,30 @@ describe('navbar.spec', () => {
 
     describe('Check we see the correct links for authorised users', () => {
         it('checks the logout link works', () => {
-            cy.refreshDatabase();
-            cy.seed('BaseSeeder');
+            cy.resetWithFullSeed();
             cy.login();
             cy.visit({route: 'home'});
-            cy.get('[data-cy=navbarDropdownAuth]').click();
-            cy.wait(5000).get('[data-cy=logout-link]').scrollIntoView().click();
-            cy.wait(5000).get('[data-cy=navbarDropdownGuest]')
+            cy.wait(5000);
+            cy.get('[data-cy=navbarDropdownAuth]').scrollIntoView().click();
+            cy.get('[data-cy=logout-link]').click();
+            cy.wait(5000);
+            cy.get('[data-cy=navbarDropdownGuest]')
         });
     })
 
     describe('There should be a link to the home page...', () => {
         it('...appears when logged in', () => {
-            cy.refreshDatabase();
-            cy.seed('BaseSeeder');
+            cy.resetWithFullSeed();
             cy.login();
-            cy.wait(5000).get('[data-cy=home-link]').scrollIntoView().click();
+            cy.wait(5000);
+            cy.get('[data-cy=home-link]').scrollIntoView().click();
             cy.url().should('match', /\/home$/);
         });
 
         it('...appears when logged out', () => {
             cy.logout();
-            cy.wait(3000).get('[data-cy=home-link]').scrollIntoView().click();
+            cy.wait(5000);
+            cy.get('[data-cy=home-link]').scrollIntoView().click();
             cy.url().should('match', /\/login$/);
         })
     })

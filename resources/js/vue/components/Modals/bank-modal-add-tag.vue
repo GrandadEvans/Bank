@@ -12,6 +12,7 @@
                         aria-describedby="tag-name-help"
                         class="form-control"
                         id="tag-name"
+                        data-cy="input-tag-name"
                         list="existing-tags"
                         name="tag-name"
                         placeholder="Type to search..."
@@ -47,6 +48,7 @@
                         aria-describedby="tag-icon-help"
                         class="form-control"
                         id="tag-icon"
+                        data-cy="input-tag-icon"
                         placeholder="eg fab fa-mastercard"
                         type="text"
                         v-model="tagIcon"
@@ -65,6 +67,7 @@
                     <input
                         class="form-control"
                         id="tag-bg-color"
+                        data-cy="input-tag-bg-colour"
                         type="color"
                         v-model="tagBgColor"
                     >
@@ -74,6 +77,7 @@
             <div
                 aria-label="This is a read only section that displays the tags icon"
                 class="mb-3 tag-example"
+                data-cy="tag-example"
                 v-if="allFieldsSet"
             >
                 <span :style="{
@@ -99,6 +103,7 @@
                 class="btn btn-primary"
                 form="add-tag-form"
                 id="add-tag-submit-button"
+                data-cy="button-submit-tag"
                 type="button"
                 @click="submit"
             >Add tag</button>
@@ -118,6 +123,7 @@
 
 <script>
 import {blackOrWhite, randomColour} from '../../../includes/helpers';
+import {toLower} from "lodash/string";
 
 const bootstrap = require('bootstrap');
 
@@ -140,7 +146,7 @@ export default {
         },
         fontAwesomeIcon () {
             return {
-                icon: this.tagIcon,
+                icon: toLower(this.tagIcon),
                 size: '3x'
             };
         },
@@ -152,7 +158,7 @@ export default {
         },
         existingTags: function () {
             return this.$store.state.tagList;
-        }
+        },
     },
     methods: {
         async submit (event) {
@@ -171,7 +177,7 @@ export default {
             const ajaxData = {
                 default_color: this.ajaxTagData.default_color,
                 find_similar: (this.findSimilar) ? 1 : 0,
-                tag_icon: this.ajaxTagData.icon,
+                tag_icon: toLower(this.ajaxTagData.icon),
                 tag_id: this.ajaxTagData.tag_id,
                 tag_name: this.ajaxTagData.tag,
                 transaction_id: this.transactionId

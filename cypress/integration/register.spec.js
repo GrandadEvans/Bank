@@ -6,20 +6,13 @@ const distinctEmail = 'john1@grandadevans.com';
 describe('register.spec.js', () => {
     describe('Check the Registration page', () => {
         before(() => {
-            cy.artisan('migrate:fresh').then(() => {
-                cy.seed('BaseSeeder')
-                cy.create('Bank\\Models\\User', 1, {
-                    'email': email
-                })
-            });
+            cy.resetWithFullSeed();
         });
 
         beforeEach(() => {
             cy.logout();
         })
 
-        beforeEach(() => {
-        })
         it('checks the home page registration link works', () => {
             cy.visit('/');
             cy.get('[data-cy=navbarDropdownGuest]').click();

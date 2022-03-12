@@ -3,9 +3,7 @@ const importURL = '/transactions/import';
 describe('import.spec', () => {
     describe('Test the import functionality', () => {
         before(() => {
-            cy.artisan('migrate:fresh').then(() => {
-                cy.seed('BaseSeeder')
-            });
+            cy.resetWithFullSeed();
         });
 
         beforeEach(() => {

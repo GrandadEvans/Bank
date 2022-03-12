@@ -1,8 +1,7 @@
 describe('sidebar.spec', () => {
     describe('Test the transaction section', () => {
         before(() => {
-            cy.refreshDatabase();
-            cy.seed('BaseSeeder');
+            cy.resetWithFullSeed();
             cy.login();
         });
 

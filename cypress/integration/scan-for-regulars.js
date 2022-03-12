@@ -6,10 +6,8 @@
 // https://on.cypress.io/writing-first-test
 
 before(() => {
-    cy.artisan('migrate:fresh').then(() => {
-        cy.seed('BaseSeeder')
-        cy.create('Bank\\Models\\User', 1, {
-            'email': email
-        })
-    });
+    cy.resetWithFullSeed();
+    cy.create('Bank\\Models\\User', 1, {
+        'email': email
+    })
 });

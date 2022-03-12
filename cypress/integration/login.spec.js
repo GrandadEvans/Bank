@@ -16,13 +16,7 @@ const passwords = {
 describe('login.spec', () => {
 describe('Check the Login page', () => {
     before(() => {
-        cy.artisan('migrate:fresh').then(() => {
-            cy.seed('BaseSeeder')
-            // cy.create('Bank\\Models\\User', 1, {
-            //     'email': emails.correct,
-            //     'password': passwords.correct.hash
-            // })
-        });
+        cy.resetWithFullSeed();
     });
 
     it('checks the home page login link works', () => {

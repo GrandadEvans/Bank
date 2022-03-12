@@ -18,17 +18,6 @@
 module.exports = (on, config) => {
     // `on` is used to hook into various events Cypress emits
     // `config` is the resolved Cypress config
-    if (config.testingType === 'component') {
-        const {startDevServer} = require('@cypress/webpack-dev-server')
-
-        // Your project's Webpack configuration
-        const webpackConfig = require('../../webpack.mix.js')
-
-        on('dev-server:start', (options) => {
-                return startDevServer({options, webpackConfig})
-            }
-        )
-    }
 
     // https://github.com/bahmutov/cypress-watch-and-reload
     require('cypress-watch-and-reload/plugins')(config)

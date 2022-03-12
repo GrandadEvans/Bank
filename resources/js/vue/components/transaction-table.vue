@@ -60,6 +60,7 @@
         },
         mounted: function() {
             this.loadPage();
+            window.scrollTo(0, 0);
         },
     }
 </script>

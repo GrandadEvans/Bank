@@ -4,46 +4,34 @@ const loginDetails = {
     'hash': '$2b$10$1XJthrfGRhrbsP21EKHIlOeH4aUlC9RZJFMu0WWpph.xkUhcO.hJe'
 };
 
-describe.skip('tags.jest', () => {
-describe('We should be able to interact from the transactions table', () => {
-    it('allows us to create a single letter tag', () => {
-        cy.exec('/bin/mysql -u john -p95T0zmye -h 192.168.0.3 bank_test < /home/john/Projects/bank/database/full-seed-dump-2022_03_10_00_04_37.sql');
-        cy.login();
-        cy.visit({ route: 'transactions.index'}).wait(5000);
+describe('tags.spec', () => {
+    before(() => {
+        cy.refreshDatabase();
+        cy.seed('BaseSeeder');
+        cy.create('Bank\\Models\\User')
+        cy.create('Bank\\Models\\Transaction', 1, {user_id: 1})
+        cy.login({id: 1});
+        cy.visit({ route: 'transactions.index'});
+    });
 
-        // it('we have an add icon button', () => {
-            cy.get('[data-cy=add-new-tag-icon]').click();
-        // })
-        // it('tag name field', () => {
+    describe('We should be able to interact from the transactions table', () => {
+        it('allows us to create a single letter tag', () => {
+            cy.scrollTo('topRight');
+            cy.get('tbody tr').first().find('[data-cy=add-new-tag-icon]').click().wait(5000);
             cy.get('[data-cy=input-tag-name]').type('new:The Letter A');
-        // });
-        // it.skip('tag icon field - uppercase', () => {
-            cy.get('[data-cy=input-tag-icon]').type('A');
+            cy.get('[data-cy=input-tag-icon]').clear().type('A');
             cy.get('[data-cy=tag-example] svg');
-        // })
-        // it.skip('tag icon field - lowercase', () => {
-            cy.get('[data-cy=input-tag-icon]').clear();
-            cy.get('[data-cy=input-tag-icon]').type('a');
+            cy.get('[data-cy=input-tag-icon]').clear().type('a');
             cy.get('[data-cy=tag-example] svg');
-        // })
-        // it.skip('tag-colour field', () => {
+        });
+
+        it('allows us to select a colour', () => {
             cy.get('[data-cy=input-tag-bg-colour]').invoke('val', '#ff0000').trigger('change')
-        // })
-        // it.skip('form buttons', () => {
-        cy.get('[data-cy=button-add-tag]').click();
-        // flushPromises();
-        cy.get('[data-cy=taglist-1] [data-cy=icon-999]');
-        // @todo test html of tag
-        // cy.create('Tag', {
-        //     id: 999,
-        //     name: 'see',
-        //     icon: 'fa-solid fa-arrow-down-short-wide',
-        //     created_by_user: 1,
-        //     default_color: '#000000',
-        //     contrasted_color: '#FFFFFF'
-        // });
-        cy.get('[data-cy=transaction-row-1] [data-cy-taglist-1]');
-    // })
-    })
-})
-})
+        });
+
+        it('checks the modal submit buttons work', () => {
+            cy.get('[data-cy=button-submit-tag]').click().wait(5000);
+            cy.get('.tags_list').first().find('[data-cy=icon]');
+        });
+    });
+});

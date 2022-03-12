@@ -2,7 +2,11 @@
     <li class="tag-list-li" :style="{'justify-content': justifyTags}">
         <div class="justify-start">
             <div class="icon-round" :style="{ 'background-color': background_color, 'color': contrasted_color, }">
-                <font-awesome-icon v-if="null != icon" v-bind:title="tagTitle" v-bind:icon="icon"/>
+                <font-awesome-icon
+                    v-if="null != icon"
+                    v-bind:title="tagTitle"
+                    v-bind:icon="icon"
+                    v-bind:data-cy="icon"/>
                 <font-awesome-icon v-else icon="fa-solid fa-circle"/>
             </div>
             <div class="tag-title" v-if="mode === 'edit'">{{ tagTitle }}</div>
@@ -38,6 +42,9 @@ export default {
         justifyTags: function () {
             return (this.mode === 'edit') ? 'space-between' : 'flex-start';
         },
+        iconId: function () {
+            return 'icon-'+this.id;
+        }
     },
     methods: {
         async deleteTag () {
@@ -51,9 +58,9 @@ export default {
                 this.$swal.fire({
                     showConfirmButton: true,
                     icon: 'error',
-                    title: `There was an error',
-                    ERROR: ${returnedData.data}
-                    CODE: ${returnedData.status}`
+                    title: `There was an error,
+                        ERROR: ${returnedData.data}
+                        CODE: ${returnedData.status}`
                 });
             }
         }
