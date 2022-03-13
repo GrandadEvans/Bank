@@ -21,7 +21,7 @@
         <td><td-amount :amount="row.amount"/></td>
         <td><td-amount :amount="row.balance"/></td>
         <td><td-payment-method :method="row.payment_method"/></td>
-        <td v-on:dblclick="changeTagMode">
+        <td data-cy="tags-list" v-on:dblclick="changeTagMode">
             <tags-list
                 :index="index"
                 :mode="mode"
@@ -30,7 +30,7 @@
                 v-on:change-tag-mode="changeTagMode"
                 v-on:tag-deleted="tagDeleted"
             /></td>
-        <td class="limit-cell-width text-truncate" @dblclick="editRemark">{{ row.remarks }}</td>
+        <td class="limit-cell-width text-truncate" @dblclick="editRemark" data-cy="transaction-row-remarks">{{ row.remarks }}</td>
         <td>EDIT</td>
     </tr>
 </template>
