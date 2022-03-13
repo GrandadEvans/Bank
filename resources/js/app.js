@@ -19,6 +19,7 @@ $(function () {
 
     let userdata = new User();
     store.commit('updateUser', userdata);
+    store.commit('updateCsrfToken', token);
     let app = new Vue({
         el: '#app',
         store,

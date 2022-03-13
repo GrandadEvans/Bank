@@ -1,5 +1,6 @@
 export const storeConfig = {
     state: {
+        csrfToken: '',
         latestTransactionTableData: {},
         latestTransactionTableStats: {},
         latestRegularTableData: {},
@@ -145,6 +146,9 @@ export const storeConfig = {
         user: null,
     },
     mutations: {
+        updateCsrfToken(state, token) {
+            state.csrfToken = token;
+        },
         updateLatestTransactionTableData(state, data) {
             state.latestTransactionTableData = data;
         },
