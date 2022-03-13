@@ -38,16 +38,10 @@ class completely_reset_system extends Command
     public function handle()
     {
         $commands = [
-            'php artisan clear-compiled',
-            'php artisan view:clear',
             'php artisan auth:clear-resets',
-            'php artisan cache:clear',
-            'php artisan config:clear',
-            'php artisan event:clear',
             'php artisan optimize:clear',
             'php artisan queue:clear',
             'php artisan queue:flush',
-            'php artisan route:clear',
             'php artisan schedule:clear-cache',
             'php artisan telescope:clear',
             'php artisan migrate:fresh --seed'
