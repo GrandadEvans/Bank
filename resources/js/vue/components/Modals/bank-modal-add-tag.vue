@@ -180,10 +180,11 @@ export default {
                 tag_icon: toLower(this.ajaxTagData.icon),
                 tag_id: this.ajaxTagData.tag_id,
                 tag_name: this.ajaxTagData.tag,
-                transaction_id: this.transactionId
+                transaction_id: this.transactionId,
+                _token: $('meta[name="csrf-token"]').attr('content')
             };
 
-            const returnedData = await axios.post(this.ajaxUrl, ajaxData);
+            const returnedData = await axios.post(this.ajaxUrl, ajaxData, { "headers": { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')}});
             const data = returnedData.data;
 
             window.addTagModal.hide();
