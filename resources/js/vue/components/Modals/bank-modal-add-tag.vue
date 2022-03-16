@@ -243,7 +243,7 @@ export default {
         },
         dismissModal: function () {
             this.resetForm();
-            window.addTagModal.dispose();
+            window.addTagModal.hide();
         },
         disableSubmitButton () {
             document.getElementById("add-tag-submit-button").setAttribute("disabled", "disabled");

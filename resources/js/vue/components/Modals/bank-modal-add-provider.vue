@@ -158,7 +158,7 @@ export default {
         },
         dismissModal: function () {
             this.resetForm();
-            window.addProviderModal.dispose();
+            window.addProviderModal.hide();
         },
         enableSubmitButton () {
             document.getElementById("add-provider-submit-button").removeAttribute("disabled")

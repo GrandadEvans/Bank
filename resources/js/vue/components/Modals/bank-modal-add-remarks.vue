@@ -112,7 +112,7 @@ export default {
         },
         dismissModal: function () {
             this.resetForm();
-            window.addRemarksModal.dispose();
+            window.addRemarksModal.hide();
         },
         disableSubmitButton () {
             document.getElementById("add-remark-submit-button").setAttribute("disabled", "disabled");
