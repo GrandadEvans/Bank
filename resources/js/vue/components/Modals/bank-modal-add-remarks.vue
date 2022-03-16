@@ -16,6 +16,7 @@
                         placeholder="What else do you want to memorialise?"
                         type="text"
                         v-model="remark"
+                        data-cy="modal-remark-edit"
                     />
                     <div id="remark-help" class="form-text">
                         <p>This field will allow you to add additional information to the item, eg transaction.</p>
@@ -29,6 +30,7 @@
                 aria-label="Cancel and dismiss the add remark modal"
                 class="btn btn-warning"
                 data-bs-dismiss="modal"
+                data-cy="modal-remark-submit"
                 type="button"
                 @click="dismissModal"
             >Cancel
@@ -76,13 +78,25 @@ export default {
                 remark: this.remark
             };
 
-            const returnedData = await axios.post(this.ajaxUrl, ajaxData);
+            const returnedData = await axios.patch(this.ajaxUrl, ajaxData);
 
             if (returnedData.status === 201) {
-                const transactionId = parseInt(returnedData.data.transaction.transaction_id);
-                this.remarkSuccessfullyAdded({
-                    id: transactionId,
-                });
+                let data = returnedData.data;
+                let allTransactions = this.$store.state.latestTransactionTableData;
+                for(let i=0; i < allTransactions.length; i++) {
+                    if (allTransactions[i].id == this.transactionId) {
+                        if (this.remark === data.transaction.remark) {
+                            allTransactions[i].remark = this.remark;
+                            this.$store.commit('updateLatestTransactionTableData', allTransactions);
+                            document.getElementById(`transaction-${this.transactionId}-remark`).innerText = this.remark;
+                        } else {
+                            Swal.fire({
+                                type: 'error',
+                                title: 'There was an error updating the remark'
+                            });
+                        }
+                    }
+                }
             } else {
                 console.groupCollapsed('"Submit" action failed')
                 console.log('Status: ', returnedData.status);
@@ -111,19 +125,6 @@ export default {
             this.$store.commit('updateModalTransactionId', null)
             this.enableSubmitButton();
         },
-        remarkSuccessfullyAdded: function (remarkDetails) {
-            let rows = this.$parent.$children[0].$children[2].$refs['transaction-table-entitys-list-row'];
-            for (let i=0; i<rows.length; i++) {
-                let row = rows[i];
-                let id = row.$options.propsData.row.id;
-                if (id === remarkDetails.id) {
-                    this.updateIndividualTransaction(i, this.remark)
-                }
-            }
-        },
-        updateIndividualTransaction: function (index, remark) {
-            this.$store.commit('updateTransactionRow', {'index': index, 'remark': remark});
-        }
     },
     mounted () {
         window.addRemarksModal = new bootstrap.Modal(document.getElementById('add-remarks-modal'))
@@ -132,6 +133,7 @@ export default {
 
         modal.addEventListener('shown.bs.modal', function () {
             input.focus()
+            input.select();
         })
     }
 }

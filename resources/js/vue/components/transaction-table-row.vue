@@ -30,8 +30,13 @@
                 v-on:change-tag-mode="changeTagMode"
                 v-on:tag-deleted="tagDeleted"
             /></td>
-        <td class="limit-cell-width text-truncate" @dblclick="editRemark" data-cy="transaction-row-remarks">{{ row.remarks }}</td>
-        <td>EDIT</td>
+        <td
+            class="limit-cell-width text-truncate td_remark"
+            v-bind:id="`transaction-${ row.id }-remark`"
+            v-on:click="editRemark"
+            data-cy="transaction-row-remarks"
+        >{{ row.remarks }}</td>
+        <td data-cy="transaction-row-edit">EDIT</td>
     </tr>
 </template>
 
@@ -60,7 +65,7 @@ export default {
         dbClickProvider: function () {
             this.row.provider.name = 'N/A';
         },
-        editRemark: function() {
+        editRemark: function(event) {
             this.$store.commit('updateModalTransactionId', this.row.id);
             window.addRemarksModal.show();
             document.getElementById('remark').value = this.row.remarks;
@@ -85,7 +90,9 @@ export default {
         max-width: $max-width;
     }
 
-    .td_tags_list:hover {
+    .td_tags_list:hover,
+    .td_remark:hover
+    {
         cursor: pointer;
     }
 </style>

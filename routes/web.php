@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/filter/{search?}', [TransactionController::class, 'filter'])->name('filter');
         Route::get('/getTransactionScrapeDates', [TransactionController::class, 'GetTransactionScrapeDates']);
         Route::get('/auto_import/', [TransactionController::class, 'autoImport']);
-        Route::post('/add-remark-from-js', [TransactionController::class, 'addRemarkFromJs']);
+        Route::patch('/add-remark-from-js', [TransactionController::class, 'addRemarkFromJs']);
     });
 
     // Regulars
