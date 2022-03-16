@@ -6,6 +6,7 @@
                     v-if="null != icon"
                     v-bind:title="tagTitle"
                     v-bind:icon="icon"
+                    v-bind:id="iconId"
                     v-bind:data-cy="icon"/>
                 <font-awesome-icon v-else icon="fa-solid fa-circle"/>
             </div>
@@ -26,14 +27,38 @@
 export default {
     name: "tag",
     props: {
-        'icon': String,
-        'tag': String,
-        'id': Number,
-        'background_color': String,
-        'contrasted_color': String,
-        'mode': String,
-        'transaction_id': Number,
-        'index': Number
+        icon: {
+            type: String,
+            required: false
+        },
+        tag: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: Number,
+            required: true
+        },
+        background_color: {
+            type: String,
+            required: true
+        },
+        contrasted_color: {
+            type: String,
+            required: true
+        },
+        mode: {
+            type: String,
+            required: true
+        },
+        transaction_id: {
+            type: Number,
+            required: true
+        },
+        index: {
+            type: Number,
+            required: true
+        },
     },
     computed: {
         tagTitle: function () {
@@ -43,7 +68,7 @@ export default {
             return (this.mode === 'edit') ? 'space-between' : 'flex-start';
         },
         iconId: function () {
-            return 'icon-'+this.id;
+            return `icon-${this.transaction_id}--${this.id}`;
         }
     },
     methods: {

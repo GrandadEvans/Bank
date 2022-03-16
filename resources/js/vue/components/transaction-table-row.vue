@@ -21,7 +21,7 @@
         <td><td-amount :amount="row.amount"/></td>
         <td><td-amount :amount="row.balance"/></td>
         <td><td-payment-method :method="row.payment_method"/></td>
-        <td data-cy="tags-list" v-on:dblclick="changeTagMode">
+        <td data-cy="tags-list" v-on:dblclick="changeTagMode" class="td_tags_list">
             <tags-list
                 :index="index"
                 :mode="mode"
@@ -83,5 +83,9 @@ export default {
     .limit-cell-width {
         $max-width: 15rem;
         max-width: $max-width;
+    }
+
+    .td_tags_list:hover {
+        cursor: pointer;
     }
 </style>

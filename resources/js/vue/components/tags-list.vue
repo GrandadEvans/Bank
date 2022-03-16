@@ -48,51 +48,51 @@ export default {
         'read_only'
     ],
     computed: {
-            direction: function () {
-                return (this.mode === 'edit') ? 'column' : 'row';
-            },
-            validTags: function () {
-                return (this.mode === 'edit' && this.tags.length > 0);
-            },
-            taglist () {
-                if (null !== this.$store.state.newEntityDetails && this.$store.state.similarTransactionsType === 'tag') {
-                    this.tagAdded();
-                }
-                return this.tags;
+        direction: function () {
+            return (this.mode === 'edit') ? 'column' : 'row';
+        },
+        validTags: function () {
+            return (this.mode === 'edit' && this.tags.length > 0);
+        },
+        taglist () {
+            if (null !== this.$store.state.newEntityDetails && this.$store.state.similarTransactionsType === 'tag') {
+                this.tagAdded();
             }
+            return this.tags;
+        }
+    },
+    methods: {
+        changeTagMode: function () {
+            this.$emit('change-tag-mode');
         },
-        methods: {
-            changeTagMode: function () {
-                this.$emit('change-tag-mode');
-            },
-            tagDeleted: function (index) {
-                this.$emit('tag-deleted', index);
-            },
-            addNewTag: function () {
-                this.$store.commit('updateModalToShow', 'add-tag-modal')
-                this.$store.commit('updateModalTransactionId', this.transaction_id)
-                this.$store.commit('updateModalIndex', this.$props.index)
-                window.addTagModal.show();
-            },
-            tagAdded: function () {
-                const newItem = {
-                    icon: this.$store.state.newEntityDetails.icon,
-                    tag: this.$store.state.newEntityDetails.name,
-                    id: this.$store.state.newEntityDetails.id,
-                    default_color: this.$store.state.newEntityDetails.bgColor,
-                    contrasted_color: blackOrWhite(this.$store.state.newEntityDetails.bgColor)
-                };
-                let activeIndex = this.$store.state.modalIndex;
-                let activeRow = this.$parent.$parent.$refs['transaction-table-entitys-list-row'][activeIndex];
-                let activeTags = activeRow.$options.propsData.row.tags;
-                activeTags.push(newItem);
+        tagDeleted: function (index) {
+            this.$emit('tag-deleted', index);
+        },
+        addNewTag: function () {
+            this.$store.commit('updateModalToShow', 'add-tag-modal')
+            this.$store.commit('updateModalTransactionId', this.transaction_id)
+            this.$store.commit('updateModalIndex', this.$props.index)
+            window.addTagModal.show();
+        },
+        tagAdded: function () {
+            const newItem = {
+                icon: this.$store.state.newEntityDetails.icon,
+                tag: this.$store.state.newEntityDetails.name,
+                id: this.$store.state.newEntityDetails.id,
+                default_color: this.$store.state.newEntityDetails.bgColor,
+                contrasted_color: blackOrWhite(this.$store.state.newEntityDetails.bgColor)
+            };
+            let activeIndex = this.$store.state.modalIndex;
+            let activeRow = this.$parent.$parent.$refs['transaction-table-entitys-list-row'][activeIndex];
+            let activeTags = activeRow.$options.propsData.row.tags;
+            activeTags.push(newItem);
 
-                this.$store.commit('newTagDetected', null);
-                this.$store.commit('updateModalTransactionId', null)
-                this.$store.commit('updateModalIndex', null)
-            },
+            this.$store.commit('newTagDetected', null);
+            this.$store.commit('updateModalTransactionId', null)
+            this.$store.commit('updateModalIndex', null)
         },
-    }
+    },
+}
 </script>
 
 <style lang="scss">

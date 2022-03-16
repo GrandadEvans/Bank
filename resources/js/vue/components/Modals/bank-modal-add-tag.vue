@@ -184,7 +184,7 @@ export default {
                 _token: $('meta[name="csrf-token"]').attr('content')
             };
 
-            const returnedData = await axios.post(this.ajaxUrl, ajaxData, { "headers": { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')}});
+            const returnedData = await axios.post(this.ajaxUrl, ajaxData)
             const data = returnedData.data;
 
             window.addTagModal.hide();

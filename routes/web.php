@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/manual_import', [TransactionController::class, 'manual_import'])->name('manual_import');
         Route::get('/all/{page?}/{limit?}/{search?}', [TransactionController::class, 'all'])->name('all');
         Route::get('/{transaction}/update_provider/{provider}', [TransactionController::class, 'updateProvider']);
-        Route::get('/{transaction}/unlink_tag/{tag}', [TransactionController::class, 'unlinkTag']);
+        Route::delete('/{transaction}/unlink_tag/{tag}', [TransactionController::class, 'unlinkTag']);
 
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/filter/{search?}', [TransactionController::class, 'filter'])->name('filter');

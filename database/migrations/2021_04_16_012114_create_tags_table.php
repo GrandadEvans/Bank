@@ -1,5 +1,6 @@
 <?php
 
+use Bank\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('created_by_user_id');
+            $table->foreignIdFor(User::class, 'created_by_user_id');
             $table->string('tag', 100);
             $table->string('default_color', 7);
             $table->string('contrasted_color', 5);
