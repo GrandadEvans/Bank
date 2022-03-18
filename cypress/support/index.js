@@ -13,6 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 require('cypress-watch-and-reload/support')
+import '@cypress/code-coverage/support'
 
 import './commands';
 import './laravel-commands';

@@ -330,7 +330,7 @@ export default {
     .tag-example {
         display: flex;
 
-        .fa, .fab, .fal, .far, .fas {
+        .fa, .fab, .far, .fas {
             border-radius: 50%;
             line-height: 3rem;
             text-align: center;

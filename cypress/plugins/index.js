@@ -21,6 +21,7 @@ module.exports = (on, config) => {
 
     // https://github.com/bahmutov/cypress-watch-and-reload
     require('cypress-watch-and-reload/plugins')(config)
+    require('@cypress/code-coverage/task')(on, config)
 
     on('task', require('./swap-env'));
 
