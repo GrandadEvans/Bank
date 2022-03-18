@@ -30,7 +30,7 @@
                 aria-label="Cancel and dismiss the add remark modal"
                 class="btn btn-warning"
                 data-bs-dismiss="modal"
-                data-cy="modal-remark-submit"
+                data-cy="modal-remark-cancel"
                 type="button"
                 @click="dismissModal"
             >Cancel
@@ -42,6 +42,7 @@
                 form="add-remark-form"
                 id="add-remark-submit-button"
                 type="submit"
+                data-cy="modal-remark-submit"
             >Add remark
             </button>
         </template>

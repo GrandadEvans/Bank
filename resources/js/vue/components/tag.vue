@@ -4,10 +4,11 @@
             <div class="icon-round" :style="{ 'background-color': background_color, 'color': contrasted_color, }">
                 <font-awesome-icon
                     v-if="null != icon"
+                    v-bind:data-cy="`tag-${transaction_id}-${id}`"
                     v-bind:title="tagTitle"
                     v-bind:icon="icon"
                     v-bind:id="iconId"
-                    v-bind:data-cy="icon"/>
+                    />
                 <font-awesome-icon v-else icon="fa-solid fa-circle"/>
             </div>
             <div class="tag-title" v-if="mode === 'edit'">{{ tagTitle }}</div>
@@ -16,7 +17,10 @@
             <div class="tag-edit">
                 <font-awesome-icon icon="fa-solid fa-pen-to-square"/>
             </div>
-            <div class="tag-delete" v-on:click="deleteTag">
+            <div
+                class="tag-delete"
+                v-on:click="deleteTag"
+                v-bind:data-cy="`tag-delete-${transaction_id}-${id}`">
                 <font-awesome-icon icon="fa-solid fa-trash-can"/>
             </div>
         </div>

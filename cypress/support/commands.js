@@ -58,7 +58,7 @@ Cypress.Commands.add('register', (
         cy.exec('php artisan migrate:fresh --seed');
     }
 
-    cy.visit('http://192.168.0.3:8000')
+    cy.visit('http://192.168.0.3:8001')
         .get('#name').type(name)
         .get('#email').type(email)
         .get('#password').type(password)

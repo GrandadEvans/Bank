@@ -179,7 +179,7 @@ Cypress.Commands.add('refreshDatabase', (options = {}) => {
  */
 Cypress.Commands.add('seed', (seederClass) => {
     return cy.artisan('db:seed', {
-        '--class': seederClass || 'DatabaseSeeder',
+        '--class': seederClass,
     });
 });
 
@@ -193,7 +193,7 @@ Cypress.Commands.add('seed', (seederClass) => {
  * @example cy.artisan('cache:clear');
  */
 Cypress.Commands.add('artisan', (command, parameters = {}, options = {}) => {
-    options = Object.assign({}, { log: true }, options);
+    options = Object.assign({}, { log: false }, options);
 
     if (options.log) {
         Cypress.log({

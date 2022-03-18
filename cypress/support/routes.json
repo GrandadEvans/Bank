@@ -295,6 +295,15 @@
       "PUT"
     ]
   },
+  "transactions.": {
+    "name": "transactions.",
+    "domain": null,
+    "action": "Bank\\Http\\Controllers\\TransactionController@addRemarkFromJs",
+    "uri": "transactions/add-remark-from-js",
+    "method": [
+      "PATCH"
+    ]
+  },
   "transactions.delete": {
     "name": "transactions.delete",
     "domain": null,
@@ -341,15 +350,6 @@
     "method": [
       "GET",
       "HEAD"
-    ]
-  },
-  "transactions.": {
-    "name": "transactions.",
-    "domain": null,
-    "action": "Bank\\Http\\Controllers\\TransactionController@addRemarkFromJs",
-    "uri": "transactions/add-remark-from-js",
-    "method": [
-      "POST"
     ]
   },
   "transactions.index": {

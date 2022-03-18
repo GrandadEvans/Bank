@@ -66,10 +66,7 @@ class TagController extends Controller
             }
 
             $reply = [
-                'tag_id' => $tag->id,
-                'tag_name' => $tag->tag,
-                'tag_icon' => $tag->icon,
-                'default_color' => $tag->default_color,
+                "tag" => $tag,
                 'similar_transactions' => $similarTransactions
             ];
         }

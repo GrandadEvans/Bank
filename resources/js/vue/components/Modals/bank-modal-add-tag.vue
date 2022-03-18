@@ -178,37 +178,40 @@ export default {
                 default_color: this.ajaxTagData.default_color,
                 find_similar: (this.findSimilar) ? 1 : 0,
                 tag_icon: toLower(this.ajaxTagData.icon),
-                tag_id: this.ajaxTagData.tag_id,
                 tag_name: this.ajaxTagData.tag,
                 transaction_id: this.transactionId,
-                _token: $('meta[name="csrf-token"]').attr('content')
+                _token: decodeURIComponent($('meta[name="csrf-token"]').attr('content'))
             };
 
-            const returnedData = await axios.post(this.ajaxUrl, ajaxData)
-            const data = returnedData.data;
+            const returnedData = await axios.post(this.ajaxUrl, ajaxData, {
+                "headers": {
+                    'X-XSRF-TOKEN': decodeURIComponent($('meta[name="csrf-token"]').attr('content')),
+                }
+            })
 
-            window.addTagModal.hide();
             if (returnedData.status === 201) {
-                const tagId = data.tag_id;
-                const similar_transactions = data.similar_transactions;
-
-                this.tagSuccessfullyAdded({
-                    bgColor: data.default_color,
-                    icon: data.tag_icon,
-                    id: tagId,
-                    name: data.tag_name,
-                    similarTransactions: similar_transactions
-                });
-                this.showSimilar(similar_transactions, tagId)
+                let data = returnedData.data;
+                let allTransactions = this.$store.state.latestTransactionTableData;
+                for(let i=0; i < allTransactions.length; i++) {
+                    if (allTransactions[i].id == this.transactionId) {
+                        allTransactions[i].tags.push(data.tag)
+                        let existingTags = allTransactions[i].tags;
+                        this.$store.commit('updateLatestTransactionTableData', allTransactions);
+                        this.$nextTick();
+                        // document.getElementById(`transaction-${this.transactionId}-remark`).innerText = this.remark;
+                    }
+                }
             } else {
                 console.groupCollapsed('"Submit" action failed')
                 console.log('Status: ', returnedData.status);
                 console.info('Reply...');
-                console.log(data);
+                console.log(returnedData.data);
                 console.info('Headers...');
                 console.log(returnedData.headers);
                 console.groupEnd();
             }
+
+            window.addTagModal.hide();
             this.resetForm();
         },
         async updateTags() {

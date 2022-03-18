@@ -7,6 +7,7 @@ describe('register.spec.js', () => {
     describe('Check the Registration page', () => {
         before(() => {
             cy.resetWithFullSeed();
+            cy.create('Bank\\Models\\User', {email: 'john@grandadevans.com'})
         });
 
         beforeEach(() => {

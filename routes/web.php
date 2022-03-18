@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/getJsonTags/{transaction}', [TransactionController::class, 'getJsonTags'])->name('getJsonTags');
         Route::put('/edit/{transaction}', [TransactionController::class, 'update'])->name('update');
         Route::put('/ajaxUpdate/{transaction}', [TransactionController::class, 'ajaxUpdate'])->name('ajaxUpdate');
+        Route::delete('/{transaction}/unlink_tag/{tag}', [TransactionController::class, 'unlinkTag']);
         Route::delete('/{transaction}', [TransactionController::class, 'destroy'])->name('delete');
 //        Route::get('/auto_import', [TransactionController::class, 'autoImport'])->name('auto_import');
         Route::get('/import', [TransactionController::class, 'import'])->name('import');
@@ -50,7 +51,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/manual_import', [TransactionController::class, 'manual_import'])->name('manual_import');
         Route::get('/all/{page?}/{limit?}/{search?}', [TransactionController::class, 'all'])->name('all');
         Route::get('/{transaction}/update_provider/{provider}', [TransactionController::class, 'updateProvider']);
-        Route::delete('/{transaction}/unlink_tag/{tag}', [TransactionController::class, 'unlinkTag']);
 
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/filter/{search?}', [TransactionController::class, 'filter'])->name('filter');
