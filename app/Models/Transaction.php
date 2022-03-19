@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Transaction
+ * @method static findOrFail(mixed $transaction_id)
+ * @method static where(string $string, $entryText)
+ * @method static whereIn(string $string, array $sanitized)
+ * @method static find(mixed $get)
  */
 class Transaction extends BaseModel
 {

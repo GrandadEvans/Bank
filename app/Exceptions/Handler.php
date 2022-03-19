@@ -3,8 +3,10 @@
 namespace Bank\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
+/**
+ * General handler for Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -34,8 +36,9 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(reportUsing: function () {
             //
         });
+        parent::register();
     }
 }

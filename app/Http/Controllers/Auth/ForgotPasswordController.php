@@ -5,6 +5,9 @@ namespace Bank\Http\Controllers\Auth;
 use Bank\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
+/**
+ * Forgotten Password Controller
+ */
 class ForgotPasswordController extends Controller
 {
     /*

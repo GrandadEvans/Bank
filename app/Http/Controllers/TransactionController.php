@@ -2,8 +2,6 @@
 
 namespace Bank\Http\Controllers;
 
-use Bank\Exceptions\InvalidPaymentMethodException;
-use Bank\Exceptions\ResourceAccessException;
 use Bank\Http\Requests\TransactionAjaxRemarkRequest;
 use Bank\Http\Requests\TransactionRequest;
 use Bank\Jobs\ImportTransactions;
@@ -14,48 +12,52 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Throwable;
 
+/**
+ * General Transactions Controller
+ *
+ * @todo Split the file down
+ */
 class TransactionController extends Controller
 {
     /**
-     * TransactionController constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * how the transactions home page and list them
+     *
+     * return View
      */
-    public function index($search = null)
+    public function index($search = null): View
     {
-//        PossibleRegularScanFinished::dispatch();
-//        return $this->all();
         return view('transactions.index')
             ->with(['search' => $search]);
     }
 
     /**
      * how the transactions home page and list them
+     *
+     * return View
      */
-    public function filter($search)
+    public function filter(string $search): View
     {
-        return $this->index($search);
+        return $this->index(search: $search);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('transactions.create')
             ->with('providers', Provider::all());
@@ -63,12 +65,19 @@ class TransactionController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
+     * @todo Handle unhandled exceptions
+     *
+     * return array
      */
-    public function all(int $page = 1, int $limit = 25, string $search = '')
+    #[ArrayShape(['data' => 'Collection', 'stats' => '[]'])]
+    public function all(int $page = 1, int $limit = 25, string $search = ''): array
     {
-        $userId = (int) Auth::id();
-        $orderByColumn = !empty($sort = request()->get('orderBy')) ? '0' : 'transactions.id';
-        $orderByDirection = request()->get('ascending') == 1 ? 'asc' : 'desc';
+        $sort = request()->get('orderBy');
+        $asc = request()->get('ascending');
+
+        $orderByColumn = !empty($sort) ? '0' : 'transactions.id';
+        $orderByDirection = ($asc == 1) ? 'asc' : 'desc';
         $startingRecord = ($limit * ($page - 1)) + 1;
         $endRecord = $limit * $page;
 
@@ -81,8 +90,7 @@ class TransactionController extends Controller
             $query
                 ->where('transactions.entry', 'like', '%%'.$search.'%')
                 ->orWhere('transactions.remarks', 'like', '%%'.$search.'%')
-                ->orWhere('transactions.amount',  'like', '%%'.$search.'%');
-//                ->orWhere('providers.name',       'like', '%%'.$search.'%');
+                ->orWhere('transactions.amount', 'like', '%%'.$search.'%');
         }
 
         $filteredRecords = $query->count();
@@ -93,25 +101,13 @@ class TransactionController extends Controller
 
         $data = $query->get();
 
-//        $query2 = DB::table('transactions')
-//            ->where('user_id', Auth::id())
-//            ->where('amount', '>', 0)
-//            ->average('amount');
-//        $query3 = DB::table('transactions')
-//            ->where('user_id', Auth::id())
-//            ->where('amount', '<', 0)
-//            ->average('amount');
-
-
         $stats = [
-            'totalRecords' => (int) $totalRecords,
-            'filteredRecords' => (int) $filteredRecords,
+            'totalRecords' => $totalRecords,
+            'filteredRecords' => $filteredRecords,
             'startingRecord' => (int) $startingRecord,
             'endRecord' => (int) $endRecord,
-            'page' => (int) $page,
-            'limit' => (int) $limit,
-//            'average_in' => $query2,
-//            'average_out' => $query3
+            'page' => $page,
+            'limit' => $limit,
         ];
 
         return [
@@ -120,34 +116,56 @@ class TransactionController extends Controller
         ];
     }
 
-    public function getJsonTags(Request $request, Transaction $transaction)
+    /**
+     * @param  Transaction  $transaction
+     *
+     * @return false|string
+     */
+    public function getJsonTags(Transaction $transaction): false|string
     {
         return json_encode($this->getTags($transaction));
     }
 
-    public function getNonJsonTags(int $id): array
+    /**
+     * @param  int  $transactionId
+     *
+     * @return array
+     */
+    public function getNonJsonTags(int $transactionId): array
     {
-        $transaction = Transaction::find($id);
+        $transaction = Transaction::find($transactionId);
         return $this->getTags($transaction);
     }
 
-    public function updateProvider(Transaction $transaction, $provider_id)
+    /**
+     * @param  Transaction  $transaction
+     * @param  int  $providerId
+     *
+     * @return Response
+     */
+    public function updateProvider(Transaction $transaction, int $providerId): Response
     {
         try {
-            $transaction->provider_id = $provider_id;
+            $transaction->provider_id = $providerId;
             $transaction->save();
         } catch (Exception $exception) {
             return new Response('Failed: '.$exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $prov = Provider::where('id', $provider_id)->get();
+        $prov = Provider::where('id', $providerId)->get();
         return new Response($prov, Response::HTTP_ACCEPTED);
     }
 
-    public function unlinkTag(Transaction $transaction, $tag_id)
+    /**
+     * @param  Transaction  $transaction
+     * @param int $tagId
+     *
+     * @return Response
+     */
+    public function unlinkTag(Transaction $transaction, int $tagId): Response
     {
         try {
             DB::table('tag_transaction')
-                ->where('tag_id', $tag_id)
+                ->where('tag_id', $tagId)
                 ->where('transaction_id', $transaction->id)
                 ->delete();
         } catch (Exception $e) {
@@ -156,6 +174,11 @@ class TransactionController extends Controller
         return new Response('OK', Response::HTTP_ACCEPTED);
     }
 
+    /**
+     * @param  Transaction  $transaction
+     *
+     * @return array
+     */
     public function getTags(Transaction $transaction): array
     {
         $tagString = [];
@@ -176,10 +199,11 @@ class TransactionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  TransactionRequest  $request
-     * @return Response
+     *
+     * @return RedirectResponse|Redirector
      * @throws Throwable
      */
-    public function store(TransactionRequest $request)
+    public function store(TransactionRequest $request): Redirector|RedirectResponse
     {
         $validated = $request->validated();
 
@@ -202,9 +226,10 @@ class TransactionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Transaction  $transaction
-     * @return Response
+     *
+     * @return View
      */
-    public function edit(Transaction $transaction)
+    public function edit(Transaction $transaction): View
     {
         $transaction->verifyRecordOwnership();
         return view('transactions.edit')
@@ -216,11 +241,13 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  TransactionRequest  $request
      * @param  Transaction  $transaction
-     * @return Response
+     *
+     * @return Redirector|RedirectResponse
+     * @throws Throwable
      */
-    public function update(TransactionRequest $request, Transaction $transaction)
+    public function update(TransactionRequest $request, Transaction $transaction): Redirector|RedirectResponse
     {
         $transaction->verifyRecordOwnership();
         $validated = $request->validated();
@@ -233,11 +260,13 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage from an Ajax request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Bank\Transaction  $transaction
-     * @return Response
+     * @param  TransactionAjaxRemarkRequest  $request
+     * @param  Transaction  $transaction
+     *
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function ajaxUpdate(TransactionAjaxRemarkRequest $request, Transaction $transaction)
+    public function ajaxUpdate(TransactionAjaxRemarkRequest $request, Transaction $transaction): JsonResponse
     {
         $validated = $request->validated();
         $transaction->remarks = $validated['remarks'];
@@ -249,12 +278,12 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
-     * @param  \Bank\Transaction  $transaction
-     * @return Response
+     * @param  Transaction $transaction
+     *
+     * @return Redirector|RedirectResponse
      * @throws Exception
      */
-    public function destroy(Request $request, Transaction $transaction)
+    public function destroy(Transaction $transaction): Redirector|RedirectResponse
     {
         $transaction->verifyRecordOwnership();
 
@@ -268,26 +297,25 @@ class TransactionController extends Controller
         session()->flash('alert', $flashData);
 
         return redirect(route('transactions.index'));
-
     }
 
     /**
      * Manual Import page
      *
-     * @param Request $request
-     * @return void
+     * @return View
      */
-    public function import() {
+    public function import(): View
+    {
         return view('transactions.import');
     }
 
     /**
      * Provide the user with the multiple provider matches that are available
      *
-     * @param Request $request
-     * @return void
+     * @return View
      */
-    public function providerChoice(Request $request) {
+    public function providerChoice(): View
+    {
         return view('transactions.providerChoice');
     }
 
@@ -298,35 +326,31 @@ class TransactionController extends Controller
      * @return Factory|View|Application
      * @throws Exception
      */
-    public function manual_import(Request $request): Factory|View|Application
+    public function manualImport(Request $request): Factory|View|Application
     {
-//        if ( ! $request->hasFile('file_input')) {
-//            throw new FileNotFoundException("There was an error in your uploaded file, check it again, please!");
-//        }
-
-        // Get a list of all providers
-        $providers = Provider::all()->get();
-
         $userId = Auth::id();
         $path = $request->file_input->path();
-        $directory = base_path()."/resources/statements/user_{$userId}";
+        $directory = base_path()."/resources/statements/user_$userId";
 
         if (!file_exists($directory)) {
             mkdir($directory);
         }
         try {
             copy($path, $directory.'/latest.csv');
-        } catch (Exception $e) {
-            throw new FileException($e->getMessage());
+        } catch (Exception $error) {
+            throw new FileException($error->getMessage());
         }
         return $this->importFromFilename();
     }
 
-    public function autoImport()
+    /**
+     * @return RedirectResponse
+     */
+    public function autoImport(): RedirectResponse
     {
-        $files = glob(base_path() . "/statement_downloads/*.csv", GLOB_BRACE);
-        foreach($files as $file) {
-            $this->importFromFilename($file);
+        $files = glob(base_path() .'/statement_downloads/*.csv', GLOB_BRACE);
+        foreach ($files as $file) {
+            $this->importFromFilename();
             $this->deleteFile($file);
         }
 
@@ -334,23 +358,22 @@ class TransactionController extends Controller
     }
 
     /**
-     * @TODO Creata a decent logger for this
+     * @TODO Creat a a decent logger for this
      *
-     * @param $filename
+     * @param string $filename
+     *
+     * @return bool
      */
-    protected function deleteFile($filename)
+    protected function deleteFile(string $filename): bool
     {
-//        chdir(base_path() . "/statement_downloads");
-//        $properFile = explode('/', $filename);
-//        $filename = array_pop($properFile);
-
-        unlink($filename);
+        return unlink($filename);
     }
 
+    /**
+     * @return Factory|View|Application
+     */
     protected function importFromFilename(): Factory|View|Application
     {
-        $id = Auth::id();
-
         /*
          * @todo: switch back to dispatch & figure out why sync si not working on server
          */
@@ -369,7 +392,11 @@ class TransactionController extends Controller
         return $this->index();
     }
 
-    public function getTransactionScrapeDates()
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getTransactionDates(): string
     {
         return '<div>'
             .(Transaction::getTransactionScrapeDates())['lastDate']
@@ -378,18 +405,21 @@ class TransactionController extends Controller
             .'</div>';
     }
 
-    public function addRemarkFromJs(Request $request)
+    /**
+     * @param  Request  $request
+     * @return Response
+     */
+    public function addRemarkFromJs(Request $request): Response
     {
         $responseCode = Response::HTTP_CREATED;
-        $responseText = "OK";
         $errors = [];
         $transactionDetails = [];
 
         try {
-            $id = intval($request->get('transaction_id'));
-            $remark = filter_var($request->get('remark'), FILTER_SANITIZE_STRING);
+            $transactionId = intval($request->get('transaction_id'));
+            $remark = htmlspecialchars($request->get('remark'), ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5);
 
-            $transaction = Transaction::findOrFail($id);
+            $transaction = Transaction::findOrFail($transactionId);
             $transaction->remarks = $remark;
             $transaction->save();
 
@@ -397,7 +427,7 @@ class TransactionController extends Controller
                 'transaction_id' => $transaction->id,
                 'remark' => $transaction->remarks
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = [
                 'action' => 'find and update transaction remark',
                 'error' => $e->getMessage(),

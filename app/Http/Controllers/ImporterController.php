@@ -2,18 +2,26 @@
 
 namespace Bank\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * This is just for the statement transfer, and maybe unused at the minute
+ */
 class ImporterController extends Controller
 {
-    public function statement_transferer()
+    /**
+     * @return Application|ResponseFactory|Response
+     */
+    public function transferStatement(): Response|Application|ResponseFactory
     {
         try {
             $responseText = 'OK';
 
-            $files = glob(base_path() . "/statement_downloads/*.csv", GLOB_BRACE);
+            $files = glob(base_path() .'/statement_downloads/*.csv', GLOB_BRACE);
 
             foreach ($files as $file) {
                 $properFile = explode('/', $file);
@@ -23,11 +31,10 @@ class ImporterController extends Controller
                 chdir(base_path() . '/statement_downloads');
                 unlink($filename);
             }
-        }
-
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $responseText = $e->getMessage();
         }
+
         /**
          * @todo Come up with a proper handler
          */

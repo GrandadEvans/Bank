@@ -21,7 +21,8 @@
         "league/flysystem-sftp": "1.*",
         "mattkingshott/axiom": "3.2.*",
         "pusher/pusher-php-server": "7.0.*",
-        "rmccue/requests": "v2.0.*"
+        "rmccue/requests": "v2.0.*",
+      "ext-http": "*"
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "2.8.*",

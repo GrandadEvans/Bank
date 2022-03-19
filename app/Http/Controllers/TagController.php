@@ -6,21 +6,28 @@ use Bank\Http\Requests\TagFromJsRequest;
 use Bank\Http\Requests\TagRequest;
 use Bank\Models\Tag;
 use Bank\Models\Transaction;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Exception;
+use Throwable;
 
+/**
+ *
+ */
 class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('tags.index')
             ->with('tags', Tag::all());
@@ -29,9 +36,9 @@ class TagController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('tags.create');
     }
@@ -39,10 +46,11 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param TagRequest $request
+     * @param  TagFromJsRequest  $request
      * @return Response
+     * @throws Throwable
      */
-    public function storeFromJs(TagFromJsRequest $request)
+    public function storeFromJs(TagFromJsRequest $request): Response
     {
         $statusCode = Response::HTTP_CREATED;
 
@@ -66,11 +74,10 @@ class TagController extends Controller
             }
 
             $reply = [
-                "tag" => $tag,
+                'tag' => $tag,
                 'similar_transactions' => $similarTransactions
             ];
-        }
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = Response::HTTP_BAD_REQUEST;
             $reply = $e->getMessage();
         }
@@ -81,10 +88,11 @@ class TagController extends Controller
      * Store a newly created resource in storage.
      *
      * @param TagFromJsRequest $request
+     *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function associateFromJs(TagFromJsRequest $request)
+    public function associateFromJs(TagFromJsRequest $request): Response
     {
         try {
             $validated = $request->validated();
@@ -103,9 +111,7 @@ class TagController extends Controller
                 'id' => $tag->id,
                 'similarTransactions' => $otherTransactions
             ];
-
-        }
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = Response::HTTP_BAD_REQUEST;
             $reply = $e->getMessage();
         }
@@ -115,10 +121,14 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param TagRequest $request
-     * @return Response
+     * @todo Handle the saveOrFail if it's thrown
+     *
+     * @param  TagRequest  $request
+     *
+     * @return View
+     * @throws Throwable
      */
-    public function store(TagRequest $request)
+    public function store(TagRequest $request): View
     {
         $validated = $request->validated();
         $tag = new Tag($validated);
@@ -133,32 +143,7 @@ class TagController extends Controller
 
         session()->flash('alert', $flashData);
 
-
-
         return view('tags.create');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Bank\Models\Tag  $tag
-     * @return Response
-     */
-    public function show(Tag $tag)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Bank\Models\Tag  $tag
-     * @return Response
-     */
-    public function edit(Tag $tag)
-    {
-        return view('tags.edit')
-            ->with('tag', $tag);
     }
 
     /**
@@ -166,10 +151,11 @@ class TagController extends Controller
      *
      * @param TagRequest $request
      * @param Tag $tag
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Throwable
+     *
+     * @return RedirectResponse|Redirector
+     * @throws Throwable
      */
-    public function update(TagRequest $request, Tag $tag)
+    public function update(TagRequest $request, Tag $tag): Redirector|RedirectResponse
     {
         $validated = $request->validated();
         $tag->update($validated);
@@ -187,10 +173,11 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bank\Models\Tag  $tag
-     * @return \Illuminate\Http\Response
+     * @param  Tag  $tag
+     *
+     * @return Redirector|RedirectResponse
      */
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag): RedirectResponse|Redirector
     {
         $tag->delete();
         $flashData = [
@@ -205,28 +192,33 @@ class TagController extends Controller
         return redirect(route('tags.index'));
     }
 
-    public function assignTransactions(Request $request)
+    /**
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function assignTransactions(Request $request): Response
     {
+        $tag = null;
+        $tagDetails = [];
         $transactions = $request->get('transactions');
         $tagId = intval($request->get('entity'));
 
         $failedTransactions = [];
         $assignedTransactions = [];
         $errors = [];
-        $responseText = 'OK';
         $responseCode = Response::HTTP_ACCEPTED;
 
         try {
             $tag = Tag::findOrFail($tagId);
-            $tagdetails = [
+            $tagDetails = [
                 'name' => $tag->tag,
                 'id' => $tag->id,
                 'default_color' => $tag->default_color,
                 'contrasted_color' => $tag->contrasted_color,
                 'icon' => $tag->icon
             ];
-        }
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = [
                 'action' => 'find tag',
                 'error' => $e->getMessage(),
@@ -237,19 +229,19 @@ class TagController extends Controller
 
         if ($responseCode !== Response::HTTP_BAD_REQUEST) {
             foreach ($transactions as $transaction) {
-                $tx = intval($transaction);
+                $transactionId = intval($transaction);
                 try {
                     $exists = DB::table('tag_transaction')
                         ->where('tag_id', $tagId)
-                        ->where('transaction_id', $tx)
+                        ->where('transaction_id', $transactionId)
                         ->exists();
 
                     if (!$exists) {
-                        Transaction::findOrFail($tx)->tags()->save($tag);
-                        $assignedTransactions[] = $tx;
+                        Transaction::findOrFail($transactionId)->tags()->save($tag);
+                        $assignedTransactions[] = $transactionId;
                     }
-                } catch (\Exception $e) {
-                    $failedTransactions[] = $tx;
+                } catch (Exception $e) {
+                    $failedTransactions[] = $transactionId;
                     $errors[] = [
                         'action' => 'assigning tags to transactions',
                         'error' => $e->getMessage(),
@@ -264,17 +256,28 @@ class TagController extends Controller
             'errors' => $errors,
             'failedTransactions' => $failedTransactions,
             'assignedTransactions' => $assignedTransactions,
-            'tagDetails' => $tagdetails
+            'tagDetails' => $tagDetails
         ];
         return new Response($responseText, $responseCode);
     }
 
-    public function simpleList()
+    /**
+     * Return a Collection of Tags
+     *
+     * @return Collection
+     */
+    public function simpleList(): Collection
     {
         return Tag::all();
     }
 
-    private function createNewTag(array $validated)
+    /**
+     * @param  array  $validated
+     *
+     * @return Tag
+     * @throws Throwable
+     */
+    private function createNewTag(array $validated): Tag
     {
         $tag = new Tag();
         $tag->tag = $validated['tag_name'];

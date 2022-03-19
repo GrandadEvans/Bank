@@ -2,10 +2,12 @@
 
 namespace Bank\Http\Controllers;
 
-use Bank\Models\Transaction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
+/**
+ * This really just controls the Home Page
+ */
 class HomeController extends Controller
 {
     /**
@@ -21,9 +23,9 @@ class HomeController extends Controller
     /**
      * Import the latest transactions or get them from the bank
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function import()
+    public function import(): Factory|View
     {
         return view('transactions.import');
     }

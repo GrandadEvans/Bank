@@ -2,25 +2,30 @@
 
 namespace Bank\Http\Controllers;
 
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\View\View;
 use stdClass;
 
+/**
+ * Prediction Strategy Controller
+ */
 class PredictionsController extends Controller
 {
 
     /**
      * Show the predictions page.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('predictions')->with('predictions', (new stdClass([
-            'date' =>'2019-12-25',
-            'entry' => 'Town Shopping',
-            'remarks' => 'Town Shopping',
-            'amount' => '50',
+            'amount'  => '50',
             'balance' => '50',
-            'type' => 'dd'
+            'date'    => '2019-12-25',
+            'entry'   => 'Town Shopping',
+            'remarks' => 'Town Shopping',
+            'type'    => 'dd',
         ])));
     }
 }

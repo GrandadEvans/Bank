@@ -6,6 +6,9 @@ use Bank\UtilityClasses\ColorUtilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static findOrFail(mixed $tag_id)
+ */
 class Tag extends Model
 {
     use HasFactory;

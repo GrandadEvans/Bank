@@ -8,17 +8,25 @@ use Bank\Models\Provider;
 use Bank\Models\Regular;
 use Exception;
 use http\Exception\UnexpectedValueException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
+/**
+ * Regular Transaction Controller
+ */
 class RegularController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $all = Regular::myRecords()->get();
         return view('regulars.index')
@@ -31,27 +39,27 @@ class RegularController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('regulars.create')
             ->with('providers', Provider::all()->get());
     }
 
-    public function storeFromJs(RegularRequest $request)
+    /**
+     * @param  RegularRequest  $request
+     *
+     * @return Response
+     * @throws Throwable
+     */
+    public function storeFromJs(RegularRequest $request): Response
     {
-        $flashDetails = [
-            'type' => 'success',
-            'title' => 'Success!',
-            'text' => 'Item successfully created'
-        ];
-
         try {
             $regular = $this->store($request);
-        } catch (Exception $e) {
+        } catch (Exception $error) {
             // @todo log error
-            return response([], 403);
+            return response($error->getMessage(), 403);
         }
 
         $user = Auth::user();
@@ -62,7 +70,12 @@ class RegularController extends Controller
         ], 201);
     }
 
-    public function storeFromPhp(RegularRequest $request)
+    /**
+     * @param  RegularRequest  $request
+     * @return RedirectResponse|Redirector
+     * @throws Throwable
+     */
+    public function storeFromPhp(RegularRequest $request): Redirector|RedirectResponse
     {
         $flashDetails = [
             'type' => 'success',
@@ -71,12 +84,13 @@ class RegularController extends Controller
         ];
 
         try {
-            $regular = $this->store($request);
-        } catch (Exception $e) {
+            $this->store($request);
+        } catch (Exception $error) {
             $flashDetails = [
                 'type' => 'error',
                 'title' => 'Error!',
                 'text' => 'There was an error saving the details you provided, please try again later or get in touch'
+                    . $error->getMessage()
             ];
         }
         return redirect(route('regulars.index'))
@@ -88,9 +102,8 @@ class RegularController extends Controller
      *
      * @param  RegularRequest  $request
      * @return Regular
-     * @throws \Throwable
+     * @throws Throwable
      * @todo    Handle the exception better
-     *
      */
     public function store(RegularRequest $request): Regular
     {
@@ -101,8 +114,11 @@ class RegularController extends Controller
 
         try {
             $regular->saveOrFail();
-        } catch (Exception $e) {
-            throw new UnexpectedValueException('We were not able to save the details you provided. Please try again, or contact us,');
+        } catch (Exception $error) {
+            $errorMessage = "We were not able to save the details you provided. Please try again, or contact us,\n"
+                .$error->getMessage();
+
+            throw new UnexpectedValueException($errorMessage);
         }
 
         return $regular;
@@ -112,9 +128,9 @@ class RegularController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Regular  $regular
-     * @return Response
+     * @return View
      */
-    public function edit(Regular $regular)
+    public function edit(Regular $regular): View
     {
         $regular->verifyRecordOwnership();
 
@@ -126,12 +142,13 @@ class RegularController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  RegularRequest  $request
      * @param  Regular  $regular
-     * @return Response
-     * @throws \Throwable
+     *
+     * @return Application|Redirector|RedirectResponse
+     * @throws Throwable
      */
-    public function update(RegularRequest $request, Regular $regular)
+    public function update(RegularRequest $request, Regular $regular): Redirector|RedirectResponse|Application
     {
         $regular->verifyRecordOwnership();
 
@@ -146,10 +163,11 @@ class RegularController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Regular  $regular
-     * @return Response
+     *
+     * @return Application|Redirector|RedirectResponse
      * @throws Exception
      */
-    public function destroy(Regular $regular)
+    public function destroy(Regular $regular): Application|RedirectResponse|Redirector
     {
         $regular->delete();
         return redirect(route('regulars.index'))
@@ -158,7 +176,5 @@ class RegularController extends Controller
                 'title' => 'Success!',
                 'text' => 'Item successfully deleted'
             ]);
-
     }
-
 }

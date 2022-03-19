@@ -48,13 +48,13 @@ Route::middleware(['auth'])->group(function () {
 //        Route::get('/auto_import', [TransactionController::class, 'autoImport'])->name('auto_import');
         Route::get('/import', [TransactionController::class, 'import'])->name('import');
         Route::get('/providerChoice', [TransactionController::class, 'providerChoice'])->name('providerChoice');
-        Route::post('/manual_import', [TransactionController::class, 'manual_import'])->name('manual_import');
+        Route::post('/manual_import', [TransactionController::class, 'manualImport'])->name('manual_import');
         Route::get('/all/{page?}/{limit?}/{search?}', [TransactionController::class, 'all'])->name('all');
         Route::get('/{transaction}/update_provider/{provider}', [TransactionController::class, 'updateProvider']);
 
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/filter/{search?}', [TransactionController::class, 'filter'])->name('filter');
-        Route::get('/getTransactionScrapeDates', [TransactionController::class, 'GetTransactionScrapeDates']);
+        Route::get('/getTransactionScrapeDates', [TransactionController::class, 'getTransactionDates']);
         Route::get('/auto_import/', [TransactionController::class, 'autoImport']);
         Route::patch('/add-remark-from-js', [TransactionController::class, 'addRemarkFromJs']);
     });
@@ -96,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/edit/{provider}', [ProviderController::class, 'update'])->name('update');
         Route::delete('/{provider}', [ProviderController::class, 'destroy'])->name('delete');
         Route::post('/assignTransactions', [ProviderController::class, 'assignTransactions']);
-        Route::get('/simple_list', [ProviderController::class, 'simple_list']);
+        Route::get('/simple_list', [ProviderController::class, 'simpleList']);
     });
 
     // Tags
@@ -125,4 +125,4 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/payment_methods/all', [PaymentMethodController::class, 'all']);
 });
-Route::get('/transfer_statement', [ImporterController::class, 'statement_transferer']);
+Route::get('/transfer_statement', [ImporterController::class, 'transferStatement']);

@@ -6,25 +6,45 @@ use Bank\Events\ScanForRegulars;
 use Bank\Models\PossibleRegular;
 use Bank\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Controller for the possible regular transaction feature
+ */
 class PossibleRegularController extends Controller
 {
 
-    public function getFirstOutstanding()
+    /**
+     * Get the 1st outstanding possible transaction that belongs to the user
+     *
+     * @return Transaction
+     */
+    public function getFirstOutstanding(): Transaction
     {
         $possibles = PossibleRegular::outstanding()->get();
         return $possibles->first();
     }
 
-    public static function getOutstandingCount()
+    /**
+     * Get the amount of outstanding transactions a user has
+     *
+     * @return int
+     */
+    public static function getOutstandingCount(): int
     {
         return PossibleRegular::outstanding()->get()->count();
     }
 
-    public function view()
+    /**
+     * @return array[]|string
+     */
+    public function view(): array|string
     {
         $possibilities = PossibleRegular::outstanding()->get();
 
@@ -41,12 +61,12 @@ class PossibleRegularController extends Controller
             ->distinct();
 
         $transactionsQuery->orderBy('date', 'DESC');
-        $transactionsCollection = $transactionsQuery->get();
+        $transactionCollection = $transactionsQuery->get();
 
         $periodName = $possibility->period_name;
         $periodMultiplier = $possibility->period_multiplier;
 
-        $lastSixMonths = $transactionsCollection->takeWhile(function ($item) {
+        $lastSixMonths = $transactionCollection->takeWhile(function ($item) {
             $now = Carbon::create('now');
             $sixMonthsAgo = Carbon::create('6 months ago');
             $test = Carbon::create($item->date);
@@ -54,7 +74,7 @@ class PossibleRegularController extends Controller
             return $test->isBetween($now, $sixMonthsAgo);
         });
 
-        $lastOneYear = $transactionsCollection->takeWhile(function ($item) {
+        $lastOneYear = $transactionCollection->takeWhile(function ($item) {
             $now = Carbon::create('now');
             $oneYearAgo = Carbon::create('now')->subYear();
             $test = Carbon::create($item->date);
@@ -62,17 +82,17 @@ class PossibleRegularController extends Controller
             return $test->isBetween($now, $oneYearAgo);
         });
 
-        $allTime = $this->getStatsPerPeriod($transactionsCollection);
-        $lastFiveEntries = $this->getStatsPerPeriod($transactionsCollection->take(5));
-        $lastTenEntries = $this->getStatsPerPeriod($transactionsCollection->take(10));
+        $allTime = $this->getStatsPerPeriod($transactionCollection);
+        $lastFiveEntries = $this->getStatsPerPeriod($transactionCollection->take(5));
+        $lastTenEntries = $this->getStatsPerPeriod($transactionCollection->take(10));
         $lastSixMonths = $this->getStatsPerPeriod($lastSixMonths);
         $lastYear = $this->getStatsPerPeriod($lastOneYear);
 
-        $nextDate = $transactionsCollection->first()->date->copy()->add($periodName, $periodMultiplier);
+        $nextDate = $transactionCollection->first()->date->copy()->add($periodName, $periodMultiplier);
 
         return [
             'data' => [
-                'transactions' => $transactionsCollection,
+                'transactions' => $transactionCollection,
             ],
             'stats' => [
                 'lastFiveEntries' => $lastFiveEntries,
@@ -80,12 +100,12 @@ class PossibleRegularController extends Controller
                 'lastSixMonths' => $lastSixMonths,
                 'lastOneYear' => $lastYear,
                 'allTime' => $allTime,
-                'name' => $transactionsCollection->first()->entry,
+                'name' => $transactionCollection->first()->entry,
                 'period_name' => $periodName,
                 'period_multiplier' => $periodMultiplier,
                 'totalDistinct' => $possibilities->count(),
-                'paymentMethodId' => $transactionsCollection->first()->payment_method_id,
-                'providerId' => $transactionsCollection->first()->provider_id,
+                'paymentMethodId' => $transactionCollection->first()->payment_method_id,
+                'providerId' => $transactionCollection->first()->provider_id,
                 'nextDate' => $nextDate->format('Y-m-d')
             ]
         ];
@@ -96,7 +116,7 @@ class PossibleRegularController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function accept()
+    public function accept(): \Illuminate\Http\Response
     {
         $possibleRegular = $this->getFirstOutstanding();
         $possibleRegular->last_action = 'accepted';
@@ -108,7 +128,7 @@ class PossibleRegularController extends Controller
 //            $r->nextDue = '';
 //            $r->lastRotated = '';
 //            $r->description = '';
-            return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
+            return \response($this->view(), Response::HTTP_ACCEPTED);
         } else {
             return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -119,13 +139,13 @@ class PossibleRegularController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function decline()
+    public function decline(): \Illuminate\Http\Response
     {
         $possibleRegular = $this->getFirstOutstanding();
         $possibleRegular->last_action = 'declined';
         $possibleRegular->last_action_happened = now();
         if ($possibleRegular->save()) {
-            return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
+            return \response($this->view(), Response::HTTP_ACCEPTED);
         } else {
             return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -136,13 +156,13 @@ class PossibleRegularController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postpone()
+    public function postpone(): \Illuminate\Http\Response
     {
         $possibleRegular = $this->getFirstOutstanding();
         $possibleRegular->last_action = 'postponed';
         $possibleRegular->last_action_happened = now();
         if ($possibleRegular->save()) {
-            return \response($this->view(), \Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED);
+            return \response($this->view(), Response::HTTP_ACCEPTED);
         } else {
             return response('Unknown error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -151,17 +171,9 @@ class PossibleRegularController extends Controller
     /**
      * Manually request a new scan of new regulars
      */
-    public function scan()
+    public function scan(): \Illuminate\Http\Response|Application|ResponseFactory
     {
         ScanForRegulars::dispatch(Auth::user());
-        $flashData = [
-            'type' => 'success',
-            'title' => 'Success!',
-            'text' => 'A new scan is underway, and you\\\'ll be informed of the results in a few minutes'
-        ];
-
-        // flash message is handled by JS on the front end
-        // session()->flash('alert', $flashData);
 
         /*
          * This is not the correct way to move the user back to the previous url.
@@ -173,16 +185,20 @@ class PossibleRegularController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      * @todo: Extract this to global functionality, not just for regulars
      *
+     * @return Application|Factory|View
      */
-    public function scanResults()
+    public function scanResults(): View|Factory|Application
     {
         return view('regulars.scanResults');
     }
 
-    private function getStatsPerPeriod(Collection $collection)
+    /**
+     * @param  Collection  $collection
+     * @return array
+     */
+    private function getStatsPerPeriod(Collection $collection): array
     {
         $sum = $collection->sum('amount');
         $count = $collection->count();
@@ -193,6 +209,4 @@ class PossibleRegularController extends Controller
 
         return [0, 0, 0];
     }
-
-
 }

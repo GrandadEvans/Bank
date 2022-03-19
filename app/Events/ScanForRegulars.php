@@ -10,9 +10,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * This is to let the user know that a scan has commenced
+ */
 class ScanForRegulars implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * The user that created the server.
@@ -25,6 +30,7 @@ class ScanForRegulars implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param  User  $user
+     *
      * @return void
      */
     public function __construct(User $user)
@@ -35,9 +41,9 @@ class ScanForRegulars implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel|PrivateChannel|array
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel|PrivateChannel|array
     {
         return new PrivateChannel('user.'.$this->user->id);
     }

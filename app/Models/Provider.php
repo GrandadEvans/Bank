@@ -5,6 +5,10 @@ namespace Bank\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @method static findOrFail(int $providerId)
+ * @method static where(string $string, int $providerId)
+ */
 class Provider extends BaseModel
 {
     use HasFactory;

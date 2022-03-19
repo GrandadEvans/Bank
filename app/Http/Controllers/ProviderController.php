@@ -6,38 +6,34 @@ use Bank\Http\Requests\ProviderRequest;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
 use Bank\Models\Transaction;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 
+/**
+ * Provider Controller
+ */
 class ProviderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Application|Factory|View
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
-        // If the regular expression has changed then format the correct flash data here
-//        Swal.fire({
-//  title: 'Are you sure?',
-//  text: "You won't be able to revert this!",
-//  icon: 'warning',
-//  showCancelButton: true,
-//  confirmButtonColor: '#3085d6',
-//  cancelButtonColor: '#d33',
-//  confirmButtonText: 'Yes, delete it!'
-//}).then((result) => {
-//        if (result.isConfirmed) {
-//            Swal.fire(
-//                'Deleted!',
-//                'Your file has been deleted.',
-//                'success'
-//            )
-//  }
-//    })
-       if (session()->has('hasUpdatedRegularExpressions')) {
+        if (session()->has('hasUpdatedRegularExpressions')) {
             $flashData = [
                 'type' => 'question',
                 'title' => 'New regex found!',
@@ -45,9 +41,9 @@ class ProviderController extends Controller
                 'showConfirmButton' => 'true',
                 'showCancelButton' => 'true',
                 'cancelButtonText' => '<font-awesome-icon icon="fa-solid fa-thumbs-down" />No',
-                'confirmButtonText' =>
-                    '<a href="/transactions/filter/'.session()->get('updatedProviderRegex').'"'.
-                    'style="text-decoration: none; color: white;"><font-awesome-icon icon="fa-solid fa-thumbs-up" />Yes</a>'
+                'confirmButtonText' => '<a href="/transactions/filter/' . session()->get('updatedProviderRegex') . '"'
+                    . 'style="text-decoration: none; color: white;">'
+                    . '<font-awesome-icon icon="fa-solid fa-thumbs-up" />Yes</a>'
             ];
 
             session()->flash('alert', $flashData);
@@ -63,9 +59,9 @@ class ProviderController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(): Application|Factory|View
     {
         session()->remove('hasUpdatedRegularExpressions');
 
@@ -76,10 +72,12 @@ class ProviderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Response
+     * @param  ProviderRequest  $request
+     *
+     * @return Application|Factory|View
+     * @throws Throwable
      */
-    public function store(ProviderRequest $request)
+    public function store(ProviderRequest $request): Application|Factory|View
     {
         $validated = $request->validated();
 
@@ -93,13 +91,10 @@ class ProviderController extends Controller
         ];
 
         session()->flash('alert', $flashData);
-
-
-
         session()->remove('hasUpdatedRegularExpressions');
+
         return view('providers.create')
             ->with('paymentMethods', PaymentMethod::all());
-//        return redirect(route('providers.index'));
     }
 
     /**
@@ -109,7 +104,7 @@ class ProviderController extends Controller
      * @return Response
      * @throws Throwable
      */
-    public function storeFromJs(ProviderRequest $request)
+    public function storeFromJs(ProviderRequest $request): Response
     {
         $statusCode = Response::HTTP_CREATED;
 
@@ -134,13 +129,12 @@ class ProviderController extends Controller
                     get();
             }
 
-             $reply = [
+            $reply = [
                 'provider_id' => $provider->id,
                 'provider_name' => $provider->name,
                 'similar_transactions' => $similarTransactions
             ];
-      }
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = Response::HTTP_BAD_REQUEST;
             $reply = $e->getMessage();
         }
@@ -148,25 +142,16 @@ class ProviderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \Bank\Provider  $provider
-     * @return Response
-     */
-    public function show(Provider $provider)
-    {
-        //        session()->remove('hasUpdatedRegularExpressions');
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Bank\Provider  $provider
-     * @return Response
+     * @param  Provider $provider
+     *
+     * @return Application|Factory|View
      */
-    public function edit(Provider $provider)
+    public function edit(Provider $provider): Application|Factory|View
     {
         session()->remove('hasUpdatedRegularExpressions');
+
         return view('providers.edit')
             ->with('provider', $provider)
             ->with('paymentMethods', PaymentMethod::all());
@@ -175,11 +160,13 @@ class ProviderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  \Bank\Provider  $provider
-     * @return Response
+     * @param  ProviderRequest  $request
+     * @param  Provider  $provider
+     *
+     * @return RedirectResponse|Redirector|Application
+     * @throws Throwable
      */
-    public function update(ProviderRequest $request, Provider $provider)
+    public function update(ProviderRequest $request, Provider $provider): Application|RedirectResponse|Redirector
     {
         $validated = $request->validated();
         $provider->update($validated);
@@ -197,10 +184,11 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bank\Provider  $provider
-     * @return Response
+     * @param  Provider $provider
+     *
+     * @return RedirectResponse|Redirector|Application
      */
-    public function destroy(Provider $provider)
+    public function destroy(Provider $provider): Application|RedirectResponse|Redirector
     {
         $provider->delete();
         $flashData = [
@@ -215,18 +203,34 @@ class ProviderController extends Controller
         return redirect(route('providers.index'));
     }
 
-    public function findTransactions(Provider $provider)
+    /**
+     * @param  Provider  $provider
+     *
+     * @return Application|Factory|View
+     */
+    public function findTransactions(Provider $provider): View|Factory|Application
     {
         return view('providers.transactions')
             ->with('provider', $provider);
     }
 
-    public function simple_list()
+    /**
+     * Return a collection of all the providers
+     *
+     * @return Collection
+     */
+    public function simpleList(): Collection
     {
         return Provider::all()->get();
     }
 
-    private function createNewProvider(array $validated)
+    /**
+     * @param  array  $validated
+     *
+     * @return Provider
+     * @throws Throwable
+     */
+    private function createNewProvider(array $validated): Provider
     {
         $provider = new Provider();
         $provider->name = $validated['name'];
@@ -238,13 +242,17 @@ class ProviderController extends Controller
         return $provider;
     }
 
-    public function assignTransactions(Request $request)
+    /**
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function assignTransactions(Request $request): Response
     {
         $assignedTransactions = [];
         $errors = [];
         $entityDetails = [];
         $failedTransactions = [];
-        $providerDetails = [];
         $providerId = intval($request->get('entity'));
         $responseCode = Response::HTTP_ACCEPTED;
         $transactions = $request->get('transactions');
@@ -255,8 +263,7 @@ class ProviderController extends Controller
                 'name' => $provider->name,
                 'id' => $provider->id
             ];
-        }
-        catch(\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = [
                 'action' => 'find provider',
                 'error' => $e->getMessage(),
