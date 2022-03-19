@@ -35,4 +35,19 @@ mix
     .sass('resources/sass/vendor.scss', 'public/css/vendor.css')
     .copy('resources/images', 'public/images')
     .sourceMaps()
-;
+    .webpackConfig({
+        module: {
+            rules: [
+                {
+                    test: /\.m?js$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
+                    }
+                }
+            ]
+        }
+    });
