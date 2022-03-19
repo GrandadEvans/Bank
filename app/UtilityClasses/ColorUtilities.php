@@ -2,18 +2,19 @@
 
 namespace Bank\UtilityClasses;
 
-
-use Exception;
 use InvalidArgumentException;
 
+/**
+ *General PHP methods to do with colour for the project to use
+ */
 class ColorUtilities
 {
-    const INVALID_HEX_CODE_PASSED_MESSAGE = 'An invalid hex code has been passed. Bugging out!';
+    public const INVALID_HEX_CODE_PASSED_MESSAGE = 'An invalid hex code has been passed. Bugging out!';
 
     /**
      * Get the contrasted color
      *
-     * The initial version of this came from https://www.jonasjohn.de/snippets/php/color-inverse.htm
+     * The initial version of this came from https://www.jonasjohn.de/snippets/php/color-inverse.htm,
      * but I threw in a few fail-safes
      *
      * @param string $startColor
@@ -21,43 +22,43 @@ class ColorUtilities
      *
      * @return string
      */
-    public static function getContrastedColor(string $startColor, string $case = 'upper'): string
+    public static function contrastedColor(string $startColor, string $case = 'upper'): string
     {
-            $startColor = str_replace('#', '', $startColor);
+        $startColor = str_replace('#', '', $startColor);
 
-            if (3 === strlen($startColor)) {
-                $startColor = self::duplicateCharacters($startColor);
-            }
+        if (3 === strlen($startColor)) {
+            $startColor = self::duplicateChar($startColor);
+        }
 
-            if (6 !== strlen($startColor)) {
-                throw new InvalidArgumentException(self::INVALID_HEX_CODE_PASSED_MESSAGE);
-            }
+        if (6 !== strlen($startColor)) {
+            throw new InvalidArgumentException(self::INVALID_HEX_CODE_PASSED_MESSAGE);
+        }
 
-            self::validateHexCharacters($startColor);
+        self::validateHexChar($startColor);
 
-            $rgb = '';
-            for ($x=0;$x<3;$x++){
-                $c = 255 - hexdec(substr($startColor,(2*$x),2));
-                $c = ($c < 0) ? 0 : dechex($c);
-                $rgb .= (strlen($c) < 2) ? '0'.$c : $c;
-            }
+        $rgb = '';
+        for ($x=0; $x<3; $x++) {
+            $segment = 255 - hexdec(substr($startColor, (2*$x), 2));
+            $segment = ($segment < 0) ? 0 : dechex($segment);
+            $rgb .= (strlen($segment) < 2) ? '0'.$segment : $segment;
+        }
 
-            $case = strtolower($case);
-            $correctCase = ('upper' === $case) ? strtoupper($rgb) : strtolower($rgb);
+        $case = strtolower($case);
+        $correctCase = ('upper' === $case) ? strtoupper($rgb) : strtolower($rgb);
 
-            return '#' . $correctCase;
+        return '#' . $correctCase;
     }
 
     /**
      * Convert a 3 character code to 6 characters
      *
-     * @param string $in
+     * @param string $char
      *
      * @return string
      */
-    public static function duplicateCharacters(string $in): string
+    public static function duplicateChar(string $char): string
     {
-        return str_repeat($in, 2);
+        return str_repeat($char, 2);
     }
 
     /**
@@ -67,12 +68,12 @@ class ColorUtilities
      *
      * @return void
      */
-    public static function validateHexCharacters(string $string): void
+    public static function validateHexChar(string $string): void
     {
         $validChars = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9'];
         $chars = str_split(strtolower($string));
 
-        foreach($chars as $char) {
+        foreach ($chars as $char) {
             if (!in_array($char, $validChars)) {
                 throw new InvalidArgumentException();
             }
@@ -86,14 +87,14 @@ class ColorUtilities
      *
      * @return string
      */
-    public static function getBlackOrWhiteForeground(string $hex): string
+    public static function blackWhiteContrast(string $hex): string
     {
-        $hexcolor = str_replace('#', '', $hex);
+        $hexColor = str_replace('#', '', $hex);
 
-        $r = hexdec(substr($hexcolor,0,2));
-        $g = hexdec(substr($hexcolor,2,2));
-        $b = hexdec(substr($hexcolor,4,2));
-        $yiq = (($r*299)+($g*587)+($b*114))/1000;
+        $red = hexdec(substr($hexColor, 0, 2));
+        $green = hexdec(substr($hexColor, 2, 2));
+        $blue = hexdec(substr($hexColor, 4, 2));
+        $yiq = (($red*299)+($green*587)+($blue*114))/1000;
 
         return ($yiq >= 128) ? 'black' : 'white';
     }

@@ -29,7 +29,7 @@ class TagFactory extends Factory
             'created_by_user_id' => 1,
             'tag' => $this->faker->word(),
             'default_color' => $default_color,
-            'contrasted_color' => ColorUtilities::getBlackOrWhiteForeground($default_color),
+            'contrasted_color' => ColorUtilities::blackWhiteContrast($default_color),
             'icon' => $this->faker->randomElement(Icons::randomIcon())
         ];
     }

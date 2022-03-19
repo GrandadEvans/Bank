@@ -20,12 +20,12 @@ class Tag extends Model
 
     public function getContrastedTagColorAttribute()
     {
-        return ColorUtilities::getBlackOrWhiteForeground($this->default_color);
+        return ColorUtilities::blackWhiteContrast($this->default_color);
     }
 
     public function setContrastedColorAttribute($value)
     {
-        $this->attributes['contrasted_color'] = ColorUtilities::getBlackOrWhiteForeground($this->default_color);
+        $this->attributes['contrasted_color'] = ColorUtilities::blackWhiteContrast($this->default_color);
     }
 
     // Has Many Transactions

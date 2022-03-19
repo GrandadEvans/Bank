@@ -33,7 +33,7 @@ class ColorUtilitiesTest extends TestCase
         $startColor = '#000000';
         $expectedResult = '#FFFFFF';
 
-        $actualResult = ColorUtilities::getContrastedColor($startColor);
+        $actualResult = ColorUtilities::contrastedColor($startColor);
 
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -45,19 +45,19 @@ class ColorUtilitiesTest extends TestCase
      */
     public function we_should_be_able_to_specify_what_case_we_want_the_color_in(): void
     {
-        $lowerCaseWhite = ColorUtilities::getContrastedColor('#000000', 'lower');
+        $lowerCaseWhite = ColorUtilities::contrastedColor('#000000', 'lower');
         $this->assertEquals('#ffffff', $lowerCaseWhite);
 
-        $upperCaseWhite = ColorUtilities::getContrastedColor('#000000', 'upper');
+        $upperCaseWhite = ColorUtilities::contrastedColor('#000000', 'upper');
         $this->assertEquals('#FFFFFF', $upperCaseWhite);
 
-        $lowerCaseWhite = ColorUtilities::getContrastedColor('#000000', 'LOWER');
+        $lowerCaseWhite = ColorUtilities::contrastedColor('#000000', 'LOWER');
         $this->assertEquals('#ffffff', $lowerCaseWhite);
 
-        $upperCaseWhite = ColorUtilities::getContrastedColor('#000000', 'UPPER');
+        $upperCaseWhite = ColorUtilities::contrastedColor('#000000', 'UPPER');
         $this->assertEquals('#FFFFFF', $upperCaseWhite);
 
-        $upperCaseByDefault = ColorUtilities::getContrastedColor('#000000');
+        $upperCaseByDefault = ColorUtilities::contrastedColor('#000000');
         $this->assertEquals('#FFFFFF', $upperCaseByDefault);
     }
 
@@ -70,7 +70,7 @@ class ColorUtilitiesTest extends TestCase
     {
         $startColor = '#fff';
         $expected = '#000000';
-        $actual = ColorUtilities::getContrastedColor($startColor);
+        $actual = ColorUtilities::contrastedColor($startColor);
 
         $this->assertEquals($expected, $actual);
     }
@@ -87,11 +87,11 @@ class ColorUtilitiesTest extends TestCase
         $expected = '#FFFFFF';
         $invalidCode = '#00';
 
-        $this->assertEquals($expected, ColorUtilities::getContrastedColor($shortCode));
-        $this->assertEquals($expected, ColorUtilities::getContrastedColor($longCode));
+        $this->assertEquals($expected, ColorUtilities::contrastedColor($shortCode));
+        $this->assertEquals($expected, ColorUtilities::contrastedColor($longCode));
 
         $this->expectException(InvalidArgumentException::class);
-        ColorUtilities::getContrastedColor($invalidCode);
+        ColorUtilities::contrastedColor($invalidCode);
     }
 
     /**
@@ -106,13 +106,13 @@ class ColorUtilitiesTest extends TestCase
 
         foreach($valid as $char) {
             $fullString = str_repeat($char, 6);
-            $this->assertIsString(ColorUtilities::getContrastedColor($fullString));
+            $this->assertIsString(ColorUtilities::contrastedColor($fullString));
         }
 
         foreach($invalid as $char) {
             $fullString = str_repeat($char, 6);
             $this->expectException(InvalidArgumentException::class);
-            ColorUtilities::getContrastedColor($fullString);
+            ColorUtilities::contrastedColor($fullString);
         }
     }
 

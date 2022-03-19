@@ -5,6 +5,7 @@ namespace Bank\UtilityClasses;
 use InfluxDB2\Client;
 use InfluxDB2\Model\WritePrecision;
 use InfluxDB2\Point;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * This is a general utility class that imports data into InfluxDB.
@@ -13,7 +14,8 @@ use InfluxDB2\Point;
  * If I put it in production I'll obviously tidy the code up
  * and obviously, write tests that'll cover the code base
  */
-class InfluxDB {
+class InfluxDB
+{
 
     /**
      * Auth token for InfluxFB
@@ -25,9 +27,9 @@ class InfluxDB {
     /**
      * InfluxDB Org
      *
-     * @var string $org Organisation under which is registered InfluxDB
+     * @var string $organisation Organisation under which is registered InfluxDB
      */
-    public string $org;
+    public string $organisation;
 
     /**
      * InfluxDB Bucket
@@ -39,9 +41,9 @@ class InfluxDB {
     /**
      * InfluxDB URL
      *
-     * @var string$url This is the URL of the InfluxDB you are working on
+     * @var string $dbUrl This is the URL of the InfluxDB you are working on
      */
-    private string $url;
+    private string $dbUrl;
 
 
     /**
@@ -49,18 +51,18 @@ class InfluxDB {
      */
     public function __construct()
     {
-        $this->assignSensitiveData();
+        $this->setSensitiveData();
     }
 
     /**
      * Assign the influxDB sensitive data from the environment
      */
-    private function assignSensitiveData()
+    private function setSensitiveData()
     {
-        $this->token  = env('INFLUXDB_TOKEN');
-        $this->url    = env('INFLUXDB_URL');
-        $this->org    = env('INFLUXDB_ORG');
-        $this->bucket = env('INFLUXDB_BUCKET');
+        $this->token        = env('INFLUXDB_TOKEN');
+        $this->dbUrl        = env('INFLUXDB_URL');
+        $this->organisation = env('INFLUXDB_ORG');
+        $this->bucket       = env('INFLUXDB_BUCKET');
     }
 
     /**
@@ -68,7 +70,7 @@ class InfluxDB {
      *
      * @return string
      */
-    private function getPrecision(): string
+    public function writePrecision(): string
     {
         return WritePrecision::S;
     }
@@ -78,11 +80,11 @@ class InfluxDB {
      *
      * @return Client
      */
-    public function getClient()
+    #[Pure] public function getClient(): Client
     {
         return new Client([
-            "url" => $this->url,
-            "token" => $this->token,
+            'token' => $this->token,
+            'url'   => $this->dbUrl,
         ]);
     }
 
@@ -93,10 +95,16 @@ class InfluxDB {
      *
      * @return void
      */
-    public static function write(Point $pointer) {
+    public static function write(Point $pointer)
+    {
         $influx = new self();
-        $writerApi =  $influx->getClient()->createWriteApi();
+        $writeApi =  $influx->getClient()->createWriteApi();
 
-        $writerApi->write($pointer, $influx->getPrecision(), $influx->bucket, $influx->org);
+        $writeApi->write(
+            data: $pointer,
+            precision: $influx->writePrecision(),
+            bucket: $influx->bucket,
+            org: $influx->organisation
+        );
     }
 }
