@@ -9,23 +9,23 @@ mix
         '@fortawesome/free-solid-svg-icons',
         '@fortawesome/vue-fontawesome',
         'axios',
-        'babel-core',
+        // 'babel-core',
         'bootstrap-reboot',
         'bootstrap',
-        'vue-google-charts',
-        'babel-loader',
+        // 'vue-google-charts',
+        // 'babel-loader',
         'currency.js',
-        'jquery',
+        // 'jquery',
         'laravel-echo',
-        'laravel-mix',
+        // 'laravel-mix',
         'lodash',
         'moment',
         'popper.js',
         'pusher-js',
-        'style-loader',
+        // 'style-loader',
         'vue',
         'vue-google-charts',
-        'vue-loader',
+        // 'vue-loader',
         'vue-sweetalert2',
         'vuex'
     ], 'public/js/vendor.js')
@@ -41,12 +41,7 @@ mix
                 {
                     test: /\.m?js$/,
                     exclude: /node_modules/,
-                    use: {
-                        loader: "babel-loader",
-                        options: {
-                            presets: ['@babel/preset-env']
-                        }
-                    }
+                    use: {loader: "babel-loader"}
                 }
             ]
         }

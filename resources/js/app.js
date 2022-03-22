@@ -4,18 +4,8 @@ require('./vue/vueComponents');
 import {store} from './vue/vueComponents';
 import User from './includes/User';
 
-
-$(function () {
+window.onload = function () {
     let token = document.head.querySelector('meta[name="csrf-token"]');
-    if (token) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    } else {
-        console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-    }
 
     let userdata = new User();
     store.commit('updateUser', userdata);
@@ -23,8 +13,7 @@ $(function () {
     let app = new Vue({
         el: '#app',
         store,
-        data: {
-        }
+        data: {}
     });
 
     window.app = app;
@@ -45,5 +34,4 @@ $(function () {
     // if (chartArea) {
     //     require('./charts/yearsIncomeExpenditureChart');
     // }
-
-});
+}

@@ -1,13 +1,14 @@
+const name = 'John Evans';
 const correctPassword = 'password123';
 const incorrectPassword = `${correctPassword}1`;
-const email = 'john@grandadevans.com';
-const distinctEmail = 'john1@grandadevans.com';
+const email = 'john1@grandadevans.com';
+const distinctEmail = 'john2@grandadevans.com';
 
 describe('register.spec.js', () => {
     describe('Check the Registration page', () => {
         before(() => {
             cy.resetWithFullSeed();
-            cy.create('Bank\\Models\\User', {email: 'john@grandadevans.com'})
+            cy.create('Bank\\Models\\User', {email: email})
         });
 
         beforeEach(() => {
@@ -24,7 +25,7 @@ describe('register.spec.js', () => {
         it('check the registration form works', () => {
             cy.visit('/register');
             cy.get('[data-cy=navbarDropdownGuest]');
-            cy.get('#name').type('John Evans');
+            cy.get('#name').type(name);
             cy.get('#email').type(email);
             cy.get('#password').type(correctPassword);
             cy.get('#password-confirm').type(incorrectPassword);

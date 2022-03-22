@@ -180,14 +180,14 @@ export default {
                 tag_icon: toLower(this.ajaxTagData.icon),
                 tag_name: this.ajaxTagData.tag,
                 transaction_id: this.transactionId,
-                _token: decodeURIComponent($('meta[name="csrf-token"]').attr('content'))
+                // _token: decodeURIComponent($('meta[name="csrf-token"]').attr('content'))
             };
 
-            const returnedData = await axios.post(this.ajaxUrl, ajaxData, {
-                "headers": {
-                    'X-XSRF-TOKEN': decodeURIComponent($('meta[name="csrf-token"]').attr('content')),
-                }
-            })
+            const returnedData = await axios.post(this.ajaxUrl, ajaxData);//, {
+                // "headers": {
+                //     'X-XSRF-TOKEN': decodeURIComponent($('meta[name="csrf-token"]').attr('content')),
+                // }
+            // })
 
             if (returnedData.status === 201) {
                 let data = returnedData.data;
