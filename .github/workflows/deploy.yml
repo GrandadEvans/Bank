@@ -71,4 +71,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           source: ${{ github.sha }}.tar.gz
-          target: ${{ SECRETS.STAGING_PATH }}/artifacts
+          target: ${{ secrets.STAGING_PATH }}/artifacts
