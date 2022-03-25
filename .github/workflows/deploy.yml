@@ -2,7 +2,7 @@ name: Deploy to staging
 
 on:
   push:
-    branches: [ master ]
+    branches: [ git-actions-test ]
 
 jobs:
   create-deployment-artifacts:
@@ -20,11 +20,11 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 8.1
-          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml, intl
 
       - name: Composer install
           run: |
-          composer install --no-dev --no-interaction --prefer-dist
+            composer install --no-dev --no-interaction --prefer-dist
 
       - name: Create deployment artifact
           run: tar -czf app.tar.gz *
