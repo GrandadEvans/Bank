@@ -6,6 +6,6 @@
         "port": "22",
         "beforeHooks": "",
         "afterHooks": "",
-        "path": ""
+        "path": "/home/customer/www/staging.bank.grandadevans.com/artifacts"
     }
 ]
