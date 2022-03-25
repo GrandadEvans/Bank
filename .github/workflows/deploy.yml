@@ -7,7 +7,7 @@ on:
 jobs:
   create-deployment-artifacts:
     name: Create deployment artifacts
-    runs-on: ubuntu-latest
+#    runs-on: ubuntu-latest
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
@@ -18,11 +18,11 @@ jobs:
           npm install
           npm run prod
 
-      - name: Configure PHP 8.1
-        uses: shivammathur/setup-php@master
-        with:
-          php-version: 8.1
-          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml, intl
+#      - name: Configure PHP 8.1
+#        uses: shivammathur/setup-php@master
+#        with:
+#          php-version: 8.1
+#          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml, intl
 
       - name: Create storage directories
         run: |
@@ -103,8 +103,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
-  #        script: |
-  #          ${{ matrix.server.beforeHooks }}
+          script: |
+            ${{ matrix.server.beforeHooks }}
 
   activate-release:
     name: "Staging server: Activate release"
