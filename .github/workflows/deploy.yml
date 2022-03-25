@@ -22,6 +22,11 @@ jobs:
           php-version: 8.1
           extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml, intl
 
+      - name: Create storage directories
+        run: |
+          mkdir -p storage/{app,framework,logs}
+          mkdir -p storage/framework/{cache,session,views}
+          chmod -R 777 storage
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
