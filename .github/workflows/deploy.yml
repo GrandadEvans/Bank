@@ -16,13 +16,7 @@ jobs:
       - name: Compile CSS and Javascript
         run: |
           npm install
-          npm run prod
-
-#      - name: Configure PHP 8.1
-#        uses: shivammathur/setup-php@master
-#        with:
-#          php-version: 8.1
-#          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml, intl
+          npm run dev
 
       - name: Create storage directories
         run: |
@@ -31,7 +25,7 @@ jobs:
           chmod -R 777 storage
 
       - name: Composer install
-        run: composer install --no-dev --no-interaction --prefer-dist
+        run: composer install --no-interaction
 
       - name: Create deployment artifact
         env:
@@ -165,8 +159,7 @@ jobs:
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,PUBLIC_HTML_PATH,LARAVEL_PUBLIC_PATH,STORAGE_PATH,BASE_PATH,ENV_PATH,LARAVEL_ENV
           script: |
             cd $ACTIVE_RELEASE_PATH
-            php81 artisan migrate:fresh
-            php81 artisan db:seed BaseSeeder
+            php81 artisan migrate
 
   clean-up:
     name: "Staging server: Clean up"
