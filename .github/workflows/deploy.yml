@@ -15,7 +15,7 @@ jobs:
 
       - name: Compile CSS and Javascript
         run: |
-          npm install
+          npm ci
           npm run dev
 
       - name: Create storage directories
