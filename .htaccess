@@ -1,8 +1,2 @@
-Options -Indexes
-DirectoryIndex /current/public/index.php
-
 RewriteEngine On
-RewriteRule "/images/(.*)$" "/current/public/images/$1"
-RewriteRule "/js/(.*)$" "/current/public/js/$1"
-RewriteRule "/css/(.*)$" "/current/public/css/$1"
-RewriteRule "/favicon.ico" "/current/public/favicon.ico"
+RewriteRule "/(.+)$" "/current/public/$1"
