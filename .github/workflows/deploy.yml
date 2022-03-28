@@ -132,7 +132,6 @@ jobs:
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
             ln -s -f $LARAVEL_PUBLIC_PATH $PUBLIC_HTML_PATH
-#            ln -s -f $LARAVEL_PUBLIC_PATH/index.php $LARAVEL_PUBLIC_PATH/Default.php
 
   run-after-hooks:
     name: "Staging server: After hook"
