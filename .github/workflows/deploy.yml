@@ -114,7 +114,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
           ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
-          PUBLIC_HTML_PATH: ${{ secrets.STAGING_PATH }}/public_html
+          PUBLIC_HTML_PATH: ${{ secrets.PUBLIC_HTML_PATH }}/public_html
           LARAVEL_PUBLIC_PATH: $ACTIVE_RELEASE_PATH/public
           STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
           BASE_PATH: ${{ secrets.STAGING_PATH }}
@@ -131,11 +131,7 @@ jobs:
             ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
-            cd /home/customer/www/staging.bank.grandadevans.com
-            rm -rf public_html
-            ln -s $ACTIVE_RELEASE_PATH/public ./public_html
-            cd public_html
-            ln -s index.php Default.php
+            ln -s -f $LARAVEL_PUBLIC_PATH $PUBLIC_HTML_PATH
 
   run-after-hooks:
     name: "Staging server: After hook"
