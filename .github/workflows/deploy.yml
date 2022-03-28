@@ -38,6 +38,7 @@ jobs:
           name: app-build
           path: ${{ github.sha }}.tar.gz
 
+
   prepare-release-on-servers:
     name: "Staging server: Prepare release"
     runs-on: ubuntu-latest
