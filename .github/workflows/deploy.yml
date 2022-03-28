@@ -114,7 +114,7 @@ jobs:
           RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
           ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
           PUBLIC_HTML_PATH: ${{ secrets.STAGING_PATH }}/public_html
-          LARAVEL_PUBLIC_PATH: $ACTIVE_RELEASE_PATH/public
+          LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_PATH }}/current/public
           STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
           BASE_PATH: ${{ secrets.STAGING_PATH }}
           LARAVEL_ENV: ${{ secrets.LARAVEL_ENV }}
@@ -144,7 +144,7 @@ jobs:
           RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
           ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
           PUBLIC_HTML_PATH: ${{ secrets.STAGING_PATH }}/public_html
-          LARAVEL_PUBLIC_PATH: $ACTIVE_RELEASE_PATH/public
+          LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_PATH }}/current/public
           STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
           BASE_PATH: ${{ secrets.STAGING_PATH }}
           LARAVEL_ENV: ${{ secrets.LARAVEL_ENV }}
