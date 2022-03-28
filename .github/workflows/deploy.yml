@@ -75,8 +75,6 @@ jobs:
             mkdir -p ${{ secrets.STAGING_PATH }}/storage/framework/{cache,sessions,testing,views}
             chmod -R 0777 ${{ secrets.STAGING_PATH }}/storage
 
-
-
   run-before-hooks:
     name: "Staging server: Before hook"
     runs-on: ubuntu-latest
@@ -99,8 +97,6 @@ jobs:
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
           script: |
             ${{ matrix.server.beforeHooks }}
-
-
 
   activate-release:
     name: "Staging server: Activate release"
