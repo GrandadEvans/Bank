@@ -131,7 +131,11 @@ jobs:
             ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
-            ln -s -f $LARAVEL_PUBLIC_PATH $PUBLIC_HTML_PATH
+            cd /home/customer/www/staging.bank.grandadevans.com
+            rm -rf public_html
+            ln -s $ACTIVE_RELEASE_PATH ./public_html
+            cd public_html
+            ln -s index.php Default.php
 
   run-after-hooks:
     name: "Staging server: After hook"
