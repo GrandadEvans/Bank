@@ -133,7 +133,7 @@ jobs:
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
             cd /home/customer/www/staging.bank.grandadevans.com
             rm -rf public_html
-            ln -s $ACTIVE_RELEASE_PATH ./public_html
+            ln -s $ACTIVE_RELEASE_PATH/public ./public_html
             cd public_html
             ln -s index.php Default.php
 
