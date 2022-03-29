@@ -155,6 +155,7 @@ jobs:
             cd $ACTIVE_RELEASE_PATH
             php81 artisan migrate
 
+
   clean-up:
     name: "Staging server: Clean up"
     runs-on: ubuntu-latest
