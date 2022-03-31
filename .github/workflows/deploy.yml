@@ -122,13 +122,25 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: GITHUB_SHA,RELEASE_PATH,PUBLIC_HTML_PATH,CURRENT_RELEASE_PATH,PUBLIC_PATH,STORAGE_PATH,STAGING_BASE_PATH,STAGING_ENV
           script: |
-            printf "%s" "$STAGING_ENV" > "${STAGING_BASE_PATH}/.env"
-            ln -s -f ${STAGING_BASE_PATH}/.env $RELEASE_PATH
-            ln -s -f $STORAGE_PATH $RELEASE_PATH
-            ln -s -n -f $PUBLIC_HTML_PATH $CURRENT_RELEASE_PATH
-            ln -s -f $PUBLIC_PATH $PUBLIC_HTML_PATH
+            # Put Laravel in maintenance mode
+            /usr/local/bin/php81 artisan down
+
+            # Persist environment
+            printf "%s" "$STAGING_ENV" > "${RELEASE_PATH}/.env"
+
+            # Create a new [forced] link to the latest release as "current"
+            cd $PUBLIC_HTML_PATH
+            ln --symbolic --force $RELEASE_PATH current
+
+            # Create a link to the global storage in the new release dir
+            cd $CURRENT_RELEASE_PATH
+            ln --symbolic --force $STORAGE_PATH
+
+            cd $CURRENT_PATH
+            # Create a link called "current" pointing to the latest release
+            ln --symbolic --force $PUBLIC_HTML_PATH $CURRENT_RELEASE_PATH
             ln -s -f $CURRENT_RELEASE_PATH/.htaccess-siteground-public_html $PUBLIC_HTML_PATH/.htaccess
-            ln -s -f $CURRENT_RELEASE_PATH/.htaccess-siteground-public $PUBLIC/.htaccess
+            ln -s -f $CURRENT_RELEASE_PATH/.htaccess-siteground-public $PUBLIC_PATH/.htaccess
 
   run-after-hooks:
     name: "Staging server: After hook"
