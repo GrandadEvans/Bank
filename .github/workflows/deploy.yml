@@ -71,6 +71,7 @@ jobs:
           script: |
             mkdir -p ${{ secrets.STAGING_BASE_PATH }}/{releases,public_html,artifacts}
             mkdir -p "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
+            mkdir -p "${{ secrets.STAGING_BASE_PATH }}/public_html/current"
             tar xzf ${{ secrets.STAGING_BASE_PATH }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
             rm -rf ${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}/storage
             mkdir -p ${{ secrets.STAGING_BASE_PATH }}/storage/{app,public,framework,logs}
