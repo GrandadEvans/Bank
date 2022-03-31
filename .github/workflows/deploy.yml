@@ -127,7 +127,7 @@ jobs:
             # Put Laravel in maintenance mode
             mkdir -p $CURRENT_RELEASE_PATH
             cd $CURRENT_RELEASE_PATH
-            /usr/local/bin/php81 artisan down
+#            /usr/local/bin/php81 artisan down
 
             # Persist environment
             printf "%s" "$STAGING_ENV" > "${RELEASE_PATH}/.env"
