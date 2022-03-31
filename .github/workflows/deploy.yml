@@ -125,6 +125,7 @@ jobs:
           envs: GITHUB_SHA,RELEASE_PATH,PUBLIC_HTML_PATH,CURRENT_RELEASE_PATH,PUBLIC_PATH,STORAGE_PATH,STAGING_BASE_PATH,STAGING_ENV
           script: |
             # Put Laravel in maintenance mode
+            mkdir -p $CURRENT_RELEASE_PATH
             cd $CURRENT_RELEASE_PATH
             /usr/local/bin/php81 artisan down
 
