@@ -69,7 +69,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           envs: GITHUB_SHA
           script: |
-            mkdir -p "${{ secrets.STAGING_BASE_PATH }}/{releases,public_html,artifacts}
+            mkdir -p ${{ secrets.STAGING_BASE_PATH }}/{releases,public_html,artifacts}
             mkdir -p "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
             tar xzf ${{ secrets.STAGING_BASE_PATH }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
             rm -rf ${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}/storage
