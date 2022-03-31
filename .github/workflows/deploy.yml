@@ -30,7 +30,7 @@ jobs:
       - name: Create deployment artifact
         env:
           GITHUB_SHA: ${{ github.sha }}
-        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules *
+        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules --exclude=.nyc_output --exclude=tests *
 
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
@@ -50,12 +50,12 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
+          port: ${{ secrets.SSH_PORT }}
           source: ${{ github.sha }}.tar.gz
-          target: ${{ secrets.STAGING_PATH }}/artifacts
+          target: ${{ secrets.STAGING_BASE_PATH }}/artifacts
 
       - name: Extract archive and create directories
         uses: appleboy/ssh-action@master
@@ -63,20 +63,18 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
+          port: ${{ secrets.SSH_PORT }}
           envs: GITHUB_SHA
           script: |
-            mkdir -p "${{ secrets.STAGING_PATH }}/releases/${GITHUB_SHA}"
-            tar xzf ${{ secrets.STAGING_PATH }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.STAGING_PATH }}/releases/${GITHUB_SHA}"
-            rm -rf ${{ secrets.STAGING_PATH }}/releases/${GITHUB_SHA}/storage
-            mkdir -p ${{ secrets.STAGING_PATH }}/storage/{app,public,framework,logs}
-            mkdir -p ${{ secrets.STAGING_PATH }}/storage/framework/{cache,sessions,testing,views}
-            chmod -R 0777 ${{ secrets.STAGING_PATH }}/storage
-
-
+            mkdir -p "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
+            tar xzf ${{ secrets.STAGING_BASE_PATH }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}"
+            rm -rf ${{ secrets.STAGING_BASE_PATH }}/releases/${GITHUB_SHA}/storage
+            mkdir -p ${{ secrets.STAGING_BASE_PATH }}/storage/{app,public,framework,logs}
+            mkdir -p ${{ secrets.STAGING_BASE_PATH }}/storage/framework/{cache,sessions,testing,views}
+            chmod -R 0777 ${{ secrets.STAGING_BASE_PATH }}/storage
 
   run-before-hooks:
     name: "Staging server: Before hook"
@@ -87,21 +85,18 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           GITHUB_SHA: ${{ github.sha }}
-          RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
-          ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
-          STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
-          BASE_PATH: ${{ secrets.STAGING_PATH }}
+          RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases/${{ github.sha }}
+          CURRENT_RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/current
+          STORAGE_PATH: ${{ secrets.STAGING_BASE_PATH }}/storage
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA,RELEASE_PATH,CURRENT_RELEASE_PATH,STORAGE_PATH,STAGING_BASE_PATH
           script: |
             ${{ matrix.server.beforeHooks }}
-
-
 
   activate-release:
     name: "Staging server: Activate release"
@@ -112,27 +107,28 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           GITHUB_SHA: ${{ github.sha }}
-          RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
-          ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
-          PUBLIC_HTML_PATH: ${{ secrets.STAGING_PATH }}/public_html
-          LARAVEL_PUBLIC_PATH: $ACTIVE_RELEASE_PATH/public
-          STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
-          BASE_PATH: ${{ secrets.STAGING_PATH }}
-          LARAVEL_ENV: ${{ secrets.LARAVEL_ENV }}
+          RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases/${{ github.sha }}
+          PUBLIC_HTML_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html
+          CURRENT_RELEASE_PATH: $PUBLIC_HTML_PATH/current
+          PUBLIC_PATH: $CURRENT_RELEASE_PATH/public
+          STORAGE_PATH: ${{ secrets.STAGING_BASE_PATH }}/storage
+          STAGING_BASE_PATH: ${{ secrets.STAGING_BASE_PATH }}
+          STAGING_ENV: ${{ secrets.STAGING_ENV }}
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,PUBLIC_HTML_PATH,LARAVEL_PUBLIC_PATH,STORAGE_PATH,BASE_PATH,ENV_PATH,LARAVEL_ENV
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA,RELEASE_PATH,PUBLIC_HTML_PATH,CURRENT_RELEASE_PATH,PUBLIC_PATH,STORAGE_PATH,STAGING_BASE_PATH,STAGING_ENV
           script: |
-            printf "%s" "$LARAVEL_ENV" > "${BASE_PATH}/.env"
-            ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
+            printf "%s" "$STAGING_ENV" > "${STAGING_BASE_PATH}/.env"
+            ln -s -f ${STAGING_BASE_PATH}/.env $RELEASE_PATH
             ln -s -f $STORAGE_PATH $RELEASE_PATH
-            ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
-            ln -s -f $LARAVEL_PUBLIC_PATH $PUBLIC_HTML_PATH
-#            service php8.1-fpm reload
+            ln -s -n -f $PUBLIC_HTML_PATH $CURRENT_RELEASE_PATH
+            ln -s -f $PUBLIC_PATH $PUBLIC_HTML_PATH
+            ln -s -f $CURRENT_RELEASE_PATH/.htaccess-siteground-public_html $PUBLIC_HTML_PATH/.htaccess
+            ln -s -f $CURRENT_RELEASE_PATH/.htaccess-siteground-public $PUBLIC/.htaccess
 
   run-after-hooks:
     name: "Staging server: After hook"
@@ -143,22 +139,22 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           GITHUB_SHA: ${{ github.sha }}
-          RELEASE_PATH: ${{ secrets.STAGING_PATH }}/releases/${{ github.sha }}
-          ACTIVE_RELEASE_PATH: ${{ secrets.STAGING_PATH }}/current
-          PUBLIC_HTML_PATH: ${{ secrets.STAGING_PATH }}/public_html
-          LARAVEL_PUBLIC_PATH: $ACTIVE_RELEASE_PATH/public
-          STORAGE_PATH: ${{ secrets.STAGING_PATH }}/storage
-          BASE_PATH: ${{ secrets.STAGING_PATH }}
-          LARAVEL_ENV: ${{ secrets.LARAVEL_ENV }}
+          RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases/${{ github.sha }}
+          PUBLIC_HTML_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html
+          CURRENT_RELEASE_PATH: $PUBLIC_HTML_PATH/current
+          PUBLIC_PATH: $CURRENT_RELEASE_PATH/public
+          STORAGE_PATH: ${{ secrets.STAGING_BASE_PATH }}/storage
+          STAGING_BASE_PATH: ${{ secrets.STAGING_BASE_PATH }}
+          STAGING_ENV: ${{ secrets.STAGING_ENV }}
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,PUBLIC_HTML_PATH,LARAVEL_PUBLIC_PATH,STORAGE_PATH,BASE_PATH,ENV_PATH,LARAVEL_ENV
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA,RELEASE_PATH,PUBLIC_HTML_PATH,CURRENT_RELEASE_PATH,PUBLIC_PATH,STORAGE_PATH,STAGING_BASE_PATH,STAGING_ENV
           script: |
-            cd $ACTIVE_RELEASE_PATH
+            cd $CURRENT_RELEASE_PATH
             php81 artisan migrate
 
   clean-up:
@@ -169,14 +165,14 @@ jobs:
       - name: Run after hooks
         uses: appleboy/ssh-action@master
         env:
-          RELEASES_PATH: ${{ secrets.STAGING_PATH }}/releases
-          ARTIFACTS_PATH: ${{ secrets.STAGING_PATH }}/artifacts
+          RELEASES_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases
+          ARTIFACTS_PATH: ${{ secrets.STAGING_BASE_PATH }}/artifacts
         with:
           host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
+          port: ${{ secrets.SSH_PORT }}
           envs: RELEASES_PATH,ARTIFACTS_PATH
           script: |
             cd $RELEASES_PATH && ls -t -1 | tail -n +6 | xargs rm -rf

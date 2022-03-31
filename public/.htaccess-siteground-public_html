@@ -2,8 +2,14 @@
 # This is for Siteground to be placed at the public_html level eg
 # /home/customer/www/b.grandadevans.com/public_html/laravel/public
 ##############################################################################
-RewriteEngine on
-RewriteCond %{HTTP_HOST} ^b.grandadevans.com$ [NC,OR]
-RewriteCond %{HTTP_HOST} ^www.b.grandadevans.com$
-RewriteCond %{REQUEST_URI} !laravel/public/
-RewriteRule (.*) /laravel/public/$1
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes +FollowSymlinks
+    </IfModule>
+
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} ^b.grandadevans.com$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^www.b.grandadevans.com$
+    RewriteCond %{REQUEST_URI} !current/public/
+    RewriteRule (.*) /current/public/$1
+</IfModule>
