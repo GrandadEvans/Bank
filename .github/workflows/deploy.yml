@@ -20,6 +20,7 @@ env:
   ACTIVE_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current
   LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current/public
   ENV: ${{ secrets.STAGING_ENV }}
+  PHP_PATH: /usr/local/bin/php81
 
 jobs:
   create-deployment-artifacts:
@@ -132,7 +133,7 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           script: |
             cd "${{ env.ACTIVE_PATH }}"
-            php81 artisan migrate
+            "${{ env.PHP_PATH }}" artisan migrate --no-interaction --force
 
 #  clean-up:
 #    name: "Staging server: Clean up"
