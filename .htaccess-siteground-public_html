@@ -8,8 +8,7 @@
     </IfModule>
 
     RewriteEngine on
-    RewriteCond %{HTTP_HOST} ^b.grandadevans.com$ [NC,OR]
-    RewriteCond %{HTTP_HOST} ^www.b.grandadevans.com$
+    RewriteCond %{HTTP_HOST} ^staging.grandadevans.com$ [NC,OR]
     RewriteCond %{REQUEST_URI} !current/public/
     RewriteRule (.*) /current/public/$1
 </IfModule>
