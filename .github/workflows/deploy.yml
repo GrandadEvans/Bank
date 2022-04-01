@@ -131,7 +131,7 @@ jobs:
           key: "${{ env.SSH_KEY }}"
           port: "${{ env.SSH_PORT }}"
           script: |
-            cd "${{ env.CURRENT_RELEASE_PATH }}"
+            cd "${{ env.ACTIVE_PATH }}"
             php81 artisan migrate
 
 #  clean-up:
