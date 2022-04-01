@@ -110,17 +110,16 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
-            ls -la "${{ env.RELEASES_PATH }}"
-            ls -la "${{ env.LATEST_RELEASE_PATH }}"
+            cat "${{ env.HOME_PATH }}/.env.staging"
 
-#            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
-#            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
-#            ln --symbolic --force --no-dereference "${{ LATEST_RELEASE_PATH }}" "${{ ACTIVE_PATH }}"
-#            ls -laH "${{ env.HOME_PATH }}"
-#            ls -laH "${{ env.PUBLIC_HTML_PATH }}"
-#            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
-#            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
-#            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
+            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ env.LATEST_RELEASE_PATH }}.env"
+            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
+            ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
+            ls -laH "${{ env.HOME_PATH }}"
+            ls -laH "${{ env.PUBLIC_HTML_PATH }}"
+            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
+            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
+            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
 #
 #  run-after-hooks:
 #    name: "Staging server: After hook"
