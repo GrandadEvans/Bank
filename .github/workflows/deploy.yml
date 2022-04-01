@@ -77,13 +77,22 @@ jobs:
           key: "${{ env.SSH_KEY }}"
           port: "${{ env.SSH_PORT }}"
           script: |
-            mkdir -p "${{ env.HOME_PATH }}/{releases,public_html,artifacts}"
+            mkdir -p "${{ env.HOME_PATH }}/releases"
+            mkdir -p "${{ env.HOME_PATH }}/public_html"
+            mkdir -p "${{ env.HOME_PATH }}/artifacts"
             mkdir -p "${{ env.RELEASES_PATH }}/${{ env.GITHUB_SHA }}"
-            mkdir -p "${{ env.CURRENT_RELEASE }}"
+            mkdir -p "${{ env.CURRENT_RELEASE_PATH }}"
             tar xzf "${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" -C "${{ env.LATEST_RELEASE_PATH }}"
             rm -rf "${{ env.STORAGE_PATH }}"
-            mkdir -p "${{ env.STORAGE_PATH }}/{app,public,framework,logs}"
-            mkdir -p "${{ env.STORAGE_PATH }}/framework/{cache,sessions,testing,views}"
+            mkdir -p "${{ env.STORAGE_PATH }}/app"
+            mkdir -p "${{ env.STORAGE_PATH }}/logs"
+            mkdir -p "${{ env.STORAGE_PATH }}/public"
+            mkdir -p "${{ env.STORAGE_PATH }}/logs"
+            mkdir -p "${{ env.STORAGE_PATH }}/framework"
+            mkdir -p "${{ env.STORAGE_PATH }}/framework/cache"
+            mkdir -p "${{ env.STORAGE_PATH }}/framework/sessions"
+            mkdir -p "${{ env.STORAGE_PATH }}/framework/testing"
+            mkdir -p "${{ env.STORAGE_PATH }}/framework/views"
             chmod -R 0777 "${{ env.STORAGE_PATH }}"
 
 
@@ -100,19 +109,25 @@ jobs:
           passphrase: ${{ env.SSH_PASSPHRASE }}
           key: ${{ env.SSH_KEY }}
           port: ${{ env.SSH_PORT }}
-          envs: GITHUB_SHA,LATEST_RELEASE_PATH,PUBLIC_HTML_PATH,CURRENT_RELEASE_PATH,LARAVEL_PUBLIC_PATH,STORAGE_PATH,HOME_PATH,ENV
+          environmants: |
+            GITHUB_SHA
+            LATEST_RELEASE_PATH
+            PUBLIC_HTML_PATH
+            CURRENT_RELEASE_PATH
+            LARAVEL_PUBLIC_PATH
+            STORAGE_PATH
+            HOME_PATH
+            ENV
           script: |
-            printf "%s" "${{ env.ENV }}" > "${{ env.LATEST_RELEASE_PATH }}/.env"
-            cd "${{ env.PUBLIC_HTML_PATH }}"
-            ln --symbolic --force "${{ env.LATEST_RELEASE_PATH}}" "${{ env.CURRENT_RELEASE_PATH }}"
-            cd "${{ env.CURRENT_RELEASE_PATH }}"
+            printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
+            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
+            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
+            ln --symbolic --force --no-dereference "${{ LATEST_RELEASE_PATH }}" "${{ CURRENT_RELEASE_PATH }}"
             ls -laH "${{ env.HOME_PATH }}"
-            ln --symbolic ${{ env.STORAGE_PATH }}
-
-#            cd "${{ env.CURRENT_RELEASE_PATH }}"
-#            ln --symbolic --force "${{ env.PUBLIC_HTML_PATH }}" "${{ env.CURRENT_RELEASE_PATH }}"
-#            ln -s -f "${{ env.CURRENT_RELEASE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
-#            ln -s -f "${{ env.CURRENT_LATEST_RELEASE_PATH }}/.htaccess-siteground-public" "${{ env.PUBLIC_PATH }}/.htaccess"
+            ls -laH "${{ env.PUBLIC_HTML_PATH }}"
+            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
+            ln -s -f "${{ env.CURRENT_RELEASE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
+            ln -s -f "${{ env.CURRENT_RELEASE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
 
 #  run-after-hooks:
 #    name: "Staging server: After hook"
