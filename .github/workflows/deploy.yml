@@ -55,7 +55,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: create-deployment-artifacts
     steps:
-    steps:
       - uses: actions/download-artifact@v2
         with:
           name: app-build
@@ -115,7 +114,7 @@ jobs:
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
             ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
             ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
-#            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
+            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
             ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
             ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
 
