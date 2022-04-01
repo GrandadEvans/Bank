@@ -15,7 +15,7 @@ env:
   RELEASES_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases
   STORAGE_PATH: ${{ secrets.STAGING_BASE_PATH }}/storage
   ARTIFACTS_PATH: ${{ secrets.STAGING_BASE_PATH }}/artifacts
-  LATEST_RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases/$GITHUB_SHA
+  LATEST_RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/releases/${{ github.sha }}
   PUBLIC_HTML_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html
   ACTIVE_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current
   LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current/public
@@ -112,14 +112,16 @@ jobs:
           envs: GITHUB_SHA, LATEST_RELEASE_PATH, PUBLIC_HTML_PATH, ACTIVE_PATH, LARAVEL_PUBLIC_PATH, STORAGE_PATH, HOME_PATH, ENV
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
-            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
-            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
-            ln --symbolic --force --no-dereference "${{ LATEST_RELEASE_PATH }}" "${{ ACTIVE_PATH }}"
-            ls -laH "${{ env.HOME_PATH }}"
-            ls -laH "${{ env.PUBLIC_HTML_PATH }}"
-            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
-            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
-            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
+            ls -la "${{ RELEASES_PATH }}"
+            ls -la "${{ LATEST_RELEASE_PATH }}"
+#            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
+#            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
+#            ln --symbolic --force --no-dereference "${{ LATEST_RELEASE_PATH }}" "${{ ACTIVE_PATH }}"
+#            ls -laH "${{ env.HOME_PATH }}"
+#            ls -laH "${{ env.PUBLIC_HTML_PATH }}"
+#            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
+#            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
+#            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
 
 #  run-after-hooks:
 #    name: "Staging server: After hook"
