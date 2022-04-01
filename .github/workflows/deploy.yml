@@ -43,7 +43,7 @@ jobs:
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
-        run: tar -czf "${{ env.GITHUB_SHA }}.tar.gz" --exclude=*.git --exclude=node_modules --exclude=.nyc_output --exclude=tests *
+        run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .*
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
         with:
@@ -83,7 +83,7 @@ jobs:
             mkdir -p "${{ env.HOME_PATH }}/artifacts"
             mkdir -p "${{ env.RELEASES_PATH }}/${{ env.GITHUB_SHA }}"
             mkdir -p "${{ env.ACTIVE_PATH }}"
-            tar xzf "${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" -C "${{ env.LATEST_RELEASE_PATH }}"
+            tar --extract --ungzip --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" --directory="${{ env.LATEST_RELEASE_PATH }}"
             rm -rf "${{ env.STORAGE_PATH }}"
             mkdir -p "${{ env.STORAGE_PATH }}/app"
             mkdir -p "${{ env.STORAGE_PATH }}/logs"
