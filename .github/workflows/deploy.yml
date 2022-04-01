@@ -19,7 +19,6 @@ env:
   PUBLIC_HTML_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html
   CURRENT_RELEASE_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current
   LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current/public
-  STORAGE_PATH: ${{ secrets.STAGING_BASE_PATH }}/storage
   ENV: ${{ secrets.STAGING_ENV }}
 
 jobs:
