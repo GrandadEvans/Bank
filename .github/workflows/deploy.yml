@@ -42,7 +42,7 @@ jobs:
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
-        run: tar -czf "{{ env.GITHUB_SHA }}.tar.gz" --exclude=*.git --exclude=node_modules --exclude=.nyc_output --exclude=tests *
+        run: tar -czf "${{ env.GITHUB_SHA }}.tar.gz" --exclude=*.git --exclude=node_modules --exclude=.nyc_output --exclude=tests *
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
         with:
