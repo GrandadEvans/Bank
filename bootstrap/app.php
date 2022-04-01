@@ -7,7 +7,7 @@ $basePath = $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__);
 if (!defined('C3_CODECOVERAGE_ERROR_LOG_FILE')) {
     define('C3_CODECOVERAGE_ERROR_LOG_FILE', '../storage/logs/c3_error.log');
 }
-if (isset($_SERVER['PWD']) && !stristr($_SERVER['PWD'], "bank.home")) {
+if ($_ENV['APP_ENV'] === 'local') {
     include $basePath . '/c3.php';
 }
     /*
