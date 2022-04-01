@@ -109,7 +109,7 @@ jobs:
           passphrase: ${{ env.SSH_PASSPHRASE }}
           key: ${{ env.SSH_KEY }}
           port: ${{ env.SSH_PORT }}
-          environmants: GITHUB_SHA, LATEST_RELEASE_PATH, PUBLIC_HTML_PATH, ACTIVE_PATH, LARAVEL_PUBLIC_PATH, STORAGE_PATH, HOME_PATH, ENV
+          environment: GITHUB_SHA, LATEST_RELEASE_PATH, PUBLIC_HTML_PATH, ACTIVE_PATH, LARAVEL_PUBLIC_PATH, STORAGE_PATH, HOME_PATH, ENV
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
             ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
