@@ -56,7 +56,7 @@ jobs:
     needs: create-deployment-artifacts
     steps:
       - name: Create aliases
-        run: echo 'alias la=''ls -laH''' >> ~/.bash_profile && echo 'alias up=''cd ../''' >> ~/.bash_profile
+        run: echo 'alias la="ls -laH"' >> ~/.bash_profile && echo 'alias up="cd ../"' >> ~/.bash_profile
       - name: Create base directory
         run: mkdir -p "${{ PUBLIC_HTML_PATH }}"
         if: "${{ PUBLIC_HTML_PATH }}" !-f
