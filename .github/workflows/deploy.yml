@@ -50,12 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: create-deployment-artifacts
     steps:
-      - name: Create storage directories
-        if: ${{ env.STORAGE_PATH !-f }}
-        run: |
-          mkdir -p storage/{app,framework,logs}
-          mkdir -p storage/framework/{cache,session,views}
-          chmod -R 777 storage
       - uses: actions/download-artifact@v2
         with:
           name: app-build
