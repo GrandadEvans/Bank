@@ -66,7 +66,7 @@ jobs:
           key: "${{ env.SSH_KEY }}"
           port: "${{ env.SSH_PORT }}"
           source: "${{ env.GITHUB_SHA }}.tar.gz"
-          target: "${{ env.HOME_PATH }}/artifacts"
+          target: "${{ env.ARTIFACTS_PATH }}"
 
       - name: Extract archive and create directories
         uses: appleboy/ssh-action@master
@@ -95,7 +95,6 @@ jobs:
             mkdir -p "${{ env.STORAGE_PATH }}/framework/views"
             chmod -R 0777 "${{ env.STORAGE_PATH }}"
 
-
   activate-release:
     name: "Staging server: Activate release"
     runs-on: ubuntu-latest
@@ -104,15 +103,16 @@ jobs:
       - name: Activate release
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.STAGING_HOST }}
-          username: ${{ env.SSH_USERNAME }}
-          passphrase: ${{ env.SSH_PASSPHRASE }}
-          key: ${{ env.SSH_KEY }}
-          port: ${{ env.SSH_PORT }}
+          host: "${{ env.STAGING_HOST }}"
+          username: "${{ env.SSH_USERNAME }}"
+          passphrase: "${{ env.SSH_PASSPHRASE }}"
+          key: "${{ env.SSH_KEY }}"
+          port: "${{ env.SSH_PORT }}"
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
-            ls -la "${{ RELEASES_PATH }}"
-            ls -la "${{ LATEST_RELEASE_PATH }}"
+            ls -la "${{ env.RELEASES_PATH }}"
+            ls -la "${{ env.LATEST_RELEASE_PATH }}"
+
 #            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ LATEST_RELEASE_PATH }}.env"
 #            ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
 #            ln --symbolic --force --no-dereference "${{ LATEST_RELEASE_PATH }}" "${{ ACTIVE_PATH }}"
@@ -121,7 +121,7 @@ jobs:
 #            ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
 #            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
 #            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
-
+#
 #  run-after-hooks:
 #    name: "Staging server: After hook"
 #    runs-on: ubuntu-latest
