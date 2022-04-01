@@ -51,7 +51,7 @@ jobs:
     needs: create-deployment-artifacts
     steps:
       - name: Create storage directories
-        if: '${{ STORAGE_PATH }}' !-f
+        if: ${{ '${{ STORAGE_PATH }}' !-f }}
         run: |
           mkdir -p storage/{app,framework,logs}
           mkdir -p storage/framework/{cache,session,views}
