@@ -111,7 +111,7 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
-            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ env.LATEST_RELEASE_PATH }}.env"
+            ln --symbolic --force "${{ env.HOME_PATH }}.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
             ln --symbolic --force "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
             ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
             ln --symbolic --force "${{ env.LARAVEL_PUBLIC_PATH }}" "${{ env.PUBLIC_HTML_PATH }}"
