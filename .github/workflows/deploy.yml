@@ -106,7 +106,7 @@ jobs:
             cd "${{ env.PUBLIC_HTML_PATH }}"
             ln --symbolic --force "${{ env.LATEST_RELEASE_PATH}}" "${{ env.CURRENT_RELEASE_PATH }}"
             cd "${{ env.CURRENT_RELEASE_PATH }}"
-            ls -laH "${{ HOME_PATH }}"
+            ls -laH "${{ env.HOME_PATH }}"
             ln --symbolic ${{ env.STORAGE_PATH }}
 
 #            cd "${{ env.CURRENT_RELEASE_PATH }}"
