@@ -106,11 +106,11 @@ jobs:
             cd "${{ env.PUBLIC_HTML_PATH }}"
             ln --symbolic --force "${{ env.LATEST_RELEASE_PATH}}" "${{ env.CURRENT_RELEASE_PATH }}"
             cd "${{ env.CURRENT_RELEASE_PATH }}"
-            ln --symbolic --force ${{ env.STORAGE_PATH }}
-            cd "${{ env.CURRENT_RELEASE_PATH }}"
-            ln --symbolic --force "${{ env.PUBLIC_HTML_PATH }}" "${{ env.CURRENT_RELEASE_PATH }}"
-            ln -s -f "${{ env.CURRENT_RELEASE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
-            ln -s -f "${{ env.CURRENT_LATEST_RELEASE_PATH }}/.htaccess-siteground-public" "${{ env.PUBLIC_PATH }}/.htaccess"
+            ln --symbolic ${{ env.STORAGE_PATH }}
+#            cd "${{ env.CURRENT_RELEASE_PATH }}"
+#            ln --symbolic --force "${{ env.PUBLIC_HTML_PATH }}" "${{ env.CURRENT_RELEASE_PATH }}"
+#            ln -s -f "${{ env.CURRENT_RELEASE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
+#            ln -s -f "${{ env.CURRENT_LATEST_RELEASE_PATH }}/.htaccess-siteground-public" "${{ env.PUBLIC_PATH }}/.htaccess"
 
 #  run-after-hooks:
 #    name: "Staging server: After hook"
