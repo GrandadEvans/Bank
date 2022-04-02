@@ -156,5 +156,5 @@ jobs:
           key: ${{ env.SSH_KEY }}
           port: ${{ env.SSH_PORT }}
           script: |
-            cd "${{ env.RELEASES_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
-            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
+            cd "${{ env.RELEASES_PATH }}" && ls -t -2 | tail -n +2 | xargs rm -rf
+            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -2 | tail -n +2 | xargs rm -rf
