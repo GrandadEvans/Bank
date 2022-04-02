@@ -123,8 +123,10 @@ jobs:
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
             ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
             ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
-            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
-            ln -s -f "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
+            cd "${{ env.PUBLIC_HTML_PATH }}"
+            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
+            cd "${{ env.LARAVEL_PUBLIC_PATH }}"
+            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" .htaccess
 
   run-after-hooks:
     name: "Staging server: After hook"
