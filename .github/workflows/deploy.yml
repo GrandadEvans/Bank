@@ -38,6 +38,7 @@ jobs:
         run: |
           npm install
           npm run dev
+
       - name: Add storage dir
         run: |
           [ -e storage ] && rm -rf storage
@@ -55,8 +56,10 @@ jobs:
       - name: Composer install
         run: |
           composer install --no-interaction
+
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
+
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
         with:
@@ -71,6 +74,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: app-build
+
       - name: Upload
         uses: appleboy/scp-action@master
         with:
@@ -81,6 +85,7 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           source: "${{ env.GITHUB_SHA }}.tar.gz"
           target: "${{ env.ARTIFACTS_PATH }}"
+
       - name: Extract archive and create directories
         uses: appleboy/ssh-action@master
         with:
