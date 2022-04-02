@@ -102,60 +102,60 @@ jobs:
             mkdir -p "${{ env.LATEST_RELEASE_PATH }}"
             tar --extract --ungzip --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" -C "${{ env.LATEST_RELEASE_PATH }}"
 
-  activate-release:
-    name: "Staging server: Activate release"
-    runs-on: ubuntu-latest
-    needs: prepare-release-on-servers
-    steps:
-      - name: Activate release
-        uses: appleboy/ssh-action@master
-        with:
-          host: "${{ env.STAGING_HOST }}"
-          username: "${{ env.SSH_USERNAME }}"
-          passphrase: "${{ env.SSH_PASSPHRASE }}"
-          key: "${{ env.SSH_KEY }}"
-          port: "${{ env.SSH_PORT }}"
-          script: |
-            printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
-            ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
-            cd "${{ env.PUBLIC_HTML_PATH }}"
-            [ -e "${{ env.ACTIVE_PATH }}" ] && rm -rf "${{ env.ACTIVE_PATH }}"
-            ln --symbolic --force -T "${{ env.LATEST_RELEASE_PATH }}" ./current
-            ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
-            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
-            cd "${{ env.LARAVEL_PUBLIC_PATH }}"
-            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" .htaccess
-
-  run-after-hooks:
-    name: "Staging server: After hook"
-    runs-on: ubuntu-latest
-    needs: activate-release
-    steps:
-      - name: Run after hooks
-        uses: appleboy/ssh-action@master
-        with:
-          host: "${{ env.STAGING_HOST }}"
-          username: "${{ env.SSH_USERNAME }}"
-          passphrase: "${{ env.SSH_PASSPHRASE }}"
-          key: "${{ env.SSH_KEY }}"
-          port: "${{ env.SSH_PORT }}"
-          script: |
-            cd "${{ env.ACTIVE_PATH }}"
-            php81 artisan migrate --no-interaction --force
-
-  clean-up:
-    name: "Staging server: Clean up"
-    runs-on: ubuntu-latest
-    needs: run-after-hooks
-    steps:
-      - name: Run after hooks
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.SSH_HOST }}
-          username: ${{ env.SSH_USERNAME }}
-          passphrase: ${{ env.SSH_PASSPHRASE }}
-          key: ${{ env.SSH_KEY }}
-          port: ${{ env.SSH_PORT }}
-          script: |
-            cd "${{ env.RELEASES_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
-            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
+#  activate-release:
+#    name: "Staging server: Activate release"
+#    runs-on: ubuntu-latest
+#    needs: prepare-release-on-servers
+#    steps:
+#      - name: Activate release
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: "${{ env.STAGING_HOST }}"
+#          username: "${{ env.SSH_USERNAME }}"
+#          passphrase: "${{ env.SSH_PASSPHRASE }}"
+#          key: "${{ env.SSH_KEY }}"
+#          port: "${{ env.SSH_PORT }}"
+#          script: |
+#            printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
+#            ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
+#            cd "${{ env.PUBLIC_HTML_PATH }}"
+#            [ -e "${{ env.ACTIVE_PATH }}" ] && rm -rf "${{ env.ACTIVE_PATH }}"
+#            ln --symbolic --force -T "${{ env.LATEST_RELEASE_PATH }}" ./current
+#            ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
+#            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
+#            cd "${{ env.LARAVEL_PUBLIC_PATH }}"
+#            ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" .htaccess
+#
+#  run-after-hooks:
+#    name: "Staging server: After hook"
+#    runs-on: ubuntu-latest
+#    needs: activate-release
+#    steps:
+#      - name: Run after hooks
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: "${{ env.STAGING_HOST }}"
+#          username: "${{ env.SSH_USERNAME }}"
+#          passphrase: "${{ env.SSH_PASSPHRASE }}"
+#          key: "${{ env.SSH_KEY }}"
+#          port: "${{ env.SSH_PORT }}"
+#          script: |
+#            cd "${{ env.ACTIVE_PATH }}"
+#            php81 artisan migrate --no-interaction --force
+#
+#  clean-up:
+#    name: "Staging server: Clean up"
+#    runs-on: ubuntu-latest
+#    needs: run-after-hooks
+#    steps:
+#      - name: Run after hooks
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ env.SSH_HOST }}
+#          username: ${{ env.SSH_USERNAME }}
+#          passphrase: ${{ env.SSH_PASSPHRASE }}
+#          key: ${{ env.SSH_KEY }}
+#          port: ${{ env.SSH_PORT }}
+#          script: |
+#            cd "${{ env.RELEASES_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
+#            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
