@@ -119,7 +119,6 @@ jobs:
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
             cd "${{ env.PUBLIC_HTML_PATH }}"
-#            [ -e "${{ env.ACTIVE_PATH }}" ] && rm -rf "${{ env.ACTIVE_PATH }}"
             ln --symbolic --force -T "${{ env.LATEST_RELEASE_PATH }}" ./current
             ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
             ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
