@@ -52,13 +52,7 @@ jobs:
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
-        run: tar \
-          --create \
-          --gzip \
-          --file="${{ env.GITHUB_SHA }}.tar.gz" \
-          --exclude-vcs \
-          --exclude-vcs-ignores \
-          * .htaccess*
+        run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
         with:
@@ -108,11 +102,7 @@ jobs:
             [ ! -d "${{ env.STORAGE_PATH }}/framework/views" ]    && mkdir -p "${{ env.STORAGE_PATH }}/framework/views"
             chmod -R 0777 "${{ env.STORAGE_PATH }}"
 
-            tar \
-              --extract \
-              --ungzip \
-              --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" \
-              --directory="${{ env.LATEST_RELEASE_PATH }}"
+            tar --extract --ungzip --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" --directory="${{ env.LATEST_RELEASE_PATH }}"
       - name: Check on extracted files
         run: echo "Releases Path"; ls -la "${{ env.RELEASES_PATH }}"
 
