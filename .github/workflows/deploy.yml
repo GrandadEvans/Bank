@@ -35,6 +35,20 @@ jobs:
         run: |
           npm install
           npm run prod
+      - name: Add storage dir
+        run: |
+          rm -rf "storage"
+          mkdir -p storage/app
+          mkdir -p storage/logs
+          mkdir -p storage/public
+          mkdir -p storage/logs
+          mkdir -p storage/framework
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/testing
+          mkdir -p storage/framework/views
+          chmod -R 0777 storage
+
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
@@ -107,8 +121,8 @@ jobs:
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
-            ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.LATEST_RELEASE_PATH }}"
             ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
+            ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
             ln -s -f -n "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" "${{ env.PUBLIC_HTML_PATH }}/.htaccess"
             ln -s -f -n "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" "${{ env.LARAVEL_PUBLIC_PATH }}/.htaccess"
 
