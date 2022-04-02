@@ -7,7 +7,7 @@ $basePath = $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__);
 if (!defined('C3_CODECOVERAGE_ERROR_LOG_FILE')) {
     define('C3_CODECOVERAGE_ERROR_LOG_FILE', '../storage/logs/c3_error.log');
 }
-$appEnv = $_ENV['APP_ENV'] || 'production';
+$appEnv = (key_exists('APP_ENV', $_ENV)) ? $_ENV['APP_ENV']  : 'production';
 if ($appEnv === 'local') {
     include $basePath . '/c3.php';
 }
