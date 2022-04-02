@@ -121,9 +121,9 @@ jobs:
           script: |
             printf "%s" "${{ env.ENV }}" > "${{ env.HOME_PATH }}/.env.staging"
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
-            ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" "${{ env.ACTIVE_PATH }}"
+            cd "${{ PUBLIC_HTML_PATH }}"
             ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
-            cd "${{ env.PUBLIC_HTML_PATH }}"
+            ln --symbolic --force "${{ env.LATEST_RELEASE_PATH }}" current
             ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
             cd "${{ env.LARAVEL_PUBLIC_PATH }}"
             ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" .htaccess
@@ -159,5 +159,5 @@ jobs:
           key: ${{ env.SSH_KEY }}
           port: ${{ env.SSH_PORT }}
           script: |
-            cd "${{ env.RELEASES_PATH }}" && ls -t -1 | tail -n +6 | xargs rm -rf
-            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -1 | tail -n +6 | xargs rm -rf
+            cd "${{ env.RELEASES_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
+            cd "${{ env.ARTIFACTS_PATH }}" && ls -t -1 | tail -n +1 | xargs rm -rf
