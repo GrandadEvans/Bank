@@ -34,7 +34,7 @@ jobs:
       - name: Compile CSS and Javascript
         run: |
           npm install
-          npm run prod
+          npm run dev
       - name: Add storage dir
         run: |
           [ -e storage ] && rm -rf storage
