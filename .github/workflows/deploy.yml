@@ -32,8 +32,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Activate release
-          uses: appleboy/ssh-action@master
-          run: printf "%s" "${{ env.ENV }}" > .env
+        uses: appleboy/ssh-action@master
+        run: printf "%s" "${{ env.ENV }}" > .env
 
       - name: Compile CSS and Javascript
         run: |
