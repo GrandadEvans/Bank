@@ -77,8 +77,6 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           source: "${{ env.GITHUB_SHA }}.tar.gz"
           target: "${{ env.ARTIFACTS_PATH }}"
-      - name: Check on uploaded file
-        run: echo "Artifacts Path"; ls -la "${{ env.ARTIFACTS_PATH }}"
       - name: Extract archive and create directories
         uses: appleboy/ssh-action@master
         with:
@@ -103,8 +101,11 @@ jobs:
             chmod -R 0777 "${{ env.STORAGE_PATH }}"
 
             tar --extract --ungzip --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" --directory="${{ env.LATEST_RELEASE_PATH }}"
-      - name: Check on extracted files
-        run: echo "Releases Path"; ls -la "${{ env.RELEASES_PATH }}"
+
+            echo "Artifacts Path"
+            ls -la "${{ env.ARTIFACTS_PATH }}"
+            echo "Releases Path"
+            ls -la "${{ env.RELEASES_PATH }}"
 
   activate-release:
     name: "Staging server: Activate release"
