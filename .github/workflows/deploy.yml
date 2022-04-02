@@ -123,7 +123,7 @@ jobs:
             ln --symbolic --force "${{ env.HOME_PATH }}/.env.staging" "${{ env.LATEST_RELEASE_PATH }}/.env"
             cd "${{ env.PUBLIC_HTML_PATH }}"
             ln --symbolic "${{ env.STORAGE_PATH }}" "${{ env.ACTIVE_PATH }}"
-            ln --symbolic --force "${{ env.LATEST_RELEASE_PATH }}" current
+            ln --symbolic --force --no-dereference "${{ env.LATEST_RELEASE_PATH }}" current
             ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public_html" .htaccess
             cd "${{ env.LARAVEL_PUBLIC_PATH }}"
             ln --symbolic --force --no-target-directory "${{ env.ACTIVE_PATH }}/.htaccess-siteground-public" .htaccess
