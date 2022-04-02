@@ -33,6 +33,12 @@ jobs:
 
       - name: Compile CSS and Javascript
         run: |
+          PUSHER_APP_ID="{{ secrets.PUSHER_APP_ID }}" \
+          PUSHER_APP_KEY="{{ secrets.PUSHER_APP_KEY }}" \
+          PUSHER_APP_SECRET="{{ secrets.PUSHER_APP_SECRET }}" \
+          PUSHER_APP_CLUSTER="{{ secrets.PUSHER_APP_CLUSTER }}" \
+          MIX_PUSHER_APP_KEY="{{ secrets.PUSHER_APP_KEY }}" \
+          MIX_PUSHER_APP_CLUSTER="{{ secrets.PUSHER_APP_CLUSTER }}" \
           npm install
           npm run dev
       - name: Add storage dir
@@ -50,7 +56,14 @@ jobs:
           chmod -R 0777 storage
 
       - name: Composer install
-        run: composer install --no-interaction
+        run: |
+          PUSHER_APP_ID="{{ secrets.PUSHER_APP_ID }}" \
+          PUSHER_APP_KEY="{{ secrets.PUSHER_APP_KEY }}" \
+          PUSHER_APP_SECRET="{{ secrets.PUSHER_APP_SECRET }}" \
+          PUSHER_APP_CLUSTER="{{ secrets.PUSHER_APP_CLUSTER }}" \
+          MIX_PUSHER_APP_KEY="{{ secrets.PUSHER_APP_KEY }}" \
+          MIX_PUSHER_APP_CLUSTER="{{ secrets.PUSHER_APP_CLUSTER }}" \
+          composer install --no-interaction
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
       - name: Store artifact for distribution
