@@ -37,7 +37,7 @@ jobs:
           npm run prod
       - name: Add storage dir
         run: |
-          rm -rf "storage"
+          [ -e storage ] && rm -rf storage
           mkdir -p storage/app
           mkdir -p storage/logs
           mkdir -p storage/public
@@ -52,7 +52,13 @@ jobs:
       - name: Composer install
         run: composer install --no-dev --no-interaction --prefer-dist
       - name: Create deployment artifact
-        run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
+        run: tar \
+          --create \
+          --gzip \
+          --file="${{ env.GITHUB_SHA }}.tar.gz" \
+          --exclude-vcs \
+          --exclude-vcs-ignores \
+          * .htaccess*
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v2
         with:
@@ -77,7 +83,8 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           source: "${{ env.GITHUB_SHA }}.tar.gz"
           target: "${{ env.ARTIFACTS_PATH }}"
-
+      - name: Check on uploaded file
+        run: echo "Artifacts Path"; ls -la "${{ env.ARTIFACTS_PATH }}"
       - name: Extract archive and create directories
         uses: appleboy/ssh-action@master
         with:
@@ -87,19 +94,27 @@ jobs:
           key: "${{ env.SSH_KEY }}"
           port: "${{ env.SSH_PORT }}"
           script: |
-            [ ! -d "${{ env.RELEASES_PATH }}" ] && mkdir -p "${{ env.RELEASES_PATH }}"
-            [ ! -d "${{ env.PUBLIC_HTML_PATH }}" ] && mkdir -p "${{ env.PUBLIC_HTML_PATH }}"
-            [ ! -d "${{ env.ARTIFACTS_PATH }}" ] && mkdir -p "${{ env.ARTIFACTS_PATH }}"
-            tar --extract --ungzip --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" --directory="${{ env.LATEST_RELEASE_PATH }}"
-            [ ! -d "${{ env.STORAGE_PATH }}/app" ] && mkdir -p "${{ env.STORAGE_PATH }}/app"
-            [ ! -d "${{ env.STORAGE_PATH }}/logs" ] && mkdir -p "${{ env.STORAGE_PATH }}/logs"
-            [ ! -d "${{ env.STORAGE_PATH }}/public" ] && mkdir -p "${{ env.STORAGE_PATH }}/public"
-            [ ! -d "${{ env.STORAGE_PATH }}/framework" ] && mkdir -p "${{ env.STORAGE_PATH }}/framework"
-            [ ! -d "${{ env.STORAGE_PATH }}/framework/cache" ] && mkdir -p "${{ env.STORAGE_PATH }}/framework/cache"
+            [ ! -d "${{ env.ARTIFACTS_PATH }}" ]                  && mkdir -p "${{ env.ARTIFACTS_PATH }}"
+            [ ! -d "${{ env.PUBLIC_HTML_PATH }}" ]                && mkdir -p "${{ env.PUBLIC_HTML_PATH }}"
+            [ ! -d "${{ env.RELEASES_PATH }}" ]                   && mkdir -p "${{ env.RELEASES_PATH }}"
+            [ ! -d "${{ env.STORAGE_PATH }}" ]                    && mkdir -p "${{ env.STORAGE_PATH }}"
+            [ ! -d "${{ env.STORAGE_PATH }}/app" ]                && mkdir -p "${{ env.STORAGE_PATH }}/app"
+            [ ! -d "${{ env.STORAGE_PATH }}/logs" ]               && mkdir -p "${{ env.STORAGE_PATH }}/logs"
+            [ ! -d "${{ env.STORAGE_PATH }}/public" ]             && mkdir -p "${{ env.STORAGE_PATH }}/public"
+            [ ! -d "${{ env.STORAGE_PATH }}/framework" ]          && mkdir -p "${{ env.STORAGE_PATH }}/framework"
+            [ ! -d "${{ env.STORAGE_PATH }}/framework/cache" ]    && mkdir -p "${{ env.STORAGE_PATH }}/framework/cache"
             [ ! -d "${{ env.STORAGE_PATH }}/framework/sessions" ] && mkdir -p "${{ env.STORAGE_PATH }}/framework/sessions"
             [ ! -d "${{ env.STORAGE_PATH }}/frameworks/testing" ] && mkdir -p "${{ env.STORAGE_PATH }}/framework/testing"
-            [ ! -d "${{ env.STORAGE_PATH }}/framework/views" ] && mkdir -p "${{ env.STORAGE_PATH }}/framework/views"
+            [ ! -d "${{ env.STORAGE_PATH }}/framework/views" ]    && mkdir -p "${{ env.STORAGE_PATH }}/framework/views"
             chmod -R 0777 "${{ env.STORAGE_PATH }}"
+
+            tar \
+              --extract \
+              --ungzip \
+              --file="${{ env.ARTIFACTS_PATH }}/${{ env.GITHUB_SHA }}.tar.gz" \
+              --directory="${{ env.LATEST_RELEASE_PATH }}"
+      - name: Check on extracted files
+        run: echo "Releases Path"; ls -la "${{ env.RELEASES_PATH }}"
 
   activate-release:
     name: "Staging server: Activate release"
@@ -140,7 +155,7 @@ jobs:
           port: "${{ env.SSH_PORT }}"
           script: |
             cd "${{ env.ACTIVE_PATH }}"
-            "${{ env.PHP_PATH }}" artisan migrate --no-interaction --force
+            php81 artisan migrate --no-interaction --force
 
   clean-up:
     name: "Staging server: Clean up"
