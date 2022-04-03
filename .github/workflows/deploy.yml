@@ -31,7 +31,7 @@ jobs:
         run: printf "%s" "${{ env.TESTING_ENV }}" > .env.testing
 
       - name: tests
-        uses: joelwmale/codeception-action@{104032c6a73aa7f1ad17dc81a9eebf7d122d76b6}
+        uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
         with:
           FRAMEWORK: laravel
           ENV_FILE: .env.testing
