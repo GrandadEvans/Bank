@@ -61,8 +61,8 @@ jobs:
       - name: Copy testing environment
         run: printf "%s" "${{ env.TESTING_ENV }}" > .env.test
 
-      - name: tests
-        uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
+      - name: Tests (Codeception)
+        run: "${{ PHP_PATH }}" ./vendor/codecept run
 
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
