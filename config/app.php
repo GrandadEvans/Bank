@@ -169,6 +169,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         Bank\Providers\AppServiceProvider::class,
         Bank\Providers\AuthServiceProvider::class,
         Bank\Providers\BroadcastServiceProvider::class,

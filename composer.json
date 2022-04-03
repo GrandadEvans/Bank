@@ -11,6 +11,7 @@
         "php": "^8.1",
         "ext-intl": "*",
         "ext-pdo": "*",
+        "bugsnag/bugsnag-laravel": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "influxdata/influxdb-client-php": "^2.3",
         "laravel/framework": "^8.12",
