@@ -2,7 +2,7 @@ name: Deploy to staging
 
 on:
   push:
-    branches: [ git-actions-test ]
+    branches: [ git-actions-test, staging ]
 
 env:
   SSH_HOST: ${{ secrets.STAGING_HOST }}
