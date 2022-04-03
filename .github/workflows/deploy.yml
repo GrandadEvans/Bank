@@ -25,20 +25,9 @@ env:
   PHP_PATH: /usr/local/bin/php81
 
 jobs:
-  run-tests:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Copy testing environment
-        run: printf "%s" "${{ env.TESTING_ENV }}" > .env.test
-
-      - name: tests
-        uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
-
   create-deployment-artifacts:
     name: Create deployment artifacts
     runs-on: ubuntu-latest
-    needs: run-tests
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
@@ -68,6 +57,12 @@ jobs:
 
       - name: Composer install
         run: composer install --no-interaction
+
+      - name: Copy testing environment
+        run: printf "%s" "${{ env.TESTING_ENV }}" > .env.test
+
+      - name: tests
+        uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
 
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
