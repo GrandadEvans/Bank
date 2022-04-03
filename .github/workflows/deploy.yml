@@ -20,6 +20,8 @@ env:
   ACTIVE_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current
   LARAVEL_PUBLIC_PATH: ${{ secrets.STAGING_BASE_PATH }}/public_html/current/public
   ENV: ${{ secrets.STAGING_ENV }}
+  FRAMEWORK: laravel
+  ENV_FILE: .env.test
   PHP_PATH: /usr/local/bin/php81
 
 jobs:
@@ -32,10 +34,6 @@ jobs:
 
       - name: tests
         uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
-        with:
-          args:
-            FRAMEWORK: laravel
-            ENV_FILE: .env.testing
 
   create-deployment-artifacts:
     name: Create deployment artifacts
