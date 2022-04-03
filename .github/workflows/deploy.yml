@@ -62,7 +62,7 @@ jobs:
         run: printf "%s" "${{ env.TESTING_ENV }}" > .env.test
 
       - name: Tests (Codeception)
-        run: "${{ PHP_PATH }}" ./vendor/codecept run
+        run: ${{ env.PHP_PATH }} vendor/codecept run
 
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
