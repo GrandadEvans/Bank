@@ -61,10 +61,11 @@ jobs:
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
 
       - name: Store artifact for distribution
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: app-build
           path: "${{ env.GITHUB_SHA }}.tar.gz"
+          retention-days: 2
 
   prepare-release-on-servers:
     name: "Staging server: Prepare release"
