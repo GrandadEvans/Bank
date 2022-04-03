@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Copy testing environment
-        run: printf "%s" "${{ env.TESTING_ENV }}" > .env.testing
+        run: printf "%s" "${{ env.TESTING_ENV }}" > .env.test
 
       - name: tests
         uses: joelwmale/codeception-action@104032c6a73aa7f1ad17dc81a9eebf7d122d76b6
