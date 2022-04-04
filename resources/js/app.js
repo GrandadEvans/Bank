@@ -2,7 +2,7 @@ import Bugsnag from "@bugsnag/js";
 
 require('./includes/bootstrap');
 require('./vue/vueComponents');
-require('.tagsPieChart');
+require('./includes/tagsPieChart');
 import {store} from './vue/vueComponents';
 import User from './includes/User';
 
