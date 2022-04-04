@@ -99,9 +99,9 @@
                 </li>
             </ul>
 
-<!--            <div id="sidebar_piechart">-->
-<!--                <div id="chart_div"></div>-->
-<!--            </div>-->
+            <div id="sidebar_piechart">
+                <div id="chart_div"></div>
+            </div>
         </div>
     </nav>
 </template>

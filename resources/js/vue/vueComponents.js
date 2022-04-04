@@ -7,7 +7,7 @@ import Bugsnag from '@bugsnag/js';
 import BugsnagPluginVue from '@bugsnag/plugin-vue';
 
 Bugsnag.start({
-    apiKey: '5654e4b0844b36dc2e56d534571d8230',
+    apiKey: process.env.BUGSNAG_API_KEY_JS,
     plugins: [new BugsnagPluginVue()]
 });
 

@@ -12,7 +12,7 @@ mix
         // 'babel-core',
         'bootstrap-reboot',
         'bootstrap',
-        // 'vue-google-charts',
+        'vue-google-charts',
         // 'babel-loader',
         'currency.js',
         // 'jquery',
