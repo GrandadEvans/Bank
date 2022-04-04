@@ -54,8 +54,7 @@ jobs:
           chmod -R 0777 storage
 
       - name: Composer install
-        run: |
-          composer install --no-interaction
+        run: composer install --no-interaction
 
       - name: Create deployment artifact
         run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
