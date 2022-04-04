@@ -14,7 +14,7 @@ Bugsnag.start({
 // Import Bugsnag
 const bugsnagVue = Bugsnag.getPlugin('vue');
 bugsnagVue.installVueErrorHandler(Vue);
-
+Bugsnag.notify(new Error('Test error'));
 Vue.use(Vuex);
 
 export const store = new Vuex.Store(storeConfig);
