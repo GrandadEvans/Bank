@@ -167,3 +167,11 @@ jobs:
           script: |
             cd "${{ env.RELEASES_PATH }}" && ls -t -2 | tail -n +2 | xargs rm -rf
             cd "${{ env.ARTIFACTS_PATH }}" && ls -t -2 | tail -n +2 | xargs rm -rf
+
+# Jobs to do:
+# Set version number in php var; package.json and tag
+
+# Test all at same time:
+  # Codeception
+  # Cypress
+  # Jest
