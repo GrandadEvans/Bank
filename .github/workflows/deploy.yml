@@ -168,7 +168,24 @@ jobs:
             cd "${{ env.RELEASES_PATH }}" && ls -t | tail -n +2 | xargs rm -rf
             cd "${{ env.ARTIFACTS_PATH }}" && ls -t | tail -n +2 | xargs rm -rf
 
-# Jobs to do:
+  get-version-number:
+    name: Get next version number
+    runs-on: ubuntu-latest
+    needs: clean-up
+    steps:
+      - name: Auto Increment Semver Action
+        uses: MCKanpolat/auto-semver-action@1.0.7
+        id: versioning
+        with:
+          releaseType: minor #default
+          identifier: beta
+          incrementPerCommit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Echo version number
+        run: echo 'New version number is - ${{ steps.versioning.outputs.version }}'
+
+
+    # Jobs to do:
   # Set version number in php var; package.json and tag
   # Test all at same time:
     # Codeception
