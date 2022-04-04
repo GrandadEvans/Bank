@@ -1,5 +1,23 @@
 {
-    "private": true,
+    "name":"Bank",
+    "version": "1.0.0",
+    "description": "This is just a simple personal, but open-source project to better track my banking finances",
+    "homepage": "https://github.com/GrandadEvans/Bank",
+    "keywords": [
+        "banking"
+    ],
+    "bugs": {
+        "email": "john@grandadevans.com",
+        "url": "https://github.com/GrandadEvans/Bank/issues"
+    },
+    "author": "John Evans <john@grandadevans.com> (https://grandadevans.com/)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/grandadevans/bank.git"
+    },
+    "license": "MIT",
+    "browser": true,
+    "private": false,
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
