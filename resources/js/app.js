@@ -1,6 +1,8 @@
+import Bugsnag from "@bugsnag/js";
+
 require('./includes/bootstrap');
 require('./vue/vueComponents');
-// require('.tagsPieChart');
+require('.tagsPieChart');
 import {store} from './vue/vueComponents';
 import User from './includes/User';
 
@@ -30,8 +32,10 @@ window.onload = function () {
         }
     })
 
-    // let chartArea = document.getElementById('curve_chart');
-    // if (chartArea) {
-    //     require('./charts/yearsIncomeExpenditureChart');
-    // }
+    let chartArea = document.getElementById('curve_chart');
+    if (chartArea) {
+        require('./charts/yearsIncomeExpenditureChart');
+    }
+
+    Bugsnag.notify(new Error('Test error'));
 }
