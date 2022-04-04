@@ -24,6 +24,7 @@
         "php": "^8.1",
         "ext-intl": "*",
         "ext-pdo": "*",
+        "bugsnag/bugsnag-laravel": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "influxdata/influxdb-client-php": "^2.3",
         "laravel/framework": "^8.12",
@@ -88,21 +89,6 @@
         ]
     },
     "extra": {
-        "hooks": {
-            "config": {
-                "stop-on-failure": ["post-merge"]
-            },
-            "post-merge": [
-                "\necho ========= Composer install =========\n",
-                "composer install",
-                "\necho ========= NPM install =========\n",
-                "npm install",
-                "\necho ========= NPM install =========\n",
-                "npm install",
-                "\necho ========= Database Migration =========\n",
-                "php artisan migrate"
-            ]
-        },
         "laravel": {
             "dont-discover": [
                 "laravel/telescope"
