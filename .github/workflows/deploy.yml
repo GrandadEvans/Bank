@@ -169,11 +169,10 @@ jobs:
             cd "${{ env.ARTIFACTS_PATH }}" && ls -t | tail -n +2 | xargs rm -rf
 
 # Jobs to do:
-# Set version number in php var; package.json and tag
-
-# Test all at same time:
-  # Codeception
-  # Cypress
-  # Jest
-
+  # Set version number in php var; package.json and tag
+  # Test all at same time:
+    # Codeception
+    # Cypress
+    # Jest
 # Get a similar job for Master branch
+# Check version number has -beta at the end
