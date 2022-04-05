@@ -1,14 +1,11 @@
-import Bugsnag from "@bugsnag/js";
-
 require('./includes/bootstrap');
 require('./vue/vueComponents');
-require('./includes/tagsPieChart');
 import {store} from './vue/vueComponents';
 import User from './includes/User';
+let token = document.head.querySelector('meta[name="csrf-token"]');
+window.token = token;
 
 window.onload = function () {
-    let token = document.head.querySelector('meta[name="csrf-token"]');
-
     let userdata = new User();
     store.commit('updateUser', userdata);
     store.commit('updateCsrfToken', token);
@@ -31,9 +28,4 @@ window.onload = function () {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
-
-    let chartArea = document.getElementById('curve_chart');
-    if (chartArea) {
-        require('./charts/yearsIncomeExpenditureChart');
-    }
 }

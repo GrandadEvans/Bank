@@ -1,3 +1,4 @@
+[![Deploy to staging](https://github.com/GrandadEvans/Bank/actions/workflows/deploy.yml/badge.svg?branch=staging)](https://github.com/GrandadEvans/Bank/actions/workflows/deploy.yml)
 #Banking app
 
 This is a simple app that will allow me to perform certain

@@ -1,5 +1,6 @@
 <?php
 
+use Bank\Http\Controllers\ApiController;
 use Bank\Http\Controllers\Auth\LoginController;
 use Bank\Http\Controllers\BadgeController;
 use Bank\Http\Controllers\GraphController;
@@ -18,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('get_logout');
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/api/get-key', [ApiController::class, 'getKey']);
 
     Route::get('/get-user-details', function () {
         return Auth::user();

@@ -3,17 +3,7 @@ import Vuex from 'vuex';
 import {storeConfig} from "./vuex.store";
 import VueSweetalert2 from 'vue-sweetalert2';
 // import {default as User} from '../includes/user';
-import Bugsnag from '@bugsnag/js';
-import BugsnagPluginVue from '@bugsnag/plugin-vue';
-
-Bugsnag.start({
-    apiKey: process.env.BUGSNAG_API_KEY_JS,
-    plugins: [new BugsnagPluginVue()]
-});
-
-// Import Bugsnag
-const bugsnagVue = Bugsnag.getPlugin('vue');
-bugsnagVue.installVueErrorHandler(Vue);
+import User from "../includes/User";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store(storeConfig);
@@ -21,7 +11,6 @@ export const store = new Vuex.Store(storeConfig);
 Vue.use(VueSweetalert2);
 
 window.Vue = Vue;
-window.Bugsnag = Bugsnag;
 
 // https://webpack.js.org/guides/dependency-management/#require-context
 const requireComponent = require.context('./components/', true, /* include subdirectories*/ /\.vue$/);

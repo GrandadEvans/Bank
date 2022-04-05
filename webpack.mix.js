@@ -12,10 +12,8 @@ mix
         // 'babel-core',
         'bootstrap-reboot',
         'bootstrap',
-        'vue-google-charts',
         // 'babel-loader',
         'currency.js',
-        // 'jquery',
         'laravel-echo',
         // 'laravel-mix',
         'lodash',
@@ -24,7 +22,6 @@ mix
         'pusher-js',
         // 'style-loader',
         'vue',
-        'vue-google-charts',
         // 'vue-loader',
         'vue-sweetalert2',
         'vuex'
