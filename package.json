@@ -1,6 +1,6 @@
 {
     "name":"Bank",
-    "version": "1.0.2",
+    "version": "1.0.3-dev",
     "description": "This is just a simple personal, but open-source project to better track my banking finances",
     "homepage": "https://github.com/GrandadEvans/Bank",
     "keywords": [
@@ -66,7 +66,7 @@
         "jsdom-global": "^3.0.2",
         "laravel-echo": "^1.11.3",
         "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.21",
+        "lodash": ">=4.17.21",
         "nyc": "^15.1.0",
         "postcss": "^8.1.14",
         "pusher-js": "^7.0.4",
