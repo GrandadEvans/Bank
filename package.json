@@ -1,5 +1,5 @@
 {
-    "name":"Bank",
+    "name": "Bank",
     "version": "1.0.3-dev",
     "description": "This is just a simple personal, but open-source project to better track my banking finances",
     "homepage": "https://github.com/GrandadEvans/Bank",
@@ -77,6 +77,7 @@
         "vue-jest": "^3.0.7",
         "vue-loader": "^15.9.8",
         "vue-template-compiler": "^2.6.12",
+        "weak-napi": "^2.0.2",
         "webpack-dev-server": "^4.7.4"
     },
     "dependencies": {
