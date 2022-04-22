@@ -1,6 +1,5 @@
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginVue from '@bugsnag/plugin-vue';
-import { bugSnagKey } from '../includes/helpers';
 require('./broadcasting');
 require('./font-awesome');
 
@@ -15,10 +14,9 @@ window.Swal   = window.swal = Swal;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
-const apiKey = bugSnagKey();
 if (typeof apiKey === 'string') {
     Bugsnag.start({
-        apiKey: apiKey,
+        apiKey: '5654e4b0844b36dc2e56d534571d8230',
         plugins: [new BugsnagPluginVue()]
     });
 
