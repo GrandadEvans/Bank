@@ -23,8 +23,68 @@ env:
   PHP_PATH: /usr/local/bin/php81
 
 jobs:
+  prep-for-tests:
+    name: Prepare for tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Activate release
+        run: printf "%s" "${{ env.ENV }}" > .env
+
+      - name: Compile CSS and Javascript
+        run: |
+          npm install
+          npm run dev
+
+      - name: Add storage dir
+        run: |
+          [ -e storage ] && rm -rf storage
+          mkdir -p storage/app
+          mkdir -p storage/logs
+          mkdir -p storage/public
+          mkdir -p storage/logs
+          mkdir -p storage/framework
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/testing
+          mkdir -p storage/framework/views
+          chmod -R 0777 storage
+
+      - name: Composer install
+        run: composer install --no-interaction
+
+      - name: Prepare database
+        run: |
+          php artisan migrate
+          php artisan db:seed BaseSeeder
+
+
+  test-jest:
+    name: Tests (Jest)
+    runs-on: ubuntu-latest
+    needs: prep-for-tests
+    steps:
+      - name: Run tests
+        run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' node_modules/.bin/jest --ci
+  test-codeception:
+    name: Tests (Codeception)
+    runs-on: ubuntu-latest
+    needs: prep-for-tests
+    steps:
+      - name: Run tests
+        run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' vendor/bin/codecept run
+  test-cypress:
+    name: Tests (Cypress)
+    runs-on: ubuntu-latest
+    needs: prep-for-tests
+    steps:
+      - name: Run tests
+        run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' npx cypress run
+
   create-deployment-artifacts:
     name: Create deployment artifacts
+    needs: (test-jest,test,codeception,test-cypress)
     runs-on: ubuntu-latest
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
