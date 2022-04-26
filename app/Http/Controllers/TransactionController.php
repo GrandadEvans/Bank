@@ -312,7 +312,7 @@ class TransactionController extends Controller
         $directory = base_path()."/resources/statements/user_{$userId}";
 
         if (!file_exists($directory)) {
-            mkdir($directory);
+            mkdir($directory, 0755, true);
         }
         try {
             copy($path, $directory.'/latest.csv');
