@@ -23,10 +23,12 @@ class CreateTransactionsTable extends Migration
             $table->foreignIdFor(PaymentMethod::class);
             $table->boolean('isPartOfRegular')->default(false);
             $table->date('date')->index('transaction_date');
-            $table->string('entry', 255)->index('transaction_entry')->fulltext();
+            //$table->string('entry', 255)->index('transaction_entry')->fulltext();
+            $table->string('entry', 255)->index('transaction_entry');
             $table->decimal('amount')->nullable();
             $table->decimal('balance')->nullable();
-            $table->text('remarks', 255)->nullable()->fulltext();
+            $table->text('remarks', 255)->nullable();
+            //$table->text('remarks', 255)->nullable()->fulltext();
             $table->timestamps();
         });
     }
