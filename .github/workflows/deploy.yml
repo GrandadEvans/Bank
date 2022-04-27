@@ -54,6 +54,9 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction
 
+      - name: Create database
+        run: touch database/database.sqlite
+
       - name: Prepare database
         run: |
               php artisan migrate
