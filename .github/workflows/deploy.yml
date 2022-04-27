@@ -62,21 +62,21 @@ jobs:
 
   test-jest:
     name: Tests (Jest)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: prep-for-tests
     steps:
       - name: Run tests
         run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' node_modules/.bin/jest --ci
   test-codeception:
     name: Tests (Codeception)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: prep-for-tests
     steps:
       - name: Run tests
         run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' vendor/bin/codecept run
   test-cypress:
     name: Tests (Cypress)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: prep-for-tests
     steps:
       - name: Run tests
