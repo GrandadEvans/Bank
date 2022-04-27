@@ -55,7 +55,8 @@
                     >
                     <div id="tag-icon-help" class="form-text">What icon do you want to associate with the tag?<br />
                         You can browse available icons <a
-                            href="https://fontawesome.com/icons?d=gallery&m=free" class="link-info">here</a></div>
+                            href="https://fontawesome.com/icons?d=gallery&m=free" class="link-info" target="_blank"
+                        >here</a></div>
                 </div>
 
                 <div

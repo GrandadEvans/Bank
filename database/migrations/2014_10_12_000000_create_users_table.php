@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->json('badges')->comment('JSON object of routes with badges');
+            $table->json('badges')->default('{}')->comment('JSON object of routes with badges');
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

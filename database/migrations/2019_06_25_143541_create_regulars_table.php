@@ -23,12 +23,15 @@ class CreateRegularsTable extends Migration
             $table->foreignIdFor(Provider::class)->default(1);
             $table->foreignIdFor(PaymentMethod::class);
 
+            //$table->string('alias')->fulltext();
+            //$table->string('entry_text')->fulltext();
             $table->string('alias');
             $table->string('entry_text');
             $table->decimal('amount', 6, 2)->nullable();
             $table->boolean('amount_varies')->default(false);
             $table->enum('period_name', TimePeriods::$availablePeriods);
             $table->string('period_multiplier');
+            //$table->text('remarks')->nullable()->fulltext();
             $table->text('remarks')->nullable();
 
             $table->date('next_due')->index('regulars_date');

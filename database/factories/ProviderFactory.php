@@ -22,6 +22,7 @@ class ProviderFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => 1,
             'name' => $this->faker->unique()->company(),
             'remarks' => $this->faker->sentence(4),
             'logo' => $this->faker->imageUrl(),

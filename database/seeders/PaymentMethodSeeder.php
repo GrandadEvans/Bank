@@ -81,6 +81,7 @@ class PaymentMethodSeeder extends Seeder
                 'method' => 'Transfer'
             ],
         ];
+
         DB::table('payment_methods')->insert($values);
     }
 }

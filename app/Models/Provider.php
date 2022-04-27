@@ -10,6 +10,7 @@ class Provider extends BaseModel
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
         'remarks',
         'payment_method_id',
@@ -60,4 +61,7 @@ class Provider extends BaseModel
         return DB::table('transactions')->select('*')->whereRaw('entry REGEXP ?', [$regex])->get();
     }
 
+    public function user() {
+        return $this->belongsToo(User::class);
+    }
 }

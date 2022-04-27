@@ -50,21 +50,3 @@ export const currency = (amount, currency = null) => {
 export function formatDate(date) {
     return moment(date).format(globalConfig.preferredDateFormat);
 }
-
-
-export async function bugSnagKey() {
-    const ajaxData = {
-        type: 'json',
-        key: 'BUGSNAG_API_KEY_JS'
-    };
-
-    const bugSnagKey = await axios.post('/api/get-key', ajaxData);
-
-    let result = null;
-    if (bugSnagKey.status === 200) {
-        result = bugSnagKey.data;
-    } else {
-        result = false;
-    }
-    return result;
-}
