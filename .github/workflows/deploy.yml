@@ -56,7 +56,7 @@ jobs:
 
       - name: Prepare database
         run: |
-              php artisan migrate:fresh
+              php artisan migrate
               php artisan db:seed BaseSeeder
 
 
