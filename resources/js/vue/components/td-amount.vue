@@ -1,7 +1,5 @@
 <template>
-    <div :class="posNegClasses">
-        {{ formattedAmount }}
-    </div>
+    <div :class="posNegClasses">{{ formattedAmount }}</div>
 </template>
 
 <script>
@@ -10,12 +8,12 @@ import {currency} from '../../includes/helpers'
 export default {
     name: "td-amount",
     props: [
-        'currency',
+        /*'currency',*/
         'amount',
         'symbol',
-        'prepend',
-        'post',
-        'formatted',
+        /*'prepend',*/
+        /*'post',*/
+        /*'formatted',*/
     ],
     computed: {
         posNegClasses: function () {
