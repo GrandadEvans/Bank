@@ -3,5 +3,10 @@
     "/js/manifest.js": "/js/manifest.js",
     "/js/vendor.js": "/js/vendor.js",
     "/css/vendor.css": "/css/vendor.css",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/images/logos/100x50/amazon.png": "/images/logos/100x50/amazon.png",
+    "/images/logos/company-name.jpg": "/images/logos/company-name.jpg",
+    "/images/logos/full/amazon.png": "/images/logos/full/amazon.png",
+    "/images/logos/halifax_bank_logo.png": "/images/logos/halifax_bank_logo.png",
+    "/images/logos/milk-bottles.jpg": "/images/logos/milk-bottles.jpg"
 }
