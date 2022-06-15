@@ -10,7 +10,6 @@ class Provider extends BaseModel
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'name',
         'remarks',
         'payment_method_id',
