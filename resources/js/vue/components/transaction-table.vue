@@ -14,7 +14,17 @@
                     <transaction-table-footer v-if="transactionsLoaded === true"/>
                 </table>
                 <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
+
+                <div id="stats">
+                    <p>
+                        Averages for the show transactions:<br />
+                    Total number of entries: {{ numberOfEntriesShown }}<br />
+                    Total amount of all show entries: {{ totalAmountShown }}<br />
+                    Average entry amount: {{ averageAmountShown }}
+                    </p>
+                </div>
         </div>
+
         <div v-else>
             Transaction not yet loaded
         </div>
@@ -22,6 +32,8 @@
 </template>
 
 <script>
+import {currency} from '../../includes/helpers'
+
     export default {
         name: "transaction-table",
         props: ['source'],
@@ -35,7 +47,10 @@
                 page: 1,
                 limit: 25,
                 period: 'unset',
-                searchTerm: ''
+                searchTerm: '',
+                numberOfEntriesShown: 0,
+                totalAmountShown: 0,
+                averageAmountShown: 0
             }
         },
         methods: {
@@ -61,8 +76,12 @@
                 let url = `/transactions/all/${page}/${limit}/${period}/${search}`;
                 // this.$store.commit('transactionsLoaded', false);
                 const returnedData = await axios.get(url);
+                let stats = returnedData.data.stats;
+                this.numberOfEntriesShown = stats.numberOfEntriesShown;
+                this.totalAmountShown = currency(stats.totalAmountShown);
+                this.averageAmountShown = currency(stats.averageAmountShown);
                 this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);
-                this.$store.commit('updateLatestTransactionTableStats', returnedData.data.stats);
+                this.$store.commit('updateLatestTransactionTableStats', stats);
                 this.$store.commit('transactionsLoaded', true);
             },
             search: function (term) {

@@ -116,6 +116,12 @@ class TransactionController extends Controller
 //            ->average('amount');
 
 
+        $totalAmount = 0;
+        foreach($data as $item) {
+            $totalAmount += $item->amount;
+        }
+
+        $recordsShown = $data->count();
         $stats = [
             'totalRecords' => (int) $totalRecords,
             'filteredRecords' => (int) $filteredRecords,
@@ -123,6 +129,9 @@ class TransactionController extends Controller
             'endRecord' => (int) $endRecord,
             'page' => (int) $page,
             'limit' => (int) $limit,
+            'numberOfEntriesShown' => (int) $recordsShown,
+            'averageAmountShown' => (float) ($totalAmount / $recordsShown),
+            'totalAmountShown' => (float) $totalAmount
 //            'average_in' => $query2,
 //            'average_out' => $query3
         ];
