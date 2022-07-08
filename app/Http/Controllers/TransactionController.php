@@ -10,6 +10,8 @@ use Bank\Jobs\ImportTransactions;
 use Bank\Models\PaymentMethod;
 use Bank\Models\Provider;
 use Bank\Models\Transaction;
+use Bank\UtilityClasses\TimePeriods;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -64,7 +66,7 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function all(int $page = 1, int $limit = 25, string $search = '')
+    public function all(int $page = 1, int $limit = 25, string $period = 'unset', string $search = '')
     {
         $userId = (int) Auth::id();
         $orderByColumn = !empty($sort = request()->get('orderBy')) ? '0' : 'transactions.id';
@@ -75,6 +77,17 @@ class TransactionController extends Controller
         $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
             ->where('transactions.user_id', Auth::id());
 
+        if ($period !== 'unset') {
+            $allowedPeriods = TimePeriods::$availablePeriods;
+
+            if (in_array($period, $allowedPeriods)) {
+                $fnName = 'sub'. ucfirst($period);
+                $limitedPeriod = Carbon::create('now')->$fnName()->format('Y-m-d');
+                $query
+                ->whereDate('date', '>=', $limitedPeriod);
+            }
+        }
+        
         $totalRecords = $query->count();
 
         if (!empty($search)) {

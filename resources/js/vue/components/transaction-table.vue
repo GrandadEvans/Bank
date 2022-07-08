@@ -1,17 +1,23 @@
 <template>
-    <div v-if="transactionsLoaded === true">
-            <search v-on:search="search"/>
-            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
-            <table
-                id="transactions-table"
-                class="table table-striped table-hover table-bordered transactions-table">
+    <div>
+        <div v-if="transactionsLoaded === true">
+                <search v-on:search="search"/>
+                <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
+                <bank-navbar-time-limiter v-on:limit-period="limitPeriod" />
+                <table
+                    id="transactions-table"
+                    class="table table-striped table-hover table-bordered transactions-table">
 
-                <caption>List of Transactions</caption>
-                <transaction-table-header v-if="transactionsLoaded === true"/>
-                <transaction-table-body v-if="transactionsLoaded === true"/>
-                <transaction-table-footer v-if="transactionsLoaded === true"/>
-            </table>
-            <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
+                    <caption>List of Transactions</caption>
+                    <transaction-table-header v-if="transactionsLoaded === true"/>
+                    <transaction-table-body v-if="transactionsLoaded === true"/>
+                    <transaction-table-footer v-if="transactionsLoaded === true"/>
+                </table>
+                <pagination-links v-on:change-page="onChangePage" v-on:change-limit="onChangeLimit"/>
+        </div>
+        <div v-else>
+            Transaction not yet loaded
+        </div>
     </div>
 </template>
 
@@ -28,6 +34,7 @@
             return {
                 page: 1,
                 limit: 25,
+                period: 'unset',
                 searchTerm: ''
             }
         },
@@ -38,6 +45,10 @@
                 this.limit = limit;
                 this.loadPage();
             },
+            limitPeriod: function (period) {
+                this.period = period;
+                this.loadPage();
+            },
             onChangeLimit: function (limit) {
                 this.limit = limit;
                 this.loadPage();
@@ -45,8 +56,9 @@
             async loadPage() {
                 let page = this.page;
                 let limit = this.limit;
+                let period = this.period;
                 let search = this.searchTerm;
-                let url = `/transactions/all/${page}/${limit}/${search}`;
+                let url = `/transactions/all/${page}/${limit}/${period}/${search}`;
                 // this.$store.commit('transactionsLoaded', false);
                 const returnedData = await axios.get(url);
                 this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);
@@ -64,6 +76,3 @@
         },
     }
 </script>
-
-<style>
-</style>
