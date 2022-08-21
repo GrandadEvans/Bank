@@ -82,49 +82,49 @@ jobs:
   #     - name: Run tests
   #       run: DB_CONNECTION=sqlite DB_DATABASE=":memory:" DB_PREFIX='' npx cypress run
 
-  # create-deployment-artifacts:
-  #   name: Create deployment artifacts
-  #   needs: [test-jest, test-codeception, test-cypress]
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
-  #   steps:
-  #     - uses: actions/checkout@v2
+  create-deployment-artifacts:
+    name: Create deployment artifacts
+    needs: [test-jest, test-codeception, test-cypress]
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Activate release
-  #       run: printf "%s" "${{ env.ENV }}" > .env
+      - name: Activate release
+        run: printf "%s" "${{ env.ENV }}" > .env
 
-  #     - name: Compile CSS and Javascript
-  #       run: |
-  #             npm install
-  #             npm run dev
+      - name: Compile CSS and Javascript
+        run: |
+              npm install
+              npm run dev
 
-  #     - name: Add storage dir
-  #       run: |
-  #             [ -e storage ] && rm -rf storage
-  #             mkdir -p storage/app
-  #             mkdir -p storage/logs
-  #             mkdir -p storage/public
-  #             mkdir -p storage/logs
-  #             mkdir -p storage/framework
-  #             mkdir -p storage/framework/cache
-  #             mkdir -p storage/framework/sessions
-  #             mkdir -p storage/framework/testing
-  #             mkdir -p storage/framework/views
-  #             chmod -R 0777 storage
+      - name: Add storage dir
+        run: |
+              [ -e storage ] && rm -rf storage
+              mkdir -p storage/app
+              mkdir -p storage/logs
+              mkdir -p storage/public
+              mkdir -p storage/logs
+              mkdir -p storage/framework
+              mkdir -p storage/framework/cache
+              mkdir -p storage/framework/sessions
+              mkdir -p storage/framework/testing
+              mkdir -p storage/framework/views
+              chmod -R 0777 storage
 
-  #     - name: Composer install
-  #       run: composer install --no-interaction
+      - name: Composer install
+        run: composer install --no-interaction
 
-  #     - name: Create deployment artifact
-  #       run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
+      - name: Create deployment artifact
+        run: tar --create --gzip --file="${{ env.GITHUB_SHA }}.tar.gz" --exclude-vcs --exclude-vcs-ignores * .htaccess*
 
-  #     - name: Store artifact for distribution
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: app-build
-  #         path: "${{ env.GITHUB_SHA }}.tar.gz"
-  #         retention-days: 2
+      - name: Store artifact for distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-build
+          path: "${{ env.GITHUB_SHA }}.tar.gz"
+          retention-days: 2
 
   prepare-release-on-servers:
     name: "Staging server: Prepare release"
