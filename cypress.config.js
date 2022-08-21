@@ -24,6 +24,6 @@ module.exports = defineConfig({
       },
       setupNodeEvents(on, config) {},
     specPattern:
-      '/home/john/Projects/bank/resources/js/vue/components/**/*.spec.{js,jsx,ts,tsx}',
+      '/home/john/Projects/bank/resources/js/vue/**/*.spec.js',
   },
 })

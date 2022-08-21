@@ -81,7 +81,7 @@ import {currency} from '../../includes/helpers'
                 this.totalAmountShown = currency(stats.totalAmountShown);
                 this.averageAmountShown = currency(stats.averageAmountShown);
                 this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);
-                this.$store.commit('updateLatestTransactionTableStats', stats);
+                this.$store.commit('updateLatestTransactionTableStats', statsphp);
                 this.$store.commit('transactionsLoaded', true);
             },
             search: function (term) {

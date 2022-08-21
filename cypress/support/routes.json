@@ -346,7 +346,7 @@
     "name": "transactions.all",
     "domain": null,
     "action": "Bank\\Http\\Controllers\\TransactionController@all",
-    "uri": "transactions/all/{page?}/{limit?}/{search?}",
+    "uri": "transactions/all/{page?}/{limit?}/{period?}/{search?}",
     "method": [
       "GET",
       "HEAD"

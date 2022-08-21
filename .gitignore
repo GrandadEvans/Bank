@@ -40,3 +40,4 @@ bank_dev--local.session.sql
 /cypress/screenshots/
 .nyc_output/
 .php-cs-fixer.cache
+database/full-prod-dump-2022_03_30_22_39_33.sql
