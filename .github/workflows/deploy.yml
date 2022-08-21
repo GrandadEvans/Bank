@@ -53,6 +53,17 @@ jobs:
 
       - name: Composer install
         run: composer install --no-interaction
+      - name: debug env
+        run: |
+          echo "SSH Username: ${{ env.SSH_USERNAME }}"
+          echo "SSH Passphrase: ${{ env.SSH_PASSPHRASE }}"
+          echo "SSH Port: ${{ env.SSH_PORT }}"
+          echo "SSH Host: ${{ env.SSH_HOST }}"
+          echo "SSH Key: ${{ env.SSH_KEY }}"
+          echo "SSH Host: ${{ env.STAGING_HOST }}"
+          echo "SSH Base Path: ${{ env.STAGING_BASE_PATH }}"
+          echo "SSH Env: ${{ env.STAGING_ENV }}"
+
 
       # - name: Prepare database
       #   run: |
