@@ -84,7 +84,7 @@ jobs:
 
   create-deployment-artifacts:
     name: Create deployment artifacts
-    needs: [test-jest, test-codeception, test-cypress]
+    # needs: [test-jest, test-codeception, test-cypress]
     runs-on: ubuntu-latest
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
