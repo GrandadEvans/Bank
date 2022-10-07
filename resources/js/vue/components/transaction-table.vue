@@ -46,7 +46,7 @@
                 let page = this.page;
                 let limit = this.limit;
                 let searchTerm = this.searchTerm;
-                let url = `/transactions/all/${page}/${limit}/${searchTerm}`;
+                let url = `/transactions/all?page=${page}&limit=${limit}&search=${searchTerm}`;
                 // this.$store.commit('transactionsLoaded', false);
                 const returnedData = await axios.get(url);
                 this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);

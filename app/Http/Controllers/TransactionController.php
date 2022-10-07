@@ -64,18 +64,17 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function all(int $page = 1, int $limit = 25, string $search = '')
+    public function all(Request $request)
     {
         $userId = (int) Auth::id();
+        $page = $request->query('page', 1);
+        $limit = $request->query('limit', 25);
+        $search = $request->query('search', '');
         $orderByColumn = !empty($sort = request()->get('orderBy')) ? '0' : 'transactions.id';
         $orderByDirection = request()->get('ascending') == 1 ? 'asc' : 'desc';
         $startingRecord = ($limit * ($page - 1)) + 1;
         $endRecord = $limit * $page;
 
-        if ($search === 'unset') {
-            $search = '';
-        }
-        
         $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
             ->where('transactions.user_id', Auth::id());
 

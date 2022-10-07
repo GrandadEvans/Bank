@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/import', [TransactionController::class, 'import'])->name('import');
         Route::get('/providerChoice', [TransactionController::class, 'providerChoice'])->name('providerChoice');
         Route::post('/manual_import', [TransactionController::class, 'manual_import'])->name('manual_import');
-        Route::get('/all/{page?}/{limit?}/{search?}', [TransactionController::class, 'all'])->name('all');
+        Route::get('/all', [TransactionController::class, 'all'])->name('all');
         Route::get('/{transaction}/update_provider/{provider}', [TransactionController::class, 'updateProvider']);
 
         Route::get('/', [TransactionController::class, 'index'])->name('index');
