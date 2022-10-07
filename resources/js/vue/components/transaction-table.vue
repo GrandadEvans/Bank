@@ -45,8 +45,8 @@
             async loadPage() {
                 let page = this.page;
                 let limit = this.limit;
-                let search = this.searchTerm;
-                let url = `/transactions/all/${page}/${limit}/${search}`;
+                let searchTerm = this.searchTerm;
+                let url = `/transactions/all/${page}/${limit}/${searchTerm}`;
                 // this.$store.commit('transactionsLoaded', false);
                 const returnedData = await axios.get(url);
                 this.$store.commit('updateLatestTransactionTableData', returnedData.data.data);

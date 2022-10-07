@@ -72,6 +72,10 @@ class TransactionController extends Controller
         $startingRecord = ($limit * ($page - 1)) + 1;
         $endRecord = $limit * $page;
 
+        if ($search === 'unset') {
+            $search = '';
+        }
+        
         $query = Transaction::with(['tags', 'provider', 'paymentMethod'])
             ->where('transactions.user_id', Auth::id());
 
